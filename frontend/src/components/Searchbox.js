@@ -8,7 +8,6 @@ export default function Searchbox() {
     let selectedOption = select[select.selectedIndex];
     select.style.width = Number(selectedOption.text.length + 6) + "ch";
   };
-
   return (
     <Navbar
       id="search-nav"
@@ -28,7 +27,9 @@ export default function Searchbox() {
         </Navbar.Brand>
         <Nav className="me-2 d-none d-md-block">
           <Nav.Link href="#features">
-            <Badge bg="secondary">Deliver</Badge>
+            <small>Hello, Sign in</small>
+            <br />
+            <b>Select your location</b>
           </Nav.Link>
         </Nav>
         <Form
@@ -121,10 +122,9 @@ export default function Searchbox() {
             id="sign-in-dropdown"
             href="#features"
             className="nav-right-item d-flex flex-column d-none d-md-flex"
-            border="primary"
           >
             <div className="nav-line-1-container">
-              <span id="nav-line-2">Hello, Sign in</span>
+              <span className="nav-line-1">Hello, Sign in</span>
             </div>
           </Nav.Link>
         </Nav>
