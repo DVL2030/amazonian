@@ -172,6 +172,7 @@ button.search {
 main {
   /* max-width: 2156px; */
   margin: 0 auto;
+  background-color: #e3e6e6;
 }
 
 .myCarousel {
@@ -488,4 +489,20 @@ button.rect {
   height: 2.5rem;
   text-align: center;
   font-size: 1rem;
+}
+
+/* ==========================================
+   Box
+   ==========================================*/
+
+#loading-box {
+  width: 99vw;
+  height: 99vh;
+  background-color: white;
+}
+
+#loading-box span {
+  color: #1e3050;
+  font-weight: 500;
+  font-size: 1.2rem;
 }

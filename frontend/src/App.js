@@ -16,6 +16,7 @@ import {} from "bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/HomePage";
+import SigninPage from "./pages/SigninPage";
 
 function App() {
   const [filterOnFocus, setFilterOnFocus] = useState(false);
@@ -188,9 +189,9 @@ function App() {
                               Sign Out
                             </button>
                           ) : (
-                            <Nav.Link to="/signin">
+                            <Link to="/signin">
                               <button className="rect">Sign in</button>
-                            </Nav.Link>
+                            </Link>
                           )}
                         </Col>
                         <Col className="flex-fill d-flex justify-content-center align-items-center gap-2">
@@ -341,6 +342,7 @@ function App() {
         >
           <Routes>
             <Route path="/" exact element={<HomePage />} />
+            <Route path="/signin" exact element={<SigninPage />} />
           </Routes>
         </main>
         <footer id="footer1" className="">
