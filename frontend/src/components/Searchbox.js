@@ -164,7 +164,7 @@ export default function Searchbox() {
           </Nav.Link>
         </Nav>
       </Container>
-      <Container fluid className="d-block d-md-none mt-2">
+      <Container fluid className="d-block d-md-none my-2">
         <Form id="searchForm" className="d-flex flex-fill ">
           <Form.Control
             id="searchControl"

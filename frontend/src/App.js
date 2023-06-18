@@ -47,7 +47,7 @@ function App() {
                   />
                 </div>
               </Navbar.Brand>
-              <Nav className="me-2 d-none d-md-block">
+              <Nav className="me-2 d-none d-lg-block">
                 <Nav.Link href="#features">
                   <span className="nav-line-1">
                     <small>Hello, Sign in</small>
@@ -172,7 +172,7 @@ function App() {
                   <div className="nav-line-1-container">
                     <span className="nav-line-1">Hello, Sign in</span>
                   </div>
-                  <span className="nav-line-2">
+                  <span className="nav-line-2 ">
                     <b>
                       Account & Lists <i className="fa fa-caret-down"> </i>
                     </b>
@@ -280,17 +280,31 @@ function App() {
               <Nav>
                 <Nav.Link
                   href="#pricing"
-                  className=" d-flex flex-column d-none d-md-flex"
+                  className=" d-flex flex-column d-none d-md-flex gap-0"
                 >
-                  <span className="nav-line-2">
-                    <small>Returns </small>
+                  <span className="nav-line-1">
+                    <small>Returns & </small>
                   </span>
-                  <span className="nav-line-2">
-                    <small>& Orders</small>
+                  <span className="nav-line-2 ">
+                    <small>Orders</small>
                   </span>
                 </Nav.Link>
               </Nav>
               <Nav>
+                <Nav.Link
+                  href="/signin"
+                  className="nav-right-item d-flex d-md-none gap-1"
+                >
+                  <span className="nav-line-1 d-none d-sm-block">
+                    <small>Sign in </small>
+                  </span>
+                  <span className="d-none d-sm-block">
+                    <i className="fa-solid fa-arrow-right fa-2xs text-white"></i>
+                  </span>
+                  <span>
+                    <i class="fa-regular fa-user fa-2xl text-white"></i>
+                  </span>
+                </Nav.Link>
                 <Nav.Link href="#cart" className="d-flex">
                   <div className="nav-cart-count-container d-flex">
                     <span
@@ -301,7 +315,7 @@ function App() {
                       0
                     </span>
                     <div className="img-cart">
-                      <img alt="cart logo" src="imgs/amazon_cart.png" />
+                      <i class="fa-brands fa-opencart fa-2xl"></i>
                     </div>
                   </div>
                   <div className="nav-cart-text-container d-flex flex-column">
@@ -578,7 +592,7 @@ function App() {
 
           <hr />
         </footer>
-        <footer id="footer2">
+        <footer id="footer2" className="d-none d-md-block">
           <Container>
             <table
               className="navFooterMoreOnAmazon"

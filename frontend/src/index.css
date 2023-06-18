@@ -52,6 +52,38 @@ code {
   flex: 1 1 auto;
 }
 
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  #nav-cart-count {
+    top: -0.2rem;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  #nav-cart-count {
+    top: -0.2rem;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #search-nav-container > *:not(#search-form):hover {
+    border: 0.15rem solid #ffffff;
+  }
+  #nav-cart-count {
+    top: 0.3rem;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+}
+
 /* ==========================================================================
    Header, Main, Footer
    ========================================================================== */
@@ -64,10 +96,7 @@ code {
   padding: 0.1rem 0.2rem;
   margin-right: 0.5rem;
   border: 0.15rem solid transparent;
-}
-
-#search-nav-container > *:not(#search-form):hover {
-  border: 0.15rem solid #ffffff;
+  height: 100%;
 }
 
 button.search {
@@ -92,26 +121,31 @@ button.search {
   border-radius: 0 0.3rem 0.3rem 0;
 }
 
+.fa-opencart {
+  color: white;
+}
+
 #nav-cart-count {
   position: absolute;
   /* left: 13px; */
-  right: 65px;
-  top: 13px;
+  right: 4.7rem;
+  /* top: 0.2rem; */
   justify-content: center;
   color: #f08804;
-  font-weight: bold;
+  font-weight: 800;
 }
 
 .nav-cart-text-container .nav-line-2 {
-  margin-top: 10px;
-  margin-left: -8px;
+  /* margin-top: 10px;
+  margin-left: -8px; */
 }
 
 .nav-line-1,
 .nav-line-2 {
-  font-size: 0.9rem;
+  font-size: 12px;
   font-weight: 500;
   color: floralwhite;
+  white-space: nowrap;
 }
 
 /* ============================
@@ -126,7 +160,7 @@ button.search {
   position: absolute;
   z-index: 2;
   display: none;
-  right: 2rem;
+  right: 2.6rem;
   top: 4rem;
   width: 37rem;
   height: 28rem;
