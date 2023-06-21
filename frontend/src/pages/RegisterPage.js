@@ -39,7 +39,7 @@ export default function RegisterPage() {
       navigate(redirectUrl);
     }
     if (success) {
-      console.log("Use Effect called");
+      console.log("Use Effect calleddsf");
 
       setTimeout(() => {
         navigate("/");
