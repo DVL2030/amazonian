@@ -28,10 +28,15 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordValid, setPasswordValid] = useState(true);
 
   const registerHandler = (e) => {
     e.preventDefault();
-    dispatch(register({ name, email, password }));
+    if (password !== confirmPassword) {
+      setPasswordValid(false);
+    } else {
+      dispatch(register({ name, email, password }));
+    }
   };
 
   useEffect(() => {
@@ -39,8 +44,6 @@ export default function RegisterPage() {
       navigate(redirectUrl);
     }
     if (success) {
-      console.log("Use Effect calleddsfsfddfSsafsdf");
-
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -81,9 +84,15 @@ export default function RegisterPage() {
                         type="text"
                         id="name"
                         placeholder="Your name"
+                        title="Name must consist of 3~50 alphabet characters."
+                        pattern="[A-Za-z\s]{3,50}"
                         required
                         onChange={(e) => setName(e.target.value)}
                       ></input>
+                      <small className="dark-grey">
+                        <i className="fa fa-info-circle" aria-hidden="true"></i>
+                        Name must consist of 3~50 alphabet characters.
+                      </small>
                     </div>
                     <div>
                       <label htmlFor="email">E-mail address</label>
@@ -102,6 +111,7 @@ export default function RegisterPage() {
                         id="password"
                         placeholder="password"
                         title="Passwords must consist of at least 6 characters."
+                        pattern=".{6,}"
                         required
                         onChange={(e) => setPassword(e.target.value)}
                       ></input>
@@ -116,9 +126,20 @@ export default function RegisterPage() {
                         type="password"
                         id="confirmPassword"
                         placeholder="confirm password"
+                        title="Passwords must consist of at least 6 characters."
+                        pattern=".{6,}"
                         required
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       ></input>
+                      {!passwordValid && (
+                        <small className="text-danger">
+                          <i
+                            className="fa-solid fa-circle-exclamation"
+                            aria-hidden="true"
+                          ></i>
+                          Passwords must consist of at least 6 characters.
+                        </small>
+                      )}
                     </div>
                     <div>
                       <label />
