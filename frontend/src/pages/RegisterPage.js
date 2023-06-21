@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router";
-import { signin } from "../slice/userAuthSlice";
 
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 
 import { Col, Container, Row } from "react-bootstrap";
 
-export default function SigninPage() {
+import { register } from "../slice/userRegisterSlice";
+
+export default function RegisterPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,26 +19,33 @@ export default function SigninPage() {
   const redirectUrl = redirectSearch ? redirectSearch : "/";
 
   const userState = useSelector((state) => state.userAuth);
-  const { userInfo, loading, error } = userState;
+  const { userInfo } = userState;
 
+  const userRegisterState = useSelector((state) => state.userRegister);
+  const { success, loading, error } = userRegisterState;
+
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const signinHandler = (e) => {
+  const registerHandler = (e) => {
     e.preventDefault();
-    dispatch(signin({ email, password }));
-    // if (userInfo && !error) navigate("/");
-  };
-
-  const registerHandler = () => {
-    navigate(`/register?redirect=${redirectUrl}`);
+    dispatch(register({ name, email, password }));
   };
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate(redirectUrl);
     }
-  }, [navigate, userInfo]);
+    if (success) {
+      console.log("Use Effect called");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  }, [navigate, userInfo, success, redirectUrl]);
 
   return (
     <>
@@ -46,6 +54,9 @@ export default function SigninPage() {
       ) : (
         <>
           {error && <MessageBox variants="danger">{error}</MessageBox>}
+          {success && (
+            <MessageBox variants="success">{success.message}</MessageBox>
+          )}
           <Container className="py-5">
             <Row>
               <Col xs="12">
@@ -59,38 +70,60 @@ export default function SigninPage() {
                 </div>
               </Col>
               <Col xs="12" className="mb-4">
-                <div className="crd crd-body signin mx-auto">
-                  <form className="form" onSubmit={signinHandler}>
+                <div className="crd crd-body register mx-auto">
+                  <form className="form register" onSubmit={registerHandler}>
                     <div>
-                      <h1>Sign-In</h1>
+                      <h1>Create account</h1>
                     </div>
                     <div>
-                      <label htmlFor="email">
-                        <small>E-mail address or mobile phone number</small>
-                      </label>
+                      <label htmlFor="name">Your name</label>
+                      <input
+                        type="text"
+                        id="name"
+                        placeholder="Your name"
+                        required
+                        onChange={(e) => setName(e.target.value)}
+                      ></input>
+                    </div>
+                    <div>
+                      <label htmlFor="email">E-mail address</label>
                       <input
                         type="email"
                         id="email"
-                        placeholder="E-mail or Mobile phone number"
+                        placeholder="E-mail"
                         required
                         onChange={(e) => setEmail(e.target.value)}
                       ></input>
                     </div>
                     <div>
-                      <label htmlFor="password">
-                        <small>Password </small>
-                      </label>
+                      <label htmlFor="password">Password</label>
                       <input
                         type="password"
                         id="password"
                         placeholder="password"
+                        title="Passwords must consist of at least 6 characters."
                         required
                         onChange={(e) => setPassword(e.target.value)}
                       ></input>
+                      <small className="dark-grey">
+                        <i className="fa fa-info-circle" aria-hidden="true"></i>
+                        Passwords must consist of at least 6 characters.
+                      </small>
                     </div>
                     <div>
-                      <button className="rect sign-in yellow" type="submit">
-                        Sign In
+                      <label htmlFor="confirmPassword">Confirm Password</label>
+                      <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="confirm password"
+                        required
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      ></input>
+                    </div>
+                    <div>
+                      <label />
+                      <button className="rect" type="submit">
+                        Create your Amazonian account
                       </button>
                     </div>
                   </form>
@@ -106,16 +139,17 @@ export default function SigninPage() {
                       </Link>{" "}
                     </small>
                   </div>
-                  <div className="text-center">
-                    <small className="grey content-center">
-                      New to Amazonian?
-                    </small>
-                    <button
-                      className="rect create-account"
-                      onClick={registerHandler}
-                    >
-                      Create your Amazonian account
-                    </button>
+                  <hr className="grad" />
+
+                  <div>
+                    <div className="content-center">
+                      <small className="grey content-center">
+                        Already have an account?{" "}
+                        <Link to={`/signin?redirect=${redirectUrl}`}>
+                          Sign in
+                        </Link>{" "}
+                      </small>
+                    </div>
                   </div>
                 </div>
               </Col>

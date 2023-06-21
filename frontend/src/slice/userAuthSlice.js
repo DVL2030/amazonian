@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import Axios from "axios";
 
 const userInfo = localStorage.getItem("userInfo")
@@ -21,7 +22,6 @@ export const signin = createAsyncThunk(
       localStorage.setItem("userInfo", JSON.stringify(res.data));
       return res.data;
     } catch (error) {
-      console.log(error.response.data.message);
       return rejectWithValue(
         error.response && error.response.data.message
           ? error.response.data.message
@@ -31,7 +31,7 @@ export const signin = createAsyncThunk(
   }
 );
 
-export const userSlice = createSlice({
+const userAuthSlice = createSlice({
   name: "signin",
   initialState,
   reducers: {
@@ -57,6 +57,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { signout } = userSlice.actions;
+export const { signout } = userAuthSlice.actions;
 
-export default userSlice.reducer;
+export default userAuthSlice.reducer;

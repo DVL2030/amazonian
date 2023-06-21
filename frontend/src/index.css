@@ -150,6 +150,9 @@ button.search {
 #sign-in-dropdown {
   display: inline-block;
 }
+#sign-in-dropdown:hover {
+  cursor: pointer;
+}
 
 #drop-down-content {
   position: absolute;
@@ -291,6 +294,15 @@ span.navFooterDescText {
    HTML Elements Styles
    ========================================================================== */
 
+hr.grad {
+  border: none;
+  min-height: 1px;
+  height: 1px;
+  max-height: 1px;
+  background-image: linear-gradient(to right, #00000000, #00000060, #00000000);
+  /* margin-bottom: 2rem; */
+}
+
 /* ==========================================
    Font
    ==========================================*/
@@ -396,9 +408,10 @@ ul.no-list-style {
   background-color: white;
   border: 0.1rem #c4c4c4 solid;
   border-radius: 0.2rem;
+  padding-bottom: 2rem;
 }
 
-.crd > * {
+.crd > *:not(hr) {
   margin-bottom: 0.2rem;
   padding: 1rem 1rem 0 1rem;
 }
@@ -419,9 +432,9 @@ ul.no-list-style {
   flex: 0 0 10%;
 }
 
-.crd.signin {
+/* .crd.signin {
   height: 35rem;
-}
+} */
 
 .vl {
   border-left: 0.1rem solid #c0c0c070;
@@ -519,6 +532,10 @@ form:not(.search, #question, .review) > div {
   display: flex;
   flex-direction: column;
   margin: 1rem;
+}
+
+form.register input {
+  height: 2.5rem;
 }
 
 button.rect {

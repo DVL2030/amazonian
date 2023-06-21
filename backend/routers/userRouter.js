@@ -47,13 +47,13 @@ userRouter.post(
     const password = bcrypt.hashSync(plainTextPassword);
     try {
       const newUser = await User.create({ name, email, password });
-      return res.send({
-        _id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        isAdmin: newUser.isAdmin,
-        token: generateToken(newUser),
-      });
+      if (newUser) {
+        return res.send({
+          status: "success",
+          message:
+            "You have successfully create account. You will be redirected to home page soon..",
+        });
+      }
     } catch (error) {
       if (error.code === 11000) {
         return res.status(401).send({
