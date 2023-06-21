@@ -1,30 +1,33 @@
-import logo from "./logo.svg";
 import "./App.css";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import {
-  Col,
-  Nav,
-  Navbar,
-  Container,
-  Form,
-  Row,
-  Carousel,
-} from "react-bootstrap";
-import {} from "bootstrap";
-
+import { Col, Nav, Navbar, Container, Form, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import HomePage from "./pages/HomePage";
 import SigninPage from "./pages/SigninPage";
 
+import { signout } from "./slice/userSlice";
+
 function App() {
+  const dispatch = useDispatch();
+  // const cartState = useSelector((state) => state.cart);
+  // const { cartItems } = cartState;
+  const userState = useSelector((state) => state.user);
+  const { userInfo } = userState;
+
   const [filterOnFocus, setFilterOnFocus] = useState(false);
 
   const adjustWidth = () => {
     let select = document.getElementById("searchSelect");
     let selectedOption = select[select.selectedIndex];
     select.style.width = Number(selectedOption.text.length + 6) + "ch";
+  };
+
+  const signOutHandler = () => {
+    dispatch(signout());
   };
 
   return (
@@ -50,7 +53,7 @@ function App() {
               <Nav className="me-2 d-none d-lg-block">
                 <Nav.Link href="#features">
                   <span className="nav-line-1">
-                    <small>Hello, Sign in</small>
+                    <small>Hello, {userInfo ? userInfo.name : "Sign in"}</small>
                   </span>
                   <br />
                   <span className="nav-line-2">
@@ -66,10 +69,9 @@ function App() {
                   id="search-select"
                   onChange={adjustWidth}
                   aria-label="Default select example"
+                  defaultValue={"search-alias=aps"}
                 >
-                  <option selected value="search-alias=aps">
-                    All
-                  </option>
+                  <option value="search-alias=aps">All</option>
                   <option value="search-alias=arts-crafts-intl-ship">
                     Arts &amp; Crafts
                   </option>
@@ -170,7 +172,9 @@ function App() {
                   onMouseOut={() => setFilterOnFocus(false)}
                 >
                   <div className="nav-line-1-container">
-                    <span className="nav-line-1">Hello, Sign in</span>
+                    <span className="nav-line-1">
+                      Hello, {userInfo ? userInfo.name : "Sign in"}
+                    </span>
                   </div>
                   <span className="nav-line-2 ">
                     <b>
@@ -181,27 +185,29 @@ function App() {
                     <Container>
                       <Row className="mb-1">
                         <Col className="flex-fill d-flex justify-content-center align-items-center">
-                          {false ? (
+                          {userInfo ? (
                             <button
-                              className="rect"
-                              // onClick={signOutHandler}
+                              className="rect yellow"
+                              onClick={signOutHandler}
                             >
                               Sign Out
                             </button>
                           ) : (
                             <Link to="/signin">
-                              <button className="rect">Sign in</button>
+                              <button className="rect yellow">Sign in</button>
                             </Link>
                           )}
                         </Col>
-                        <Col className="flex-fill d-flex justify-content-center align-items-center gap-2">
-                          <div>
-                            <small className="dark-grey">New customer?</small>
-                          </div>
-                          <Link to="/register">
-                            <small className="blue">Start here</small>
-                          </Link>
-                        </Col>
+                        {!userInfo && (
+                          <Col className="flex-fill d-flex justify-content-center gap-2">
+                            <div>
+                              <small className="dark-grey">New customer?</small>
+                            </div>
+                            <Link to="/register">
+                              <small className="blue">Start here</small>
+                            </Link>
+                          </Col>
+                        )}
                       </Row>
                       <hr className="my-4 text-dark"></hr>
                       <Row className="align-items-start">
@@ -302,7 +308,7 @@ function App() {
                     <i className="fa-solid fa-arrow-right fa-2xs text-white"></i>
                   </span>
                   <span>
-                    <i class="fa-regular fa-user fa-2xl text-white"></i>
+                    <i className="fa-regular fa-user fa-2xl text-white"></i>
                   </span>
                 </Nav.Link>
                 <Nav.Link href="#cart" className="d-flex">
@@ -315,7 +321,7 @@ function App() {
                       0
                     </span>
                     <div className="img-cart">
-                      <i class="fa-brands fa-opencart fa-2xl"></i>
+                      <i className="fa-brands fa-opencart fa-2xl"></i>
                     </div>
                   </div>
                   <div className="nav-cart-text-container d-flex flex-column">
@@ -327,7 +333,7 @@ function App() {
                 </Nav.Link>
               </Nav>
             </Container>
-            <Container fluid className="d-block d-md-none mt-2">
+            <Container fluid className="d-block d-md-none mt-2 mb-2">
               <Form id="searchForm" className="d-flex flex-fill ">
                 <Form.Control
                   id="searchControl"
@@ -367,43 +373,43 @@ function App() {
                   <div className="nav-footer-col-header">Get to Know Us</div>
                   <ul className="nav-footer-link">
                     <li className="nav_first">
-                      <a href="https://www.amazon.jobs" className="nav_a">
+                      <Link href="https://www.amazon.jobs" className="nav_a">
                         Careers
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://blog.aboutamazon.com/?utm_source=gateway&amp;utm_medium=footer"
                         className="nav_a"
                       >
                         Blog
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.aboutamazon.com/?utm_source=gateway&amp;utm_medium=footer"
                         className="nav_a"
                       >
                         About Amazon
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="https://www.amazon.com/ir" className="nav_a">
+                      <Link href="https://www.amazon.com/ir" className="nav_a">
                         Investor Relations
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/browse.html?node=2102313011&amp;ref_=footer_devices"
                         className="nav_a"
                       >
                         Amazon Devices
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav_last ">
-                      <a href="https://www.amazon.science" className="nav_a">
+                      <Link href="https://www.amazon.science" className="nav_a">
                         Amazon Science
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </Col>
@@ -413,68 +419,69 @@ function App() {
                   </div>
                   <ul className="nav-footer-link">
                     <li className="nav_first">
-                      <a
+                      <Link
                         href="https://services.amazon.com/sell.html?ld=AZFSSOA&amp;ref_=footer_soa"
                         className="nav_a"
                       >
                         Sell products on Amazon
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://services.amazon.com/amazon-business.html?ld=usb2bunifooter&amp;ref_=footer_b2b"
                         className="nav_a"
                       >
                         Sell on Amazon Business
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="https://developer.amazon.com" className="nav_a">
+                      <Link
+                        href="https://developer.amazon.com"
+                        className="nav_a"
+                      >
                         Sell apps on Amazon
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://affiliate-program.amazon.com/"
                         className="nav_a"
                       >
                         Become an Affiliate
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://advertising.amazon.com/?ref=ext_amzn_ftr"
                         className="nav_a"
                       >
                         Advertise Your Products
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/seller-account/mm-summary-page.html?ld=AZFooterSelfPublish&amp;topic=200260520&amp;ref_=footer_publishing"
                         className="nav_a"
                       >
                         Self-Publish with Us
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://go.thehub-amazon.com/amazon-hub-locker"
                         className="nav_a"
                       >
                         Host an Amazon Hub
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav_last nav_a_carat">
-                      <span className="nav_a_carat" aria-hidden="true">
-                        ›
-                      </span>
-                      <a
+                      <span className="nav_a_carat" aria-hidden="true"></span>
+                      <Link
                         href="https://www.amazon.com/b/?node=18190131011&amp;ld=AZUSSOA-seemore&amp;ref_=footer_seemore"
                         className="nav_a"
                       >
                         See More Make Money with Us
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </Col>
@@ -484,36 +491,36 @@ function App() {
                   </div>
                   <ul className="nav-footer-link">
                     <li className="nav_first">
-                      <a
+                      <Link
                         href="https://www.amazon.com/dp/B07984JN3L?plattr=ACOMFO&amp;ie=UTF-8"
                         className="nav_a"
                       >
                         Amazon Business Card-normal
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/browse.html?node=16218619011&amp;ref_=footer_swp"
                         className="nav_a"
                       >
                         Shop with Points
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/browse.html?node=10232440011&amp;ref_=footer_reload_us"
                         className="nav_a"
                       >
                         Reload Your Balance
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav_last ">
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/browse.html?node=388305011&amp;ref_=footer_tfx"
                         className="nav_a"
                       >
                         Amazon Currency Converter
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </Col>
@@ -521,68 +528,68 @@ function App() {
                   <div className="nav-footer-col-header">Let Us Help You </div>
                   <ul className="nav-footer-link">
                     <li className="nav_first">
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/help/customer/display.html?nodeId=GDFU3JS5AL6SYHRD&amp;ref_=footer_covid"
                         className="nav_a"
                       >
                         Amazon and COVID-19
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/css/homepage.html?ref_=footer_ya"
                         className="nav_a"
                       >
                         Your Account
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/css/order-history?ref_=footer_yo"
                         className="nav_a"
                       >
                         Your Orders
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468520&amp;ref_=footer_shiprates"
                         className="nav_a"
                       >
                         Shipping Rates &amp; Policies
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/css/returns/homepage.html?ref_=footer_hy_f_4"
                         className="nav_a"
                       >
                         Returns &amp; Replacements
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/digital/fiona/manage?ref_=footer_myk"
                         className="nav_a"
                       >
                         Manage Your Content and Devices
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/BIT/ref=footer_bit_v2_us_A0029?bitCampaignCode=A0029"
                         className="nav_a"
                       >
                         Amazon Assistant
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav_last ">
-                      <a
+                      <Link
                         href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508510&amp;ref_=footer_gw_m_b_he"
                         className="nav_a"
                       >
                         Help
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </Col>

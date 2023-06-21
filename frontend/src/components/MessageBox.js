@@ -15,16 +15,14 @@ export default function MessageBox(props) {
         </span>
       </div>
       <div>
-        <big>
+        <big className="d-inline-block mr-3">
           <strong>
             {props.variants === "danger"
               ? "There was a problem..."
               : props.variants === "success" && "Success !"}
           </strong>
         </big>
-        <span className={`${props.variants === "helpful" && "success"}`}>
-          {props.children}
-        </span>
+        <span className={props.variants}>{props.children}</span>
       </div>
     </div>
   );

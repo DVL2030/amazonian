@@ -3,11 +3,10 @@ import { Col, Container, Row, Carousel } from "react-bootstrap";
 
 export default function HomePage() {
   return (
-    <div>
+    <div id="home">
       <Carousel
         fade
         slide
-        showControls
         variant="dark"
         indicators={false}
         className="myCarousel"

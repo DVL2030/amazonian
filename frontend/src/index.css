@@ -19,9 +19,9 @@ code {
     monospace;
 }
 
-/* ==========================================================================
+/* ====================================================================================
    Color
-   ========================================================================== */
+   ==================================================================================== */
 .grey {
   color: #828282;
 }
@@ -44,9 +44,9 @@ code {
   font-size: larger;
 }
 
-/* ==========================================================================
+/* =====================================================================================
    Responsive Layout
-   ========================================================================== */
+   ===================================================================================== */
 
 .flex-fill {
   flex: 1 1 auto;
@@ -84,9 +84,9 @@ code {
 @media only screen and (min-width: 1200px) {
 }
 
-/* ==========================================================================
+/* ===================================================================================
    Header, Main, Footer
-   ========================================================================== */
+   ==================================================================================== */
 
 /* ==========================================
    Header
@@ -133,11 +133,6 @@ button.search {
   justify-content: center;
   color: #f08804;
   font-weight: 800;
-}
-
-.nav-cart-text-container .nav-line-2 {
-  /* margin-top: 10px;
-  margin-left: -8px; */
 }
 
 .nav-line-1,
@@ -206,6 +201,9 @@ button.search {
 main {
   /* max-width: 2156px; */
   margin: 0 auto;
+}
+
+#home {
   background-color: #e3e6e6;
 }
 
@@ -390,12 +388,14 @@ ul.no-list-style {
    ==========================================*/
 
 .crd {
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
   width: 25rem;
-  height: 30rem;
+  height: auto;
   margin: 0.5rem 0;
   background-color: white;
+  border: 0.1rem #c4c4c4 solid;
+  border-radius: 0.2rem;
 }
 
 .crd > * {
@@ -404,7 +404,7 @@ ul.no-list-style {
 }
 
 .crd-body {
-  flex: 1 1 auto;
+  /* flex: 1 1 auto; */
   /* background-color: #f08804; */
 }
 
@@ -417,6 +417,10 @@ ul.no-list-style {
 
 .crd-toe {
   flex: 0 0 10%;
+}
+
+.crd.signin {
+  height: 35rem;
 }
 
 .vl {
@@ -434,7 +438,6 @@ ul.no-list-style {
 .card-normal {
   /* display: flex;
   flex-wrap: wrap; */
-  /* aspect-ratio: 2/3; */
   /* max-width: 15rem; */
   height: 30rem;
   width: 25rem;
@@ -512,17 +515,34 @@ select:hover {
   cursor: pointer;
 }
 
+form:not(.search, #question, .review) > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
 button.rect {
-  background-color: #ffd814;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 0.5rem;
-  width: 15rem;
+  min-width: 15rem;
   height: 2.5rem;
   text-align: center;
   font-size: 1rem;
+}
+
+button.create-account {
+  width: 100%;
+}
+
+button.yellow {
+  background-color: #ffd814;
+}
+
+button.orange {
+  background-color: #f3d078;
 }
 
 /* ==========================================
@@ -540,3 +560,7 @@ button.rect {
   font-weight: 500;
   font-size: 1.2rem;
 }
+
+/* ==========================================
+   Alert
+   ==========================================*/
