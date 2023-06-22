@@ -19,30 +19,6 @@ code {
     monospace;
 }
 
-/* ====================================================================================
-   Color
-   ==================================================================================== */
-.grey {
-  color: #828282;
-}
-
-.blue {
-  color: #306faa;
-}
-
-.dark-grey {
-  color: #2e2e2e;
-}
-
-.green {
-  color: #4ba54b;
-}
-
-.dark-red {
-  color: #a02020;
-  font-weight: bold;
-  font-size: larger;
-}
 /* ===================================================================================
    Header, Main, Footer
    ==================================================================================== */
@@ -262,9 +238,51 @@ hr.grad {
   /* margin-bottom: 2rem; */
 }
 
+.vl {
+  border-left: 0.1rem solid #c0c0c070;
+  padding-left: 3rem;
+}
+
+/* ==========================================
+   Color
+   ==========================================*/
+
+.grey {
+  color: #828282;
+}
+
+.blue {
+  color: #306faa;
+}
+
+.dark-grey {
+  color: #2e2e2e;
+}
+
+.green {
+  color: #4ba54b;
+}
+
+.dark-red {
+  color: #a02020;
+  font-weight: bold;
+  font-size: larger;
+}
+
 /* ==========================================
    Font
    ==========================================*/
+
+.a-discout-price {
+  text-decoration: line-through;
+  font-size: 0.4rem;
+}
+
+.a-discout-price,
+.a-price-label {
+  font-size: 0.4rem;
+  color: #828282;
+}
 
 /* ==========================================
    Img
@@ -312,24 +330,17 @@ div.img-xl {
   height: 60rem;
 }
 
-div.img-carousel {
-  /* width: 300rem; */
-  height: auto;
-}
-
 div.img-xs img,
 div.img-sm img,
 div.img-md img,
 div.img-lg img,
 div.img-xl img {
-  display: block;
   height: 100%;
   width: auto;
-  margin: 0 auto;
 }
 
-img.responsive {
-  max-width: 100%;
+div.img-carousel {
+  height: auto;
 }
 
 /* ==========================================
@@ -405,6 +416,7 @@ ul.no-list-style {
   padding: 0;
 }
 .card-grid img {
+  width: 100%;
   height: 95%;
 }
 
@@ -412,9 +424,8 @@ ul.no-list-style {
   margin: 0;
 }
 
-.vl {
-  border-left: 0.1rem solid #c0c0c070;
-  padding-left: 3rem;
+.crd.crd-carousel {
+  height: auto;
 }
 
 .box {
@@ -507,6 +518,19 @@ button.orange {
 /* ==========================================
    Carousel
    ==========================================*/
+
+/* ==========================================
+   Rating
+   ==========================================*/
+
+.rating span {
+  color: gold;
+}
+
+.rating span:last-child {
+  margin: 0.5rem;
+  color: #404040;
+}
 
 /* =====================================================================================
    Responsive Layout

@@ -157,7 +157,7 @@ const buildHttpRequest = async (URL) => {
     console.log("Time took: ", (Date.now() - now) / 1000);
     fs.writeFile(
       process.cwd() +
-        "/amazon_fetch_" +
+        "/rawHTML/amazon_fetch_" +
         Math.floor(Math.random() * 10000) +
         ".html",
       body,
@@ -446,10 +446,10 @@ function scrapeCarousel(carousel, type = "a") {
 
   if (type == "feed") {
     className = ".feed-carousel-viewport > ul";
-    header = $(".as-title-block").text();
+    header = $(".as-title-block").text().trim();
   } else {
     className = ".a-carousel-viewport > ol";
-    header = $("h2.a-carousel-heading").text();
+    header = $("h2.a-carousel-heading").text().trim();
   }
 
   // const $selected = $('[data-selected=true]');
@@ -458,7 +458,7 @@ function scrapeCarousel(carousel, type = "a") {
 
   $(className)
     .children()
-    .each((i, item) => {
+    .each((_, item) => {
       let title, link, img, price, rating;
       const body = [];
 
@@ -491,7 +491,7 @@ function scrapeCarousel(carousel, type = "a") {
       price = scrapePrice(item);
       rating = scrapeRating(item);
 
-      let carousel = { title: title, body: body, price: price, rating: rating };
+      let carousel = { body: body, price: price, rating: rating };
 
       carouselItems.push(carousel);
     });
