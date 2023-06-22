@@ -247,12 +247,12 @@ function App() {
                           <h5 className="text-dark">Your Account</h5>
                           <ul className="drop-down-list no-list-style mb-1">
                             <li>
-                              <Link to="/user/home">
+                              <Link to={userInfo ? "/user/home" : "/"}>
                                 <span className="dark-grey">Your Account</span>
                               </Link>
                             </li>
                             <li>
-                              <Link to="/order/mine">
+                              <Link to={userInfo ? "/order/mine" : "/"}>
                                 <span className="dark-grey"> Your Orders</span>
                               </Link>
                             </li>
@@ -264,7 +264,7 @@ function App() {
                               </Link>
                             </li>
                             <li>
-                              <Link to="#">
+                              <Link to={userInfo ? "/user/savedItems" : "/"}>
                                 <span className="dark-grey">
                                   Your Save Items
                                 </span>

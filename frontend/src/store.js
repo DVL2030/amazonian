@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userAuthSlice from "./slice/userAuthSlice";
 import userRegisterSlice from "./slice/userRegisterSlice";
+import amazonSlice from "./slice/amazonSlice";
 
 const initialState = {
   userAuth: {
@@ -14,6 +15,7 @@ export const store = configureStore({
   reducer: {
     userAuth: userAuthSlice,
     userRegister: userRegisterSlice,
+    amazon: amazonSlice,
   },
   preloadedState: initialState,
 });

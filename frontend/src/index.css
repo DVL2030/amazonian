@@ -43,47 +43,6 @@ code {
   font-weight: bold;
   font-size: larger;
 }
-
-/* =====================================================================================
-   Responsive Layout
-   ===================================================================================== */
-
-.flex-fill {
-  flex: 1 1 auto;
-}
-
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-  #nav-cart-count {
-    top: -0.2rem;
-  }
-}
-
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-  #nav-cart-count {
-    top: -0.2rem;
-  }
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-  #search-nav-container > *:not(#search-form):hover {
-    border: 0.15rem solid #ffffff;
-  }
-  #nav-cart-count {
-    top: 0.3rem;
-  }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-}
-
 /* ===================================================================================
    Header, Main, Footer
    ==================================================================================== */
@@ -212,14 +171,14 @@ main {
 
 .myCarousel {
   position: relative;
-  max-width: 1500px;
+  max-width: 1400px;
   margin: 0 auto;
   /* z-index: 1; */
 }
 
 .main-container {
   position: relative;
-  max-width: 1500px;
+  max-width: 1400px;
   margin: 0 auto;
   padding-bottom: 3rem;
 }
@@ -379,11 +338,16 @@ img.responsive {
 
 a {
   text-decoration: none;
+  color: #5e9da8;
+  /* color: red; */
+  margin: 0;
+  padding: 0;
 }
 
 a:link,
 a:visited {
   text-decoration: none;
+  color: #5e9da8;
 }
 
 /* ==========================================
@@ -400,15 +364,16 @@ ul.no-list-style {
    ==========================================*/
 
 .crd {
-  /* display: flex; */
-  /* flex-direction: column; */
-  width: 25rem;
-  height: auto;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  /* min-width: 24rem; */
+  /* min-height: 28rem; */
+  height: 30rem;
   margin: 0.5rem 0;
-  background-color: white;
-  border: 0.1rem #c4c4c4 solid;
+  background-color: #ffffff;
   border-radius: 0.2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 0.5rem;
 }
 
 .crd > *:not(hr) {
@@ -417,24 +382,35 @@ ul.no-list-style {
 }
 
 .crd-body {
-  /* flex: 1 1 auto; */
+  flex: 1;
   /* background-color: #f08804; */
 }
 
 .crd-body img {
-  max-height: 100%;
-  min-height: 80%;
-  min-width: 80%;
-  max-width: 100%;
+  height: 95%;
+  width: 100%;
+  aspect-ratio: 3/2;
 }
-
-.crd-toe {
-  flex: 0 0 10%;
-}
-
-/* .crd.signin {
-  height: 35rem;
+/* 
+.crd-footer {
+  flex: 0 0 10px;
 } */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* column-gap: 0.5rem; */
+  gap: 1.5rem 1rem;
+  margin: 0;
+  padding: 0;
+}
+.card-grid img {
+  height: 95%;
+}
+
+.card-grid span {
+  margin: 0;
+}
 
 .vl {
   border-left: 0.1rem solid #c0c0c070;
@@ -446,60 +422,6 @@ ul.no-list-style {
   border-radius: 0 0 8px 8px;
   position: relative;
   padding: 1rem 1.5rem;
-}
-
-.card-normal {
-  /* display: flex;
-  flex-wrap: wrap; */
-  /* max-width: 15rem; */
-  height: 30rem;
-  width: 25rem;
-  margin: 0.5rem 0;
-  padding: 1em 1em;
-  /* border: 0.1rem #c4c4c4 solid; */
-  /* border-radius: 0.5rem; */
-  /* max-height: 30rem;
-  min-height: 30rem; */
-  background-color: white;
-}
-
-.card-ui-header > h5 {
-  font-weight: 700;
-}
-
-.card-ui-body {
-  min-height: 24rem;
-}
-
-.card-ui-body > img {
-  min-width: 25%;
-  height: auto;
-}
-
-.card-normal.center {
-  justify-content: center;
-}
-
-.card-normal-body > * {
-  margin-bottom: 1.8rem;
-  word-wrap: break-word;
-}
-
-/* 
-.card-header {
-  flex-basis: 100%;
-} */
-
-.card-normal-content {
-  flex-basis: 100%;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  /* column-gap: 0.5rem; */
-  gap: 1rem 1rem;
-  background-color: white;
 }
 
 /* ==========================================
@@ -581,3 +503,81 @@ button.orange {
 /* ==========================================
    Alert
    ==========================================*/
+
+/* ==========================================
+   Carousel
+   ==========================================*/
+
+/* =====================================================================================
+   Responsive Layout
+   ===================================================================================== */
+
+.flex-fill {
+  flex: 1 1 auto;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  #nav-cart-count {
+    top: -0.2rem;
+  }
+  .crd {
+    height: 19rem;
+  }
+  .crd h5,
+  .crd-footer small {
+    font-size: 0.7rem;
+  }
+  .card-grid small {
+    font-size: 0.4rem;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  #nav-cart-count {
+    top: -0.2rem;
+  }
+  .crd {
+    height: 23rem;
+  }
+  .crd-head > h5,
+  .crd-footer small {
+    font-size: 0.7rem;
+  }
+  .card-grid small {
+    font-size: 0.55rem;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #search-nav-container > *:not(#search-form):hover {
+    border: 0.15rem solid #ffffff;
+  }
+  #nav-cart-count {
+    top: 0.3rem;
+  }
+  .crd {
+    height: 24rem;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .crd {
+    height: 26rem;
+  }
+
+  .crd-head > h5,
+  .crd-footer small {
+    font-size: 1rem;
+  }
+  .card-grid small {
+    font-size: 0.7rem;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+}

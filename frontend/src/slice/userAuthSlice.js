@@ -32,7 +32,7 @@ export const signin = createAsyncThunk(
 );
 
 const userAuthSlice = createSlice({
-  name: "signin",
+  name: "auth",
   initialState,
   reducers: {
     signout() {
