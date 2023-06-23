@@ -7,6 +7,7 @@ import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
 
 import MultiCarousel from "../components/MultiCarousel";
+import Card from "../components/Card";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -14,12 +15,9 @@ export default function HomePage() {
   const amazonState = useSelector((state) => state.amazon);
   const { data, loading, error } = amazonState;
 
-  const defaultSrc =
-    "https://images-na.ssl-images-amazon.com/images/G/01/AmazonExports/Fuji/2020/May/Dashboard/Fuji_Dash_Beauty_1x._SY304_CB432774351_.jpg";
-
   useEffect(() => {
     dispatch(getHomePage());
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -63,100 +61,26 @@ export default function HomePage() {
               <Row className="gwCardList">
                 {data.gwCardList.map((card) => (
                   <Col xs={6} md={4} lg={3}>
-                    <div className="crd">
-                      <div className="crd-head">
-                        <h5>{card.header}</h5>
-                      </div>
-
-                      <div className="crd-body">
-                        {card.items.length <= 1 ? (
-                          card.items.map((item, idx) => (
-                            <Link key={idx} to={item.link}>
-                              <img
-                                className="img"
-                                src={item.img ? item.img : defaultSrc}
-                                alt="gw-card-img"
-                              />
-                            </Link>
-                          ))
-                        ) : (
-                          <div className="card-grid">
-                            {card.items.map(
-                              (item, idx) =>
-                                idx <= 3 && (
-                                  <div key={idx} className="card-grid-item">
-                                    <Link to={item.link ? item.link : ""}>
-                                      <img
-                                        src={item.img ? item.img : defaultSrc}
-                                        alt="gw-grid-img"
-                                      />
-                                      <span>
-                                        <small>{item.label}</small>
-                                      </span>
-                                    </Link>
-                                  </div>
-                                )
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="crd-footer">
-                        <Link to="/">
-                          <small>See more</small>
-                        </Link>
-                      </div>
-                    </div>
+                    <Card
+                      header={card.header}
+                      items={card.items}
+                      footer="See more"
+                      footerLink="/"
+                    ></Card>
                   </Col>
                 ))}
               </Row>
             )}
             {data && data.mainCard && data.mainCard.length > 0 && (
               <Row className="mainCard mb-3">
-                {data.mainCard.map((card) => (
-                  <Col xs={6} md={4} lg={3}>
-                    <div className="crd">
-                      <div className="crd-head">
-                        <h5>{card.header}</h5>
-                      </div>
-
-                      <div className="crd-body">
-                        {card.items.length <= 1 ? (
-                          card.items.map((item, idx) => (
-                            <Link key={idx} to={item.link}>
-                              <img
-                                className="img"
-                                src={item.img ? item.img : defaultSrc}
-                                alt="gw-card-img"
-                              />
-                            </Link>
-                          ))
-                        ) : (
-                          <div className="card-grid">
-                            {card.items.map(
-                              (item, idx) =>
-                                idx <= 3 && (
-                                  <div key={idx} className="card-grid-item">
-                                    <Link to={item.link}>
-                                      <img
-                                        src={item.img ? item.img : defaultSrc}
-                                        alt="gw-grid-img"
-                                      />
-                                      <span>
-                                        <small>{item.label}</small>
-                                      </span>
-                                    </Link>
-                                  </div>
-                                )
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="crd-footer">
-                        <Link to="/">
-                          <small>See more</small>
-                        </Link>
-                      </div>
-                    </div>
+                {data.mainCard.map((card, idx) => (
+                  <Col key={idx} xs={6} md={4} lg={3}>
+                    <Card
+                      header={card.header}
+                      items={card.items}
+                      footer="Shop now"
+                      footerLink="/"
+                    ></Card>
                   </Col>
                 ))}
               </Row>

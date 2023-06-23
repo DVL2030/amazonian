@@ -26,6 +26,22 @@ export const getHomePage = createAsyncThunk(
   }
 );
 
+export const getProductList = createAsyncThunk(
+  "amazon/products",
+  async (searchParams, { rejectWithValue }) => {
+    try {
+      const res = await Axios.post("/api/amazon/products", searchParams);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const amazonSlice = createSlice({
   name: "amazon",
   initialState,
@@ -40,6 +56,18 @@ const amazonSlice = createSlice({
       state.data = action.payload;
     });
     builder.addCase(getHomePage.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getProductList.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductList.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.data = action.payload;
+    });
+    builder.addCase(getProductList.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

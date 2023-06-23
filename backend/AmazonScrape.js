@@ -36,6 +36,7 @@ const startScraper = async ({
       }${page ? `&page=${page}` : ""}`;
       resBody = await buildHttpRequest(apiEndpoint);
       result = scrapeProductSearchPage(resBody);
+      console.log(result);
       return result;
     case "productAsin":
       if (!asin)
@@ -155,19 +156,19 @@ const buildHttpRequest = async (URL) => {
     const response = await fetch(URL, options);
     const body = await response.text();
     console.log("Time took: ", (Date.now() - now) / 1000);
-    fs.writeFile(
-      process.cwd() +
-        "/rawHTML/amazon_fetch_" +
-        Math.floor(Math.random() * 10000) +
-        ".html",
-      body,
-      (err) => {
-        if (err) {
-          console.error(err);
-        }
-        console.log("File written Successfully");
-      }
-    );
+    // fs.writeFile(
+    //   process.cwd() +
+    //     "/rawHTML/amazon_fetch_" +
+    //     Math.floor(Math.random() * 10000) +
+    //     ".html",
+    //   body,
+    //   (err) => {
+    //     if (err) {
+    //       console.error(err);
+    //     }
+    //     console.log("File written Successfully");
+    //   }
+    // );
 
     return body;
   } catch (err) {
@@ -234,10 +235,10 @@ const scrapeHomePage = (body) => {
 const scrapeProductSearchPage = (body) => {
   const $ = cheerio.load(body);
 
-  const productList = $("div[data-index]");
+  const totalPage = $("span.s-pagination-item:last").text();
   const searchItems = [];
 
-  productList.each((i, item) => {
+  $("div[data-index]").each((_, item) => {
     const productItem = {};
     const asin = $(item).prop("data-asin");
     // check if the div container has asin data attribute.
@@ -250,32 +251,37 @@ const scrapeProductSearchPage = (body) => {
       productItem["link"] = productLink;
       productItem["image"] = image;
 
-      // scrape product name & rating.
+      // scrape product name.
+      productItem["name"] = $(item).find("h2").text();
 
-      const name = $(item).find("h2").text();
-      productItem["name"] = name;
-      productItem["rating"] = scrapeRating(item);
+      // scrape product avgRating, totalReview, and shipping info
+      const labels = $(item).find("span[aria-label]");
+      productItem["rating"] = $(labels[0]).text().trim().split(" ")[0];
+      productItem["totalReview"] = $(labels[1]).text().trim();
 
       // scrape prime
       if ($("i.a-icon-prime")) productItem["prime"] = true;
       else productItem["prime"] = false;
 
       // scrape price
-      const price = scrapePrice(item);
-      productItem["currentPrice"] = price.currentPrice;
-      productItem["beforePrice"] = price.beforePrice;
+      productItem["price"] = scrapePrice(item);
 
       // scrape shipping info
-      const $shipping = $(item).find("div.a-row > span[aria-label]");
+      const shipping = $(item).find("div.a-row > span[aria-label]");
 
-      $shipping.each((i, s) => {
-        if ($(s).text().toLowerCase().includes("delivery"))
-          productItem["shippingInfo"] = $(s).text();
+      const shippingInfo = [];
+
+      shipping.each((i, s) => {
+        let info = $(s).text().toLowerCase();
+        if (info.includes("delivery") || info.includes("order"))
+          shippingInfo.push(info);
       });
+      productItem["shippingInfo"] = shippingInfo;
+
       searchItems.push(productItem);
     }
   });
-  return searchItems;
+  return { totalPage: totalPage, items: searchItems };
 };
 
 const scrapeProductDetailsPage = (body) => {
@@ -300,8 +306,7 @@ const scrapeProductDetailsPage = (body) => {
 
     // scrape price
     const price = scrapePrice($("#corePriceDisplay_desktop_feature_div"));
-    product["currentPrice"] = price.currentPrice || "";
-    product["beforePrice"] = price.beforePrice || "";
+    product["price"] = price;
 
     // scrape overview
     product["overview"] = scrapeProductOverview($);
@@ -344,6 +349,9 @@ const scrapeProductDetailsPage = (body) => {
     const avgRating = $('i[data-hook="average-star-rating"]')
       .text()
       .split(" ")[0];
+    const totalReviewCount = $('div[data-hook="total-review-count"]')
+      .text()
+      .trim();
     const ratingDist = {};
     const histogram = $("#customerReviews tr > td:last-child a").each(
       (i, item) => {
@@ -354,6 +362,7 @@ const scrapeProductDetailsPage = (body) => {
 
     product["avgRating"] = avgRating;
     product["histogram"] = ratingDist;
+    product["totalReviewCount"] = totalReviewCount;
 
     // scrape all top reviews in the product detail page.
     const reviewsLocal = $("#cm-cr-dp-review-list");
@@ -403,13 +412,15 @@ const scrapeReviewPage = (body) => {
 
 function scrapeRating(review) {
   const $ = cheerio.load(review);
+  // console.log($("i.a-icon-star-small").text());
 
   const icon =
-    $("i.a-icon-star") ||
-    $("i.a-icon-star-small") ||
-    $("i.a-icon-star-medium") ||
-    $("i.a-icon-star-large");
-  const rating = icon.text().trim().split(" ")[0];
+    $("i.a-icon-star") || $("i.a-icon-star-small") || $("i.a-icon-star-medium");
+
+  const rating = $(icon).text().trim().split(" ")[0];
+  if (!rating) {
+    return $("i.a-icon-star-small").text().trim().split(" ")[0];
+  }
 
   return rating;
 }
@@ -513,7 +524,7 @@ function scrapeAsinFromLink(link) {
 function scrapePrice(body) {
   const $ = cheerio.load(cheerio.html(body));
 
-  let price;
+  let price, discount;
 
   const currentPrice =
     $('span[data-a-size="m"]')[0] ||
@@ -528,7 +539,15 @@ function scrapePrice(body) {
     price = $("span.a-color-price").text();
   }
 
-  return { currentPrice: price, beforePrice: beforePrice };
+  if (price && beforePrice) {
+    discount = Math.round(
+      (1 -
+        parseFloat(price.substring(1)) / parseFloat(beforePrice.substring(1))) *
+        100
+    );
+  }
+
+  return { currentPrice: price, beforePrice: beforePrice, discount: discount };
 }
 
 function scrapeProductImages(body) {
@@ -768,9 +787,11 @@ function scrapeReviews(body) {
   return reviewList;
 }
 
-// const result = await startScraper({
-//     type: 'productAsin',
-//     asin: 'B073R2C9T6'
-// });
+const result = await startScraper({
+  type: "products",
+  keyword: "iphone",
+});
+
+console.log(result);
 
 export default startScraper;

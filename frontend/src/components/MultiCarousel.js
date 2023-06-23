@@ -32,8 +32,9 @@ export default function MultiCarousel(props) {
         <Card
           key={idx}
           items={item.body}
-          pricing={item.pricing}
+          price={item.price}
           rating={item.rating}
+          carousel={true}
         ></Card>
       ))}
     </Carousel>

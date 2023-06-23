@@ -6,10 +6,11 @@ export default function Card(props) {
   const cardFooters = ["See more, See all deals, Shop now"];
   const randFooter = cardFooters[Math.floor(Math.random() * 2)];
 
-  const { header, items, pricing, rating } = props;
+  const { header, items, price, rating, footer, footerLink, carousel } = props;
+  console.log(price);
 
   return (
-    <div className="crd crd-carousel">
+    <div className={`crd ${carousel ? "crd-carousel" : ""}`}>
       {header && (
         <div className="crd-head">
           <h5>{header}</h5>
@@ -20,12 +21,14 @@ export default function Card(props) {
         {items.length <= 1 ? (
           items.map((item, idx) => (
             <div>
-              <Link key={idx} to={item.link}>
-                <img
-                  className="img"
-                  src={item.img ? item.img : ""}
-                  alt="gw-card-img"
-                />
+              <Link
+                key={idx}
+                to={item.link}
+                className={
+                  price && price.currentPrice.length > 1 ? "bg-grey" : ""
+                }
+              >
+                <img src={item.img ? item.img : ""} alt="gw-card-img" />
               </Link>
               {item.title && <Link to={item.link}>{item.title}</Link>}
             </div>
@@ -36,7 +39,7 @@ export default function Card(props) {
               (item, idx) =>
                 idx <= 3 && (
                   <div key={idx} className="card-grid-item">
-                    <Link to={item.link ? item.link : ""}>
+                    <Link to={item.link}>
                       <img src={item.img ? item.img : ""} alt="gw-grid-img" />
                       <span>
                         <small>{item.label}</small>
@@ -49,18 +52,36 @@ export default function Card(props) {
         )}
       </div>
       <div className="crd-footer">
-        {pricing ? (
+        {price && price.currentPrice.length > 1 ? (
           rating ? (
             <Rating rating={parseInt(rating)} size="fa-sm" />
           ) : (
             <div>
-              <span className="a-price">${pricing.currentPrice}</span>
-              <span className="a-price-label">List Price</span>
-              <span className="a-discout-price">${pricing.beforePrice}</span>
+              <div className="d-flex align-items-center gap-1">
+                <span className="discount-box bg-danger text-white p-1">
+                  {price.discount}% off
+                </span>
+                <strong className="text-danger">Deal</strong>
+              </div>
+
+              <div>
+                <span className="a-price">
+                  {price.currentPrice}
+                  {"  "}
+                </span>
+                <span className="a-price-label">List Price</span>
+                {price.beforePrice && (
+                  <span className="a-discout-price">${price.beforePrice}</span>
+                )}
+              </div>
             </div>
           )
         ) : (
-          <></>
+          footer && (
+            <Link to={footerLink}>
+              <small>{footer}</small>
+            </Link>
+          )
         )}
       </div>
     </div>

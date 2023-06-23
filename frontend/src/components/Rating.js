@@ -9,10 +9,10 @@ export default function Rating(props) {
         <i
           className={
             rating >= 1
-              ? `fa fa-star ${size} ${color}`
+              ? `fa-solid fa-star ${size} ${color}`
               : rating >= 0.5
-              ? `fa fa-star-half-o ${size} ${color}`
-              : `fa fa-star-o ${size} ${color}`
+              ? `fa-solid fa-star-half-stroke ${size} ${color}`
+              : `fa-regular fa-star ${size} ${color}`
           }
         ></i>
       </span>
@@ -20,10 +20,10 @@ export default function Rating(props) {
         <i
           className={
             rating >= 2
-              ? `fa fa-star ${size} ${color}`
+              ? `fa-solid fa-star ${size} ${color}`
               : rating >= 1.5
-              ? `fa fa-star-half-o ${size} ${color}`
-              : `fa fa-star-o ${size} ${color}`
+              ? `fa-solid fa-star-half-stroke ${size} ${color}`
+              : `fa-regular fa-star ${size} ${color}`
           }
         ></i>
       </span>
@@ -31,10 +31,10 @@ export default function Rating(props) {
         <i
           className={
             rating >= 3
-              ? `fa fa-star ${size} ${color}`
+              ? `fa-solid fa-star ${size} ${color}`
               : rating >= 2.5
-              ? `fa fa-star-half-o ${size} ${color}`
-              : `fa fa-star-o ${size} ${color}`
+              ? `fa-solid fa-star-half-stroke ${size} ${color}`
+              : `fa-regular fa-star ${size} ${color}`
           }
         ></i>
       </span>
@@ -42,10 +42,10 @@ export default function Rating(props) {
         <i
           className={
             rating >= 4
-              ? `fa fa-star ${size} ${color}`
+              ? `fa-solid fa-star ${size} ${color}`
               : rating >= 3.5
-              ? `fa fa-star-half-o ${size} ${color}`
-              : `fa fa-star-o ${size} ${color}`
+              ? `fa-solid fa-star-half-stroke ${size} ${color}`
+              : `fa-regular fa-star ${size} ${color}`
           }
         ></i>
       </span>
@@ -53,10 +53,10 @@ export default function Rating(props) {
         <i
           className={
             rating >= 5
-              ? `fa fa-star ${size} ${color}`
+              ? `fa-solid fa-star ${size} ${color}`
               : rating >= 4.5
-              ? `fa fa-star-half-o ${size} ${color}`
-              : `fa fa-star-o ${size} ${color}`
+              ? `fa-solid fa-star-half-stroke ${size} ${color}`
+              : `fa-regular fa-star ${size} ${color}`
           }
         ></i>
       </span>

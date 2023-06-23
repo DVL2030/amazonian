@@ -11,6 +11,7 @@ import SigninPage from "./pages/SigninPage";
 import RegisterPage from "./pages/RegisterPage";
 
 import { signout } from "./slice/userAuthSlice";
+import ProductSearchPage from "./pages/ProductSearchPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -363,8 +364,9 @@ function App() {
         >
           <Routes>
             <Route path="/" exact element={<HomePage />} />
-            <Route path="/signin" exact element={<SigninPage />} />
-            <Route path="/register" exact element={<RegisterPage />} />
+            <Route path="/signin" element={<SigninPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/products" element={<ProductSearchPage />} />
           </Routes>
         </main>
         <footer id="footer1" className="">

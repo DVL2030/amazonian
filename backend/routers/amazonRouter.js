@@ -19,22 +19,37 @@ amazonRouter.get(
   })
 );
 
-amazonRouter.get(
+amazonRouter.post(
   "/products",
-  expressAsyncHandler(async (req, res) => {})
+  expressAsyncHandler(async (req, res) => {
+    const { keyword, department, page } = req.body;
+    try {
+      const data = await AmazonScrape({
+        type: "products",
+        keyword: keyword,
+        department: department,
+        page: page,
+      });
+      return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
 );
 
-amazonRouter.get(
+amazonRouter.post(
   "/productAsin",
   expressAsyncHandler(async (req, res) => {})
 );
 
-amazonRouter.get(
+amazonRouter.post(
   "/reviews",
   expressAsyncHandler(async (req, res) => {})
 );
 
-amazonRouter.get(
+amazonRouter.post(
   "/reviewAsin",
   expressAsyncHandler(async (req, res) => {})
 );
