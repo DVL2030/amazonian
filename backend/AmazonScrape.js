@@ -787,11 +787,11 @@ function scrapeReviews(body) {
   return reviewList;
 }
 
-const result = await startScraper({
-  type: "products",
-  keyword: "iphone",
-});
+// const result = await startScraper({
+//   type: "products",
+//   keyword: "iphone",
+// });
 
-console.log(result);
+// console.log(result);
 
 export default startScraper;

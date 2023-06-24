@@ -9,9 +9,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/HomePage";
 import SigninPage from "./pages/SigninPage";
 import RegisterPage from "./pages/RegisterPage";
-
-import { signout } from "./slice/userAuthSlice";
 import ProductSearchPage from "./pages/ProductSearchPage";
+import Searchbox from "./components/Searchbox";
+import { signout } from "./slice/userAuthSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,12 +21,6 @@ function App() {
   const { userInfo } = userState;
 
   const [filterOnFocus, setFilterOnFocus] = useState(false);
-
-  const adjustWidth = () => {
-    let select = document.getElementById("searchSelect");
-    let selectedOption = select[select.selectedIndex];
-    select.style.width = Number(selectedOption.text.length + 6) + "ch";
-  };
 
   const signOutHandler = () => {
     dispatch(signout());
@@ -63,96 +57,48 @@ function App() {
                   </span>
                 </Nav.Link>
               </Nav>
-              <Form
+              {/* <Form
                 id="search-form"
                 className="nav-center d-flex flex-fill d-none d-md-flex "
               >
                 <Form.Select
                   id="search-select"
-                  onChange={adjustWidth}
+                  onChange={(e) => {
+                    selectChange(e.target.value);
+                  }}
                   aria-label="Default select example"
-                  defaultValue={"search-alias=aps"}
+                  defaultValue={"aps"}
                 >
-                  <option value="search-alias=aps">All</option>
-                  <option value="search-alias=arts-crafts-intl-ship">
-                    Arts &amp; Crafts
-                  </option>
-                  <option value="search-alias=automotive-intl-ship">
-                    Automotive
-                  </option>
-                  <option value="search-alias=baby-products-intl-ship">
-                    Baby
-                  </option>
-                  <option value="search-alias=beauty-intl-ship">
-                    Beauty &amp; Personal Care
-                  </option>
-                  <option value="search-alias=stripbooks-intl-ship">
-                    Books
-                  </option>
-                  <option value="search-alias=fashion-boys-intl-ship">
-                    Boys' Fashion
-                  </option>
-                  <option value="search-alias=computers-intl-ship">
-                    Computers
-                  </option>
-                  <option value="search-alias=deals-intl-ship">Deals</option>
-                  <option value="search-alias=digital-music">
-                    Digital Music
-                  </option>
-                  <option value="search-alias=electronics-intl-ship">
-                    Electronics
-                  </option>
-                  <option value="search-alias=fashion-girls-intl-ship">
-                    Girls' Fashion
-                  </option>
-                  <option value="search-alias=hpc-intl-ship">
-                    Health &amp; Household
-                  </option>
-                  <option value="search-alias=kitchen-intl-ship">
-                    Home &amp; Kitchen
-                  </option>
-                  <option value="search-alias=industrial-intl-ship">
+                  <option value="aps">All</option>
+                  <option value="arts-crafts">Arts &amp; Crafts</option>
+                  <option value="automotive">Automotive</option>
+                  <option value="baby-products">Baby</option>
+                  <option value="beauty">Beauty &amp; Personal Care</option>
+                  <option value="stripbooks">Books</option>
+                  <option value="fashion-boys">Boys' Fashion</option>
+                  <option value="computers">Computers</option>
+                  <option value="deals">Deals</option>
+                  <option value="digital-music">Digital Music</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="fashion-girls">Girls' Fashion</option>
+                  <option value="hpc">Health &amp; Household</option>
+                  <option value="kitchen">Home &amp; Kitchen</option>
+                  <option value="industrial">
                     Industrial &amp; Scientific
                   </option>
-                  <option value="search-alias=digital-text">
-                    Kindle Store
-                  </option>
-                  <option value="search-alias=luggage-intl-ship">
-                    Luggage
-                  </option>
-                  <option value="search-alias=fashion-mens-intl-ship">
-                    Men's Fashion
-                  </option>
-                  <option value="search-alias=movies-tv-intl-ship">
-                    Movies &amp; TV
-                  </option>
-                  <option value="search-alias=music-intl-ship">
-                    Music, CDs &amp; Vinyl
-                  </option>
-                  <option value="search-alias=pets-intl-ship">
-                    Pet Supplies
-                  </option>
-                  <option value="search-alias=instant-video">
-                    Prime Video
-                  </option>
-                  <option value="search-alias=software-intl-ship">
-                    Software
-                  </option>
-                  <option value="search-alias=sporting-intl-ship">
-                    Sports &amp; Outdoors
-                  </option>
-                  <option value="search-alias=tools-intl-ship">
-                    Tools &amp; Home Improvement
-                  </option>
-                  <option value="search-alias=toys-and-games-intl-ship">
-                    Toys &amp; Games
-                  </option>
-                  <option value="search-alias=videogames-intl-ship">
-                    Video Games
-                  </option>
-                  <option value="search-alias=fashion-womens-intl-ship">
-                    Women's Fashion
-                  </option>
+                  <option value="digital-text">Kindle Store</option>
+                  <option value="luggage">Luggage</option>
+                  <option value="fashion-mens">Men's Fashion</option>
+                  <option value="movies-tv">Movies &amp; TV</option>
+                  <option value="music">Music, CDs &amp; Vinyl</option>
+                  <option value="pets">Pet Supplies</option>
+                  <option value="instant-video">Prime Video</option>
+                  <option value="software">Software</option>
+                  <option value="sporting">Sports &amp; Outdoors</option>
+                  <option value="tools">Tools &amp; Home Improvement</option>
+                  <option value="toys-and-games">Toys &amp; Games</option>
+                  <option value="videogames">Video Games</option>
+                  <option value="fashion-womens">Women's Fashion</option>
                 </Form.Select>
                 <Form.Control
                   id="search-input"
@@ -160,11 +106,19 @@ function App() {
                   placeholder="Search"
                   className="me-2"
                   aria-label="Search"
+                  onChange={(e) => setKeyword(e.target.value)}
                 />
-                <button className="search" type="submit">
-                  <i className="fa fa-search fa-lg"></i>
+                <button
+                  className="search"
+                  type="submit"
+                  onSubmit={console.log("wow")}
+                >
+                  <Link to={buildURL}>
+                    <i className="fa fa-search fa-lg text-black"></i>
+                  </Link>
                 </button>
-              </Form>
+              </Form> */}
+              <Searchbox mobile={false} />
               <Nav>
                 <Nav.Link
                   id="sign-in-dropdown"
@@ -203,7 +157,7 @@ function App() {
                         {!userInfo && (
                           <Col className="flex-fill d-flex justify-content-center gap-2">
                             <div>
-                              <small className="dark-grey">New customer?</small>
+                              <small className="text-dark">New customer?</small>
                             </div>
                             <Link to="/register">
                               <small className="blue">Start here</small>
@@ -335,20 +289,8 @@ function App() {
                 </Nav.Link>
               </Nav>
             </Container>
-            <Container fluid className="d-block d-md-none mt-2 mb-2">
-              <Form id="searchForm" className="d-flex flex-fill ">
-                <Form.Control
-                  id="searchControl"
-                  type="search"
-                  placeholder="Search"
-                  className="me-2"
-                  aria-label="Search"
-                />
-                <button className="search" type="submit">
-                  <i className="fa fa-search fa-lg"></i>
-                </button>
-              </Form>
-            </Container>
+
+            <Searchbox mobile={true} />
           </Navbar>
         </header>
         <main
@@ -366,7 +308,26 @@ function App() {
             <Route path="/" exact element={<HomePage />} />
             <Route path="/signin" element={<SigninPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/products" element={<ProductSearchPage />} />
+            <Route
+              path="/products/:keyword"
+              exact
+              element={<ProductSearchPage />}
+            />
+            <Route
+              path="/products/:keyword/page/:page"
+              exact
+              element={<ProductSearchPage />}
+            />
+            <Route
+              path="/products/:keyword/department/:department"
+              exact
+              element={<ProductSearchPage />}
+            />
+            <Route
+              path="/products/:keyword/department/:department/page/:page"
+              exact
+              element={<ProductSearchPage />}
+            />
           </Routes>
         </main>
         <footer id="footer1" className="">

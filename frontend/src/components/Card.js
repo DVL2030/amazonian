@@ -1,13 +1,14 @@
 import React from "react";
 import Rating from "./Rating";
 import { Link } from "react-router-dom";
+import MultiCarousel from "./MultiCarousel";
+import { Carousel } from "react-bootstrap";
 
 export default function Card(props) {
   const cardFooters = ["See more, See all deals, Shop now"];
   const randFooter = cardFooters[Math.floor(Math.random() * 2)];
 
   const { header, items, price, rating, footer, footerLink, carousel } = props;
-  console.log(price);
 
   return (
     <div className={`crd ${carousel ? "crd-carousel" : ""}`}>
@@ -20,9 +21,8 @@ export default function Card(props) {
       <div className="crd-body">
         {items.length <= 1 ? (
           items.map((item, idx) => (
-            <div>
+            <div key={idx}>
               <Link
-                key={idx}
                 to={item.link}
                 className={
                   price && price.currentPrice.length > 1 ? "bg-grey" : ""
@@ -33,7 +33,7 @@ export default function Card(props) {
               {item.title && <Link to={item.link}>{item.title}</Link>}
             </div>
           ))
-        ) : (
+        ) : items.length < 5 ? (
           <div className="card-grid">
             {items.map(
               (item, idx) =>
@@ -42,12 +42,33 @@ export default function Card(props) {
                     <Link to={item.link}>
                       <img src={item.img ? item.img : ""} alt="gw-grid-img" />
                       <span>
-                        <small>{item.label}</small>
+                        {item.label.length > 15 ? (
+                          <small>{item.label.substring(0, 15)}...</small>
+                        ) : (
+                          <small>{item.label}</small>
+                        )}
                       </span>
                     </Link>
                   </div>
                 )
             )}
+          </div>
+        ) : (
+          <div>
+            <Carousel
+              className="main-card-carousel"
+              slide
+              variant="dark"
+              indicators={false}
+            >
+              {items.map((item, idx) => (
+                <Carousel.Item key={idx}>
+                  <Link>
+                    <img src={item.img} alt="First slide" />
+                  </Link>
+                </Carousel.Item>
+              ))}
+            </Carousel>
           </div>
         )}
       </div>

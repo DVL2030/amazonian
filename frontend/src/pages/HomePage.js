@@ -59,8 +59,8 @@ export default function HomePage() {
 
             {data && data.gwCardList && data.gwCardList.length > 0 && (
               <Row className="gwCardList">
-                {data.gwCardList.map((card) => (
-                  <Col xs={6} md={4} lg={3}>
+                {data.gwCardList.map((card, idx) => (
+                  <Col key={idx} xs={6} md={4} lg={3}>
                     <Card
                       header={card.header}
                       items={card.items}
@@ -87,9 +87,9 @@ export default function HomePage() {
             )}
             {data && data.mainCarousel && data.mainCarousel.length > 0 && (
               <Row className="mainCarousel">
-                {data.mainCarousel.map((carousel) => (
-                  <div className="carousel-container bg-white mb-5">
-                    <div className="darousel-header ">
+                {data.mainCarousel.map((carousel, idx) => (
+                  <div key={idx} className="carousel-container bg-white mb-5">
+                    <div className="carousel-header ">
                       <h4>{carousel.header}</h4>
                     </div>
                     <div className="carousel-viewport">

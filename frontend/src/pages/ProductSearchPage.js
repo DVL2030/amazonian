@@ -16,13 +16,13 @@ export default function ProductSearchPage() {
 
   const param = useParams();
   const {
-    keyword = "all",
-    department = "all",
+    keyword,
+    department,
     minPrice = 0,
     maxPrice = Infinity,
     minRating = 0,
     sortOrder = "newest",
-    page = 20,
+    page = 1,
     // availability = false,
   } = param;
 
@@ -37,34 +37,30 @@ export default function ProductSearchPage() {
     high: data ? Number(data.items.length * page) : 1,
   };
 
-  //   useEffect(() => {
-  //     dispatch(
-  //       getProductList({
-  //         type: "products",
-  //         keyword: "iphone",
-  //         department: "all",
-  //         page: "1",
-  //       })
-  //     );
-  //   }, []);
+  useEffect(() => {
+    if (!keyword) navigate("/");
+    else {
+      dispatch(
+        getProductList({
+          type: "products",
+          keyword: keyword,
+          department: department ? department : {},
+          page: "1",
+        })
+      );
+    }
+  }, []);
 
   return loading ? (
     <LoadingBox />
+  ) : data.items.length == 0 ? (
+    <div className="d-flex justify-content-center align-items-center vh-100">
+      Sorry, I could not find anything... Try with different keyword or refresh
+      this page.
+    </div>
   ) : (
     <div>
       {error && <MessageBox variants="danger">{error}</MessageBox>}
-
-      {/* 
-      asin: 'B0B833NMNQ',
-      link: '/GOWENIC-Unlocked-6-1inch-Smartphone-Android/dp/B0B833NMNQ/ref=sr_1_31?keywords=iphone&qid=1687499721&sr=8-31',
-      image: 'https://m.media-amazon.com/images/I/717hYJ3jqxL._AC_UY218_.jpg',
-      name: 'GOWENIC I14pro Plus Unlocked Phone, 6.1inch HD Screen Face Unlock Smartphone for Android 11, Dual SIM, 4G/64GB, GPS, Dual Camera 4G GSM Net Phone, Support 128G Memory Card, 4002mAh Battery(Blue)  ',
-      rating: '2.4 out of 5 stars',
-      totalReview: '6',
-      prime: true,
-      price: [Object],
-      shippingInfo: 'only 12 left in stock - order soon.' */}
-
       <Container className="products-search-container mt-4">
         <Row>
           <Col>
@@ -144,8 +140,8 @@ export default function ProductSearchPage() {
           <Col xs={12} lg={9}>
             <Container>
               {data &&
-                data.items.map((item) => (
-                  <Row className="products-search-row">
+                data.items.map((item, idx) => (
+                  <Row key={idx} className="products-search-row">
                     <Col xs={3} className="products-search-img">
                       <Link to={`/product/${item.asin}`}>
                         <img src={item.image} alt={item.asin}></img>
@@ -166,30 +162,27 @@ export default function ProductSearchPage() {
                           {item.price.currentPrice}
                           {"  "}
                         </span>
-                        <span className="a-price-label">List</span>
+
                         {item.price.beforePrice && (
-                          <span className="a-discout-price">
-                            ${item.price.beforePrice}
-                          </span>
+                          <>
+                            <span className="a-price-label">List</span>
+                            <span className="a-discout-price">
+                              ${item.price.beforePrice}
+                            </span>
+                          </>
                         )}
                       </div>
-                      {/* {item.shippingInfo.map((ship) => (
+                      {item.shippingInfo.map((ship) => (
                         <div className="shipping-info">
-                          <span
-                            className={`${
-                              ship.includes("order") && "dark-red"
-                            }`}
-                          >
-                            {ship}
-                          </span>
+                          <span className="dark-red">{ship}</span>
                         </div>
-                      ))} */}
+                      ))}
                     </Col>
                   </Row>
                 ))}
             </Container>
 
-            <div class="pagination">
+            <div className="pagination">
               <span aria-disabled={page == 1}>
                 <Link to="#">
                   <i className="fa-solid fa-angle-left fa-xs"></i> Prev

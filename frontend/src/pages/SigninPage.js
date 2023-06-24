@@ -59,7 +59,7 @@ export default function SigninPage() {
                 </div>
               </Col>
               <Col xs="12" className="mb-4">
-                <div className="crd crd-body signin mx-auto">
+                <div className="box signin mx-auto">
                   <form className="form" onSubmit={signinHandler}>
                     <div>
                       <h1>Sign-In</h1>

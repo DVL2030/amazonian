@@ -73,7 +73,7 @@ export default function RegisterPage() {
                 </div>
               </Col>
               <Col xs="12" className="mb-4">
-                <div className="crd crd-body register mx-auto">
+                <div className="box register mx-auto">
                   <form className="form register" onSubmit={registerHandler}>
                     <div>
                       <h1>Create account</h1>
