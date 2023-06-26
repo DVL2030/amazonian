@@ -22,11 +22,16 @@ export default function ProductDetailsPage() {
   const { asin } = param;
 
   const changeMainImage = (idx) => {
-    console.log(idx);
+    // console.log(idx);
     const listEl = document.getElementsByClassName("main-image-item");
     for (let list of listEl) {
-      if (list.getAttribute("key") === idx) list.classList.add("d-block");
-      else list.classList.remove("d-block");
+      if (list.getAttribute("data-index") == idx) {
+        list.classList.remove("d-none");
+        list.classList.add("d-block");
+      } else {
+        list.classList.remove("d-block");
+        list.classList.add("d-none");
+      }
     }
   };
 
@@ -38,7 +43,7 @@ export default function ProductDetailsPage() {
 
   useEffect(() => {
     if (!asin) navigate("/");
-    else {
+    else if (!data) {
       dispatch(
         getProductAsin({
           type: "product",
@@ -59,11 +64,24 @@ export default function ProductDetailsPage() {
         <>
           <Container id="ppd" className="product-details-container pt-4">
             <Row>
-              <Col xs={12} className="d-block d-lg-none">
+              <Col xs={12} className="d-block d-lg-none mb-4">
                 {data.images && (
-                  <Carousel>
+                  <Carousel
+                    fade
+                    slide
+                    variant="dark"
+                    indicators={false}
+                    className="myCarousel"
+                  >
                     {data.images.map((item, idx) => (
-                      <img key={idx} src={item.img} alt={idx}></img>
+                      <Carousel.Item>
+                        <img
+                          className="product-details-carousel-img"
+                          key={idx}
+                          src={item.image}
+                          alt={idx}
+                        ></img>
+                      </Carousel.Item>
                     ))}
                   </Carousel>
                 )}
@@ -72,9 +90,12 @@ export default function ProductDetailsPage() {
                 <div className="image-block d-flex">
                   <div className="imageThumbnail">
                     {data.images && (
-                      <ul className="no-list-style">
+                      <ul className="no-list-style imageThumbnail-list">
                         {data.images.map((item, idx) => (
-                          <li key={idx} onMouseOver={changeMainImage(idx)}>
+                          <li
+                            key={idx}
+                            onMouseOver={() => changeMainImage(idx)}
+                          >
                             <img src={item.thumb} alt={idx}></img>
                           </li>
                         ))}
@@ -86,6 +107,7 @@ export default function ProductDetailsPage() {
                       {data.images.map((item, idx) => (
                         <li
                           key={idx}
+                          data-index={idx}
                           className={
                             idx === 0
                               ? "main-image-item d-block"
@@ -243,7 +265,7 @@ export default function ProductDetailsPage() {
                 <Col lg={3} className="d-none d-lg-block">
                   <div className="review-histogram"></div>
                 </Col>
-                <Col lg={9} className="d-none d-lg-block">
+                <Col lg={9} className="">
                   <div className="reviews-local">
                     <h4>Top reviews from the United States</h4>
                     {data.reviewData.reviewListLocal.map((review, idx) => (
