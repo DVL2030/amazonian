@@ -357,8 +357,8 @@ div.img-cart {
 }
 
 div.img-xs {
-  width: 8rem;
-  height: 8rem;
+  width: 5rem;
+  height: auto;
 }
 
 div.img-sm {
@@ -467,8 +467,9 @@ div.img-carousel {
   max-height: 100%;
 }
 
-.mainCard .main-card-carousel img {
-  /* max-width: 50%; */
+.main-card-carousel img {
+  min-height: 13rem;
+  height: 100%;
 }
 
 /* ==========================================
@@ -525,6 +526,16 @@ select:hover {
   cursor: pointer;
 }
 
+select {
+  margin: 0 0.7rem;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  min-width: 5rem;
+  max-width: 10rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
 form:not(.search, #question, .review) > div {
   display: flex;
   flex-direction: column;
@@ -533,6 +544,11 @@ form:not(.search, #question, .review) > div {
 
 form.register input {
   height: 2.5rem;
+}
+
+.buy-box-qty select {
+  border-radius: 1.5rem;
+  font-size: 0.9rem;
 }
 
 button.rect {
@@ -567,7 +583,7 @@ button.review {
   background-color: #fff;
   box-shadow: 0px 0px 1.3rem #cecece;
   outline: none;
-  margin-top: 1rem;
+  margin: 1rem 0;
   width: 75%;
 }
 
@@ -577,25 +593,48 @@ button.helpful {
   margin-right: 3rem;
 }
 
+.buy-box-button {
+  padding: 0 1rem;
+}
+
 .buy-box-button button {
   border-radius: 1rem;
+  width: 100%;
+  margin-bottom: 0.6rem;
 }
 
-#product-details-overview {
-  display: table;
-  text-indent: initial;
-  border-spacing: 2rem;
+table.review {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  border-collapse: separate;
+  border-spacing: 0.8rem;
 }
 
-#product-details-overview tbody {
-  display: table-row-group;
-  vertical-align: middle;
-  border-color: inherit;
+td.filter {
+  left: 2rem;
 }
-#product-details-overview tbody tr {
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
+
+th.filter {
+  padding-left: 2rem;
+}
+
+#buy-box-tabular tr {
+  vertical-align: top;
+}
+
+#product-details-info {
+  border-spacing: 3rem;
+}
+
+#product-details-info tr {
+  border-top: 0.1rem solid rgb(180, 180, 180);
+  border-bottom: 0.1rem solid rgb(175, 175, 175);
+}
+
+#product-details-info th {
+  background-color: #e0e0df;
+  font-weight: 100;
+  color: #6e6e6e;
 }
 
 /* ==========================================

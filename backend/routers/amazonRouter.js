@@ -59,7 +59,21 @@ amazonRouter.post(
 
 amazonRouter.post(
   "/reviews",
-  expressAsyncHandler(async (req, res) => {})
+  expressAsyncHandler(async (req, res) => {
+    const { asin, reviewFilter } = req.body;
+    try {
+      const data = await AmazonScrape({
+        type: "reviews",
+        asin: asin,
+        reviewFilter: reviewFilter,
+      });
+      return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
 );
 
 amazonRouter.post(

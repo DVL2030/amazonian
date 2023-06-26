@@ -13,6 +13,7 @@ import ProductSearchPage from "./pages/ProductSearchPage";
 import Searchbox from "./components/Searchbox";
 import { signout } from "./slice/userAuthSlice";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import ReviewPage from "./pages/ReviewPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,10 +27,6 @@ function App() {
   const signOutHandler = () => {
     dispatch(signout());
   };
-
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
 
   return (
     <BrowserRouter>
@@ -337,6 +334,17 @@ function App() {
               path="/product/:asin"
               exact
               element={<ProductDetailsPage />}
+            />
+
+            <Route
+              path="/product-reviews/:asin"
+              exact
+              element={<ReviewPage />}
+            />
+            <Route
+              path="/product-reviews/:asin/page/:page"
+              exact
+              element={<ReviewPage />}
             />
           </Routes>
         </main>

@@ -9,6 +9,7 @@ import LoadingBox from "../components/LoadingBox";
 import Rating from "../components/Rating";
 import SorryBox from "../components/SorryBox";
 import RatingHistogram from "../components/RatingHistogram";
+import Review from "../components/Review";
 
 export default function ProductDetailsPage() {
   const dispatch = useDispatch();
@@ -143,41 +144,48 @@ export default function ProductDetailsPage() {
                   </div>
                   <hr></hr>
                   <div className="product-details-price">
-                    <div>
-                      <span className="product-details-discount dark-red">
-                        {data.price.discount}%{" "}
-                      </span>
-                      <span className="product-details-a-price">
-                        {data.price.currentPrice}
-                      </span>
-                    </div>
-
-                    {data.price.beforePrice && (
-                      <div>
-                        <small className="a-price-label">List Price:</small>
-                        <small className="a-discout-price">
-                          {data.price.beforePrice}
-                        </small>
-                      </div>
+                    {data.price.currentPrice && (
+                      <>
+                        <div>
+                          <span className="product-details-discount dark-red">
+                            {data.price.discount && `${data.price.discount}%`}{" "}
+                          </span>
+                          <span className="product-details-a-price">
+                            {data.price.currentPrice}
+                          </span>
+                        </div>
+                        {data.price.beforePrice && (
+                          <div>
+                            <small className="a-price-label">List Price:</small>
+                            <small className="a-discout-price">
+                              {data.price.beforePrice}
+                            </small>
+                          </div>
+                        )}
+                        <hr></hr>
+                      </>
                     )}
-                    <hr></hr>
+
                     {data.overview && (
-                      <table id="product-details-overview">
-                        <tbody>
-                          {Object.entries(data.overview).map(
-                            ([k, v], idx) =>
-                              k !== "aboutItem" && (
-                                <tr key={idx}>
-                                  <th>{k}</th>
-                                  <td>{v}</td>
-                                </tr>
-                              )
-                          )}
-                        </tbody>
-                      </table>
+                      <>
+                        <table id="product-details-overview">
+                          <tbody>
+                            {Object.entries(data.overview).map(
+                              ([k, v], idx) =>
+                                k !== "aboutItem" &&
+                                k !== "bookDes" && (
+                                  <tr key={idx}>
+                                    <th className="py-1">{k}</th>
+                                    <td className="py-1 px-5">{v}</td>
+                                  </tr>
+                                )
+                            )}
+                          </tbody>
+                        </table>
+                        <hr></hr>
+                      </>
                     )}
                   </div>
-                  <hr></hr>
                   <div className="product-details-variants"></div>
                   <div className="product-details-about">
                     <b>About this item</b>
@@ -199,35 +207,38 @@ export default function ProductDetailsPage() {
                   </div>
                   <div className="buy-box-delivery-info">
                     {data.delivery.map((d, idx) => (
-                      <div key={idx}>
-                        <span>{d}</span>
+                      <div className="mb-2" key={idx}>
+                        <b>{d}</b>
                       </div>
                     ))}
                   </div>
-                  <div className="buy-box-availability">
-                    <span
+                  <div className="buy-box-availability mt-2">
+                    <h4
                       className={
                         data.availability ? "text-success" : "text-danger"
                       }
                     >
                       {data.availability ? "In Stock" : "Out of Stock"}
-                    </span>
+                    </h4>
                   </div>
-                  <div className="buy-box-qty">
-                    Qty:
-                    <span>
-                      <select
-                        value={qty}
-                        onChange={(e) => setQty(e.target.value)}
-                      >
-                        {[...Array(Number(10)).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
-                      </select>
-                    </span>
-                  </div>
+                  {data.availability && (
+                    <div className="buy-box-qty mb-4">
+                      Qty:{" "}
+                      <span>
+                        <select
+                          value={qty}
+                          onChange={(e) => setQty(e.target.value)}
+                        >
+                          {[...Array(Number(10)).keys()].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </span>
+                    </div>
+                  )}
+
                   {data.availability && (
                     <div className="buy-box-button">
                       <button
@@ -247,8 +258,8 @@ export default function ProductDetailsPage() {
                           {Object.entries(data.tabularFeature).map(
                             ([k, v], idx) => (
                               <tr key={idx}>
-                                <th>{k}</th>
-                                <td>{v}</td>
+                                <th className="py-2 px-2">{k}</th>
+                                <td className="py-1 px-2">{v}</td>
                               </tr>
                             )
                           )}
@@ -267,12 +278,12 @@ export default function ProductDetailsPage() {
             {data.information && (
               <Row>
                 <Col>
-                  <table id="product-details-info">
+                  <table id="product-details-info" cellSpacing="2">
                     <tbody>
                       {Object.entries(data.information).map(([k, v], idx) => (
                         <tr key={idx}>
-                          <th>{k}</th>
-                          <td>{v}</td>
+                          <th className="bg-grey py-4 px-3">{k}</th>
+                          <td className="px-3">{v}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -304,49 +315,7 @@ export default function ProductDetailsPage() {
                   <div className="reviews-local ">
                     <h4>Top reviews from the United States</h4>
                     {data.reviewData.reviewListLocal.map((review, idx) => (
-                      <div className="mb-5" key={idx} id={review.id}>
-                        <div className="review-profile d-flex">
-                          <div className="profile-avatar">
-                            <img
-                              src={
-                                review.avatar
-                                  ? review.avatar
-                                  : "imgs/default-avatar.jpeg"
-                              }
-                              alt={review.name}
-                            ></img>
-                          </div>
-                          <div className="profile-name">
-                            <span>{review.name}</span>
-                          </div>
-                        </div>
-                        <div className="review-main-row">
-                          <Link to={`/review/${review.id}`}>
-                            <Rating rating={review.star}></Rating>
-                            <h5>{review.title}</h5>
-                          </Link>
-                        </div>
-                        <span className="review-date">{review.date}</span>
-                        <div className="review-strip">
-                          {review.verified && (
-                            <span className="text-danger">
-                              Verified Purchase
-                            </span>
-                          )}
-                        </div>
-                        <div className="review-content">
-                          <p>{review.content}</p>
-                        </div>
-                        <span className="review-vote">
-                          {review.helpful}{" "}
-                          {review.helpful > 1 ? "people" : "person"} found this
-                          helpful
-                        </span>
-                        <div>
-                          <button className="review helpful">Helpful</button>
-                          <button className="review helpful">Report</button>
-                        </div>
-                      </div>
+                      <Review review={review} key={idx}></Review>
                     ))}
                   </div>
                   <hr></hr>
@@ -354,46 +323,7 @@ export default function ProductDetailsPage() {
                     <h4>Top reviews from other countries</h4>
 
                     {data.reviewData.reviewListGlobal.map((review, idx) => (
-                      <div key={idx} id={review.id}>
-                        <div className="review-profile d-flex">
-                          <div className="profile-avatar">
-                            <img
-                              src={
-                                review.avatar
-                                  ? review.avatar
-                                  : "imgs/default-avatar.jpeg"
-                              }
-                              alt={review.name}
-                            ></img>
-                          </div>
-                          <div className="profile-name">
-                            <span>{review.name}</span>
-                          </div>
-                        </div>
-                        <div className="review-main-row">
-                          <Link to={`/review/${review.id}`}>
-                            <Rating rating={review.star}></Rating>
-                            <h5>{review.title}</h5>
-                          </Link>
-                        </div>
-                        <span className="review-date">{review.date}</span>
-                        <div className="review-strip">
-                          <span className="strip-col">{review.strip}</span>
-                          {review.verified && (
-                            <span className="text-danger vl">
-                              Verified Purchase
-                            </span>
-                          )}
-                        </div>
-                        <div className="review-content">
-                          <p>{review.content}</p>
-                        </div>
-                        <span className="review-vote">
-                          {review.helpful}{" "}
-                          {review.helpful > 1 ? "people" : "person"} found this
-                          helpful
-                        </span>
-                      </div>
+                      <Review review={review} key={idx}></Review>
                     ))}
                   </div>
                 </Col>

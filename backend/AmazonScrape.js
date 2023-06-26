@@ -66,11 +66,25 @@ const startScraper = async ({
       apiEndpoint = `${
         CONST.host
       }/product-reviews/${asin}/ref=cm_cr_arp_d_viewopt_srt?ie=UTF8&reviewerType=${
-        reviewFilter.reviewerType ? reviewFilter.reviewerType : "all_reviews"
-      }${reviewFilter.sortBy ? `&sortBy=${reviewFilter.sortBy}` : ""}${
-        reviewFilter.formatType ? `&formatType=${reviewFilter.formatType}` : ""
-      }${reviewFilter.mediaType ? `&sortBy=${reviewFilter.mediaType}` : ""}${
-        reviewFilter.filterByStar ? `&sortBy=${reviewFilter.filterByStar}` : ""
+        reviewFilter && reviewFilter.reviewerType
+          ? reviewFilter.reviewerType
+          : "all_reviews"
+      }${
+        reviewFilter && reviewFilter.sortBy
+          ? `&sortBy=${reviewFilter.sortBy}`
+          : ""
+      }${
+        reviewFilter && reviewFilter.formatType
+          ? `&formatType=${reviewFilter.formatType}`
+          : ""
+      }${
+        reviewFilter && reviewFilter.mediaType
+          ? `&sortBy=${reviewFilter.mediaType}`
+          : ""
+      }${
+        reviewFilter && reviewFilter.filterByStar
+          ? `&sortBy=${reviewFilter.filterByStar}`
+          : ""
       }&pageNumber=${page ? page : 1}`;
       resBody = await buildHttpRequest(apiEndpoint);
       result = scrapeReviewPage(resBody);
@@ -403,6 +417,27 @@ const scrapeProductDetailsPage = (body) => {
 const scrapeReviewPage = (body) => {
   const $ = cheerio.load(body);
 
+  const img = $('img[data-hook="cr-product-image"]').attr("src");
+
+  const pname = $('a[data-hook="product-link"]').text().trim();
+  const pasin = scrapeAsinFromLink(
+    $('a[data-hook="product-link"]').attr("href")
+  );
+
+  const avgRating = $('i[data-hook="average-star-rating"]')
+    .text()
+    .split(" ")[0];
+  const totalReviewCount = $('div[data-hook="total-review-count"]')
+    .text()
+    .trim();
+
+  const ratingDist = {};
+  const histogram = $("#histogramTable tr > td:last-child a").each(
+    (i, item) => {
+      ratingDist[5 - Number(i)] = $(item).text().trim();
+    }
+  );
+
   const topPositive = $("div.positive-review");
   const topCritical = $("div.critical-review");
 
@@ -412,7 +447,17 @@ const scrapeReviewPage = (body) => {
   const criReview = scrapeReviews(topCritical);
   const localReviews = scrapeReviews(reviewsLocal);
 
-  return { positive: posReview, critical: criReview, reviews: localReviews };
+  return {
+    img: img,
+    pname: pname,
+    pasin: pasin,
+    avgRating: avgRating,
+    totalReviewCount: totalReviewCount,
+    histogram: ratingDist,
+    positive: posReview,
+    critical: criReview,
+    reviews: localReviews,
+  };
 };
 
 /***************************************************************
@@ -705,7 +750,7 @@ function scrapeReviews(body) {
     $("div")
       .first()
       .children()
-      .each((i, item) => {
+      .each((_, item) => {
         /**
          * Get Review ID
          */
@@ -715,7 +760,7 @@ function scrapeReviews(body) {
           /**
            * Get Review User
            */
-          const user_name = $(item).find(".a-profile-name").text();
+          const user_name = $(item).find(".a-profile-name").first().text();
           let user_avatar = $(item)
             .find(".a-profile-avatar img")
             .prop("data-src");
@@ -753,6 +798,7 @@ function scrapeReviews(body) {
            */
           const review_title = $(item)
             .find('[data-hook="review-title"]')
+            .children("span")
             .text()
             .trim();
           const review_link = $(item)
@@ -774,6 +820,22 @@ function scrapeReviews(body) {
               .children("span")
               .text();
 
+          /**
+           * Get Review Image
+           */
+          const review_img =
+            $(item).find('img[data-hook="cmps-review-image-tile"]') ||
+            $(item).find('img[data-hook="review-image-tile"]');
+          const imgs = [];
+          // const review_img =
+          //   $(review_img_tag).attr("src") || $(review_img_tag).prop("data-src");
+
+          review_img.each(_, (img) => {
+            let src =
+              $(review_img_tag).attr("src") ||
+              $(review_img_tag).prop("data-src");
+            imgs.push(src);
+          });
           /**
            * Get Helpful Count
            */
@@ -798,6 +860,7 @@ function scrapeReviews(body) {
           review["link"] = review_link;
           review["content"] = review_content;
           review["helpful"] = helpful_count;
+          review["imgs"] = imgs;
 
           reviewList.push(review);
         }
@@ -807,12 +870,5 @@ function scrapeReviews(body) {
   }
   return reviewList;
 }
-
-const result = await startScraper({
-  type: "productAsin",
-  asin: "B09WTJ7S5M",
-});
-
-console.log(result);
 
 export default startScraper;
