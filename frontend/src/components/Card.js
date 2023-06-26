@@ -23,12 +23,15 @@ export default function Card(props) {
           items.map((item, idx) => (
             <div key={idx}>
               <Link
-                to={item.link}
+                to={item.link ? item.link : `/products/${item.label}`}
                 className={
                   price && price.currentPrice.length > 1 ? "bg-grey" : ""
                 }
               >
-                <img src={item.img ? item.img : ""} alt="gw-card-img" />
+                <img
+                  src={item.img ? item.img : "/imgs/no-image.png"}
+                  alt="gw-card-img"
+                />
               </Link>
               {item.title && <Link to={item.link}>{item.title}</Link>}
             </div>
@@ -39,7 +42,9 @@ export default function Card(props) {
               (item, idx) =>
                 idx <= 3 && (
                   <div key={idx} className="card-grid-item">
-                    <Link to={item.link}>
+                    <Link
+                      to={item.link ? item.link : `/products/${item.label}`}
+                    >
                       <img src={item.img ? item.img : ""} alt="gw-grid-img" />
                       <span>
                         {item.label.length > 15 ? (
@@ -64,7 +69,7 @@ export default function Card(props) {
               {items.map((item, idx) => (
                 <Carousel.Item key={idx}>
                   <Link>
-                    <img src={item.img} alt="First slide" />
+                    <img src={item.img} alt={`slide ${idx}`} />
                   </Link>
                 </Carousel.Item>
               ))}

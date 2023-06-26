@@ -7,8 +7,7 @@ import { getProductList } from "../slice/amazonSlice";
 import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
 import Rating from "../components/Rating";
-
-import d from "../data";
+import SorryBox from "../components/SorryBox";
 
 export default function ProductSearchPage() {
   const dispatch = useDispatch();
@@ -26,16 +25,19 @@ export default function ProductSearchPage() {
     // availability = false,
   } = param;
 
-  const data = d.products;
-
   const amazonState = useSelector((state) => state.amazon);
-  const { loading, error } = amazonState;
-  const totalItems = data ? data.totalPage * data.items.length : 100;
+  const { data, loading, error } = amazonState;
+  const totalItems =
+    data && data.totalPage ? data.totalPage * data.items.length : 100;
 
   const range = {
     low: data ? Number(data.items.length * (page - 1) + 1) : 1,
     high: data ? Number(data.items.length * page) : 1,
   };
+
+  // const linkHandler = (link) => {
+  //   navigate(link);
+  // };
 
   useEffect(() => {
     if (!keyword) navigate("/");
@@ -45,7 +47,7 @@ export default function ProductSearchPage() {
           type: "products",
           keyword: keyword,
           department: department ? department : {},
-          page: "1",
+          page: page,
         })
       );
     }
@@ -53,15 +55,12 @@ export default function ProductSearchPage() {
 
   return loading ? (
     <LoadingBox />
-  ) : data.items.length == 0 ? (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      Sorry, I could not find anything... Try with different keyword or refresh
-      this page.
-    </div>
+  ) : data && data.items.length === 0 ? (
+    <SorryBox />
   ) : (
     <div>
       {error && <MessageBox variants="danger">{error}</MessageBox>}
-      <Container className="products-search-container mt-4">
+      <Container className="products-search-container pt-4">
         <Row>
           <Col>
             <div>
@@ -139,7 +138,7 @@ export default function ProductSearchPage() {
           </Col>
           <Col xs={12} lg={9}>
             <Container>
-              {data &&
+              {data ? (
                 data.items.map((item, idx) => (
                   <Row key={idx} className="products-search-row">
                     <Col xs={3} className="products-search-img">
@@ -167,73 +166,111 @@ export default function ProductSearchPage() {
                           <>
                             <span className="a-price-label">List</span>
                             <span className="a-discout-price">
-                              ${item.price.beforePrice}
+                              {item.price.beforePrice}
                             </span>
                           </>
                         )}
                       </div>
-                      {item.shippingInfo.map((ship) => (
-                        <div className="shipping-info">
+                      {item.shippingInfo.map((ship, idx) => (
+                        <div key={idx} className="shipping-info">
                           <span className="dark-red">{ship}</span>
                         </div>
                       ))}
                     </Col>
                   </Row>
-                ))}
-            </Container>
-
-            <div className="pagination">
-              <span aria-disabled={page == 1}>
-                <Link to="#">
-                  <i className="fa-solid fa-angle-left fa-xs"></i> Prev
-                </Link>
-              </span>
-
-              {page - 1 > 1 && (
-                <>
-                  <Link to="#">1</Link>
-                  <span>...</span>
-                </>
-              )}
-              {page == 1 ? (
-                <>
-                  <Link to="#" className="active">
-                    1
-                  </Link>
-                  <Link to="#">2</Link>
-                  <Link to="#">3</Link>
-                </>
-              ) : page == data.totalPage ? (
-                <>
-                  <Link to="#">{data.totalPage - 2}</Link>
-                  <Link to="#">{data.totalPage - 1}</Link>
-                  <Link to="#" class="active">
-                    {data.totalPage}
-                  </Link>
-                </>
+                ))
               ) : (
-                <>
-                  <Link to="#">{page - 1}</Link>
-                  <Link to="#" class="active">
-                    {page}
+                <div></div>
+              )}
+            </Container>
+            {data && data.totalPage ? (
+              <div className="pagination">
+                <span>
+                  <Link
+                    className={page === 1 && "link-disabled"}
+                    // onClick={linkHandler(`/products/${keyword}/page/${1}`)}
+                    to={`/products/${keyword}/page/${page - 1}`}
+                  >
+                    <i className="fa-solid fa-angle-left fa-xs"></i> Prev
                   </Link>
-                  <Link to="#">{page + 1}</Link>
-                </>
-              )}
-              {page + 1 < data.totalPage && (
-                <>
-                  {page < 18 && <span>...</span>}
+                </span>
 
-                  <Link to="#">{data.totalPage}</Link>
-                </>
-              )}
+                {page > 3 && (
+                  <>
+                    <Link to={`/products/${keyword}/page/${1}`}>1</Link>
+                    <span>...</span>
+                  </>
+                )}
+                {page === 1 ? (
+                  <>
+                    <Link to="#" className="active link-disabled">
+                      1
+                    </Link>
+                    <Link
+                      to={`/products/${keyword}/page/${2}`}
+                      // onClick={linkHandler(`/products/${keyword}/page/${2}`)}
+                    >
+                      2
+                    </Link>
+                    <Link to={`/products/${keyword}/page/${3}`}>3</Link>
+                  </>
+                ) : page === data.totalPage ? (
+                  <>
+                    <Link to={`/products/${keyword}/page/${1}`}>
+                      {Number(data.totalPage) - 2}
+                    </Link>
+                    <Link to={`/products/${keyword}/page/${1}`}>
+                      {data.totalPage - 1}
+                    </Link>
+                    <Link
+                      to={`/products/${keyword}/page/${1}`}
+                      class="active link-disabled"
+                    >
+                      {data.totalPage}
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to={`/products/${keyword}/page/${1}`}
+                      // onClick={linkHandler(`/products/${keyword}/page/${1}`)}
+                    >
+                      {Number(page) - 1}
+                    </Link>
+                    <Link
+                      to={`/products/${keyword}/page/${1}`}
+                      class="active link-disabled"
+                    >
+                      {page}
+                    </Link>
+                    <Link to={`/products/${keyword}/page/${1}`}>
+                      {Number(page) + 1}
+                    </Link>
+                  </>
+                )}
+                {page + 1 < data.totalPage ? (
+                  <>
+                    {page < data.totalPage - 2 && <span>...</span>}
 
-              <span aria-disabled={page == 20}>
-                <Link to="#">
-                  Next <i className="fa-solid fa-angle-right fa-xs"></i>
-                </Link>
-              </span>
-            </div>
+                    <Link to={`/products/${keyword}/page/${1}`}>
+                      {data.totalPage}
+                    </Link>
+                  </>
+                ) : (
+                  <span>...</span>
+                )}
+                <span>
+                  <Link
+                    className={page === data.totalPage && "link-disabled"}
+                    to={`/products/${keyword}/page/${1}`}
+                  >
+                    Next <i className="fa-solid fa-angle-right fa-xs"></i>
+                  </Link>
+                </span>
+              </div>
+            ) : (
+              <></>
+            )}
           </Col>
         </Row>
       </Container>

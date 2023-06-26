@@ -41,7 +41,20 @@ amazonRouter.post(
 
 amazonRouter.post(
   "/productAsin",
-  expressAsyncHandler(async (req, res) => {})
+  expressAsyncHandler(async (req, res) => {
+    const { asin } = req.body;
+    try {
+      const data = await AmazonScrape({
+        type: "productAsin",
+        asin: asin,
+      });
+      return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
 );
 
 amazonRouter.post(

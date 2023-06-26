@@ -6,8 +6,19 @@ import { HttpsProxyAgent } from "https-proxy-agent";
 import CONST from "./constant.js";
 
 /*************************************************************
- * 
-    MAIN FUNC TO START SCRAPING AMAZON
+ *
+ *   MAIN FUNC TO START SCRAPING AMAZON
+ *
+ *   type : HOME =>
+ *            Scrape Home Page data (Card, main, carousel, etc..)
+ *        : PRODUCT SEARCH =>
+ *            Srape result of searched products with keyword and department param
+ *        : PRODUCT ASIN =>
+ *            Scrape a product with asin number
+ *        : REVIEWS =>
+ *            Scrape reviews with product Asin
+ *        : REVIEWID =>
+ *            Scrape a review with reviewID
  *
  *************************************************************/
 
@@ -65,7 +76,7 @@ const startScraper = async ({
       result = scrapeReviewPage(resBody);
       return result;
 
-    case "reviewAsin":
+    case "reviewID":
       if (!reviewId)
         return console.error("You need a review ID to search a review details");
       apiEndpoint = `${CONST.host}gp/customer-reviews/${reviewId}/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8`;
@@ -317,14 +328,21 @@ const scrapeProductDetailsPage = (body) => {
       deliveryMessages.push($(item).text());
     });
     product["delivery"] = deliveryMessages;
-    product["availability"] = $("#availability > span").text().trim();
+    product["availability"] = $("#availability > span")
+      .text()
+      .trim()
+      .includes("In")
+      ? true
+      : false;
 
     let label, text;
+    const tabularFeature = [];
     $("div.tabular-buybox-text").each((i, item) => {
       label = $(item).prop("tabular-attribute-name");
       text = $(item).children("span").text().trim();
-      product[label] = text;
+      tabularFeature.push({ label: label, text: text });
     });
+    product["tabularFeature"] = tabularFeature;
 
     // scrape Product Information
     product["information"] = scrapeProductInformation($);
@@ -346,6 +364,7 @@ const scrapeProductDetailsPage = (body) => {
     // product['brandStory'] = brandStory;
 
     // scrape Product Review Metadata
+    const reviewData = {};
     const avgRating = $('i[data-hook="average-star-rating"]')
       .text()
       .split(" ")[0];
@@ -360,9 +379,9 @@ const scrapeProductDetailsPage = (body) => {
       }
     );
 
-    product["avgRating"] = avgRating;
-    product["histogram"] = ratingDist;
-    product["totalReviewCount"] = totalReviewCount;
+    reviewData["avgRating"] = avgRating;
+    reviewData["histogram"] = ratingDist;
+    reviewData["totalReviewCount"] = totalReviewCount;
 
     // scrape all top reviews in the product detail page.
     const reviewsLocal = $("#cm-cr-dp-review-list");
@@ -370,8 +389,10 @@ const scrapeProductDetailsPage = (body) => {
     const reviewListLocal = scrapeReviews(reviewsLocal);
     const reviewListGlobal = scrapeReviews(reviewsGlobal);
 
-    product["reviewListLocal"] = reviewListLocal;
-    product["reviewListGlobal"] = reviewListGlobal;
+    reviewData["reviewListLocal"] = reviewListLocal;
+    reviewData["reviewListGlobal"] = reviewListGlobal;
+
+    product["reviewData"] = reviewData;
   } catch (e) {
     console.error(e.message);
   }
@@ -787,11 +808,11 @@ function scrapeReviews(body) {
   return reviewList;
 }
 
-// const result = await startScraper({
-//   type: "products",
-//   keyword: "iphone",
-// });
+const result = await startScraper({
+  type: "productAsin",
+  asin: "B09WTJ7S5M",
+});
 
-// console.log(result);
+console.log(result);
 
 export default startScraper;

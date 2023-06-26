@@ -15,6 +15,7 @@ export const getHomePage = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await Axios.get("/api/amazon/home");
+      localStorage.setItem("amazonHome", JSON.stringify(res.data));
       return res.data;
     } catch (error) {
       return rejectWithValue(
@@ -42,6 +43,23 @@ export const getProductList = createAsyncThunk(
   }
 );
 
+export const getProductAsin = createAsyncThunk(
+  "amazon/productAsin",
+  async (asin, { rejectWithValue }) => {
+    try {
+      const res = await Axios.post("/api/amazon/productAsin", asin);
+      localStorage.setItem("productAsin", JSON.stringify(res.data));
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const amazonSlice = createSlice({
   name: "amazon",
   initialState,
@@ -53,7 +71,7 @@ const amazonSlice = createSlice({
     builder.addCase(getHomePage.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
-      state.data = action.payload;
+      state.amazonHome = action.payload;
     });
     builder.addCase(getHomePage.rejected, (state, action) => {
       state.loading = false;
@@ -68,6 +86,18 @@ const amazonSlice = createSlice({
       state.data = action.payload;
     });
     builder.addCase(getProductList.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getProductAsin.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductAsin.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.amazonProductAsin = action.payload;
+    });
+    builder.addCase(getProductAsin.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

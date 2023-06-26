@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Col, Nav, Navbar, Container, Form, Row } from "react-bootstrap";
+import { Col, Nav, Navbar, Container, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import HomePage from "./pages/HomePage";
@@ -12,6 +12,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductSearchPage from "./pages/ProductSearchPage";
 import Searchbox from "./components/Searchbox";
 import { signout } from "./slice/userAuthSlice";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ function App() {
                 <div className="img-logo">
                   <img
                     alt="amazonian brand logo"
-                    src="imgs/amazonian_brand_logo.png"
+                    src="/imgs/amazonian_brand_logo.png"
                     className="align-top"
                   />
                 </div>
@@ -328,9 +329,14 @@ function App() {
               exact
               element={<ProductSearchPage />}
             />
+            <Route
+              path="/product/:asin"
+              exact
+              element={<ProductDetailsPage />}
+            />
           </Routes>
         </main>
-        <footer id="footer1" className="">
+        <footer id="footer1">
           <div className="navFooter">
             <Container className="justify-content-md-center">
               <Row>

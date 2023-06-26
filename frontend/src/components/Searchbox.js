@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Searchbox(props) {
   const navigate = useNavigate();
-  const [department, setDepartment] = useState("All");
+  const [department, setDepartment] = useState("aps");
   const [keyword, setKeyword] = useState("");
 
   const { mobile } = props;
@@ -19,24 +19,15 @@ export default function Searchbox(props) {
   const selectChange = (value) => {
     adjustWidth();
     setDepartment(value);
-    console.log(department);
   };
 
-  const inputChange = (value) => {
-    setKeyword(value);
-    console.log(keyword);
-  };
-
-  const buildURL = () => {
+  const searchSubmitHandler = (e) => {
+    e.preventDefault();
     let url = "/";
     if (keyword.length > 1) url += `products/${keyword}`;
-    if (department.length > 1) url += `/department/${department}`;
-    return url;
-  };
-
-  const searchSubmitHandler = () => {
-    console.log("I am called");
-    navigate(buildURL());
+    if (department.length > 1 && department !== "aps")
+      url += `/department/${department}`;
+    navigate(url);
   };
 
   return (
@@ -54,7 +45,7 @@ export default function Searchbox(props) {
               placeholder="Search"
               className="me-2"
               aria-label="Search"
-              onChange={(e) => inputChange(e.target.value)}
+              onChange={(e) => setKeyword(e.target.value)}
             />
             <button className="search" type="submit">
               <i className="fa fa-search fa-lg text-black"></i>

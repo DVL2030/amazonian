@@ -9,6 +9,14 @@ const initialState = {
       ? JSON.parse(localStorage.getItem("userInfo"))
       : null,
   },
+  amazon: {
+    amazonHome: localStorage.getItem("amazonHome")
+      ? JSON.parse(localStorage.getItem("amazonHome"))
+      : null,
+    amazonProductAsin: localStorage.getItem("productAsin")
+      ? JSON.parse(localStorage.getItem("productAsin"))
+      : null,
+  },
 };
 
 export const store = configureStore({

@@ -13,10 +13,10 @@ export default function HomePage() {
   const dispatch = useDispatch();
 
   const amazonState = useSelector((state) => state.amazon);
-  const { data, loading, error } = amazonState;
+  const { amazonHome, loading, error } = amazonState;
 
   useEffect(() => {
-    dispatch(getHomePage());
+    if (!amazonHome) dispatch(getHomePage());
   }, []);
 
   return (
@@ -57,48 +57,57 @@ export default function HomePage() {
           <Container fluid className="main-container">
             {error && <MessageBox variant="danger">{error}</MessageBox>}
 
-            {data && data.gwCardList && data.gwCardList.length > 0 && (
-              <Row className="gwCardList">
-                {data.gwCardList.map((card, idx) => (
-                  <Col key={idx} xs={6} md={4} lg={3}>
-                    <Card
-                      header={card.header}
-                      items={card.items}
-                      footer="See more"
-                      footerLink="/"
-                    ></Card>
-                  </Col>
-                ))}
-              </Row>
-            )}
-            {data && data.mainCard && data.mainCard.length > 0 && (
-              <Row className="mainCard mb-3">
-                {data.mainCard.map((card, idx) => (
-                  <Col key={idx} xs={6} md={4} lg={3}>
-                    <Card
-                      header={card.header}
-                      items={card.items}
-                      footer="Shop now"
-                      footerLink="/"
-                    ></Card>
-                  </Col>
-                ))}
-              </Row>
-            )}
-            {data && data.mainCarousel && data.mainCarousel.length > 0 && (
-              <Row className="mainCarousel">
-                {data.mainCarousel.map((carousel, idx) => (
-                  <div key={idx} className="carousel-container bg-white mb-5">
-                    <div className="carousel-header ">
-                      <h4>{carousel.header}</h4>
+            {amazonHome &&
+              amazonHome.gwCardList &&
+              amazonHome.gwCardList.length > 0 && (
+                <Row className="gwCardList">
+                  {amazonHome.gwCardList.map((card, idx) => (
+                    <Col key={idx} xs={6} md={4} lg={3}>
+                      <Card
+                        header={card.header}
+                        items={card.items}
+                        footer="See more"
+                        footerLink={`/products/${card.header}`}
+                      ></Card>
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            {amazonHome &&
+              amazonHome.mainCard &&
+              amazonHome.mainCard.length > 0 && (
+                <Row className="mainCard mb-3">
+                  {amazonHome.mainCard.map((card, idx) => (
+                    <Col key={idx} xs={6} md={4} lg={3}>
+                      <Card
+                        header={card.header}
+                        items={card.items}
+                        footer="Shop now"
+                        footerLink={`/products/${card.header}`}
+                      ></Card>
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            {amazonHome &&
+              amazonHome.mainCarousel &&
+              amazonHome.mainCarousel.length > 0 && (
+                <Row className="mainCarousel">
+                  {amazonHome.mainCarousel.map((carousel, idx) => (
+                    <div
+                      key={idx}
+                      className="carousel-container bg-white mb-5 p-3"
+                    >
+                      <div className="carousel-header ">
+                        <h4>{carousel.header}</h4>
+                      </div>
+                      <div className="carousel-viewport">
+                        <MultiCarousel>{carousel.items}</MultiCarousel>
+                      </div>
                     </div>
-                    <div className="carousel-viewport">
-                      <MultiCarousel>{carousel.items}</MultiCarousel>
-                    </div>
-                  </div>
-                ))}
-              </Row>
-            )}
+                  ))}
+                </Row>
+              )}
           </Container>
         </div>
       )}
