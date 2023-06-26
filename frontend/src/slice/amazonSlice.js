@@ -48,7 +48,6 @@ export const getProductAsin = createAsyncThunk(
   async (asin, { rejectWithValue }) => {
     try {
       const res = await Axios.post("/api/amazon/productAsin", asin);
-      localStorage.setItem("productAsin", JSON.stringify(res.data));
       return res.data;
     } catch (error) {
       return rejectWithValue(

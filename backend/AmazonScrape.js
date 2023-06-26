@@ -336,11 +336,11 @@ const scrapeProductDetailsPage = (body) => {
       : false;
 
     let label, text;
-    const tabularFeature = [];
+    const tabularFeature = {};
     $("div.tabular-buybox-text").each((i, item) => {
       label = $(item).prop("tabular-attribute-name");
-      text = $(item).children("span").text().trim();
-      tabularFeature.push({ label: label, text: text });
+      text = $(item).find("span").first().text().trim();
+      tabularFeature[label] = text;
     });
     product["tabularFeature"] = tabularFeature;
 

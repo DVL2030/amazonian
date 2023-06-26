@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,6 +26,10 @@ function App() {
   const signOutHandler = () => {
     dispatch(signout());
   };
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   return (
     <BrowserRouter>

@@ -8,6 +8,7 @@ import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
 import Rating from "../components/Rating";
 import SorryBox from "../components/SorryBox";
+import RatingHistogram from "../components/RatingHistogram";
 
 export default function ProductDetailsPage() {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ export default function ProductDetailsPage() {
       {error && <MessageBox variants="danger">{error}</MessageBox>}
       {data && (
         <>
-          <Container id="ppd" className="product-details-container pt-4">
+          <Container id="ppd" className="product-details-container py-4">
             <Row>
               <Col xs={12} className="d-block d-lg-none mb-4">
                 {data.images && (
@@ -86,7 +87,7 @@ export default function ProductDetailsPage() {
                   </Carousel>
                 )}
               </Col>
-              <Col lg={5} className="d-none d-lg-block">
+              <Col lg={4} className="d-none d-lg-block">
                 <div className="image-block d-flex">
                   <div className="imageThumbnail">
                     {data.images && (
@@ -140,22 +141,26 @@ export default function ProductDetailsPage() {
                       {data.reviewData.totalReviewCount}
                     </Link>
                   </div>
+                  <hr></hr>
                   <div className="product-details-price">
                     <div>
                       <span className="product-details-discount dark-red">
-                        ${data.price.discount}%
+                        {data.price.discount}%{" "}
                       </span>
-                      <span className="a-price">{data.price.currentPrice}</span>
+                      <span className="product-details-a-price">
+                        {data.price.currentPrice}
+                      </span>
                     </div>
 
                     {data.price.beforePrice && (
                       <div>
-                        <span className="a-price-label">List Price:</span>
-                        <span className="a-discout-price">
+                        <small className="a-price-label">List Price:</small>
+                        <small className="a-discout-price">
                           {data.price.beforePrice}
-                        </span>
+                        </small>
                       </div>
                     )}
+                    <hr></hr>
                     {data.overview && (
                       <table id="product-details-overview">
                         <tbody>
@@ -185,10 +190,10 @@ export default function ProductDetailsPage() {
                   </div>
                 </div>
               </Col>
-              <Col lg={2} className="d-none d-lg-block">
+              <Col lg={3} className="d-none d-lg-block">
                 <div className="buy-box box">
                   <div className="buy-box-price mb-4">
-                    <h5 className="a-price display-4">
+                    <h5 className="a-price display-6">
                       {data.price.currentPrice}
                     </h5>
                   </div>
@@ -235,6 +240,22 @@ export default function ProductDetailsPage() {
                       <button className="rect orange">Buy Now</button>
                     </div>
                   )}
+                  {data.tabularFeature && (
+                    <div>
+                      <table id="buy-box-tabular">
+                        <tbody>
+                          {Object.entries(data.tabularFeature).map(
+                            ([k, v], idx) => (
+                              <tr key={idx}>
+                                <th>{k}</th>
+                                <td>{v}</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -261,15 +282,29 @@ export default function ProductDetailsPage() {
             )}
             <hr></hr>
             {data.reviewData && (
-              <Row>
-                <Col lg={3} className="d-none d-lg-block">
-                  <div className="review-histogram"></div>
+              <Row className="py-4">
+                <Col lg={4} className="d-none d-lg-block">
+                  <div className="review-histogram">
+                    <h3>Customer Reviews</h3>
+                    <div className="d-flex gap-1">
+                      <Rating rating={data.reviewData.avgRating}></Rating>
+                      <h5>{data.reviewData.avgRating} out of 5</h5>
+                    </div>
+                    <small className="text-secondary">
+                      {data.reviewData.totalReviewCount}
+                    </small>
+
+                    <RatingHistogram
+                      asin={asin}
+                      distribution={data.reviewData.histogram}
+                    />
+                  </div>
                 </Col>
-                <Col lg={9} className="">
-                  <div className="reviews-local">
+                <Col lg={8} className="">
+                  <div className="reviews-local ">
                     <h4>Top reviews from the United States</h4>
                     {data.reviewData.reviewListLocal.map((review, idx) => (
-                      <div key={idx} id={review.id}>
+                      <div className="mb-5" key={idx} id={review.id}>
                         <div className="review-profile d-flex">
                           <div className="profile-avatar">
                             <img
@@ -293,9 +328,8 @@ export default function ProductDetailsPage() {
                         </div>
                         <span className="review-date">{review.date}</span>
                         <div className="review-strip">
-                          <span className="strip-col">{review.strip}</span>
                           {review.verified && (
-                            <span className="text-danger vl">
+                            <span className="text-danger">
                               Verified Purchase
                             </span>
                           )}
@@ -308,10 +342,15 @@ export default function ProductDetailsPage() {
                           {review.helpful > 1 ? "people" : "person"} found this
                           helpful
                         </span>
+                        <div>
+                          <button className="review helpful">Helpful</button>
+                          <button className="review helpful">Report</button>
+                        </div>
                       </div>
                     ))}
                   </div>
-                  <div className="reviews-global">
+                  <hr></hr>
+                  <div className="reviews-global py-5">
                     <h4>Top reviews from other countries</h4>
 
                     {data.reviewData.reviewListGlobal.map((review, idx) => (

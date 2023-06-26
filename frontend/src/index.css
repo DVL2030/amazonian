@@ -243,6 +243,11 @@ hr.grad {
   padding-left: 3rem;
 }
 
+.vr {
+  border-right: 0.1rem solid #c0c0c070;
+  padding-right: 3rem;
+}
+
 /* ==========================================
    Font, Color
    ==========================================*/
@@ -277,8 +282,8 @@ hr.grad {
 
 .a-discout-price,
 .a-price-label {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 300;
 
   color: #828282;
 }
@@ -293,6 +298,11 @@ hr.grad {
   padding: 0.3rem 0.2rem;
   color: floralwhite;
 } */
+
+.product-details-discount,
+.product-details-a-price {
+  font-size: 1.8rem;
+}
 
 /* ==========================================
    Anchor
@@ -549,8 +559,43 @@ button.orange {
   background-color: #f1951b;
 }
 
+button.review {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 1.3rem #cecece;
+  outline: none;
+  margin-top: 1rem;
+  width: 75%;
+}
+
+button.helpful {
+  width: 8rem;
+  height: 3rem;
+  margin-right: 3rem;
+}
+
 .buy-box-button button {
   border-radius: 1rem;
+}
+
+#product-details-overview {
+  display: table;
+  text-indent: initial;
+  border-spacing: 2rem;
+}
+
+#product-details-overview tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+#product-details-overview tbody tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
 }
 
 /* ==========================================
@@ -571,6 +616,41 @@ i.fa-star-half-stroke {
   margin: 0.5rem;
   color: #404040;
 } */
+
+.rating-progress-bar > a {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.rating-progress-bar:hover {
+  text-decoration: underline;
+  color: #f19101;
+}
+
+.rating-progress-bar:hover .rating-bar {
+  border: 0.1rem #f19101 solid;
+}
+
+.rating-bar {
+  background-color: #e4e4e491;
+  border: 0.1rem #d4d4d491 solid;
+  border-radius: 0.3rem;
+  width: 70%;
+  height: 2.3rem;
+  margin: 0.8rem 1rem;
+  padding: 0;
+}
+
+.rating-bar > div {
+  background-color: #f19d01;
+  height: 2.2rem;
+  border-radius: 0.3rem;
+}
+
+.rating-bar > div:not(.zero) {
+  border: 0.1em #f19101 solid;
+}
 
 /* =====================================================================================
    MISCELL
@@ -648,7 +728,7 @@ i.fa-star-half-stroke {
 
 .product-details-carousel-img,
 .main-image-item img {
-  height: 25rem;
+  max-height: 28rem;
 }
 
 /* =====================================================================================

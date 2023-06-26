@@ -13,9 +13,6 @@ const initialState = {
     amazonHome: localStorage.getItem("amazonHome")
       ? JSON.parse(localStorage.getItem("amazonHome"))
       : null,
-    amazonProductAsin: localStorage.getItem("productAsin")
-      ? JSON.parse(localStorage.getItem("productAsin"))
-      : null,
   },
 };
 
