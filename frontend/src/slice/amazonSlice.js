@@ -75,6 +75,22 @@ export const getProductReviews = createAsyncThunk(
   }
 );
 
+export const getReviewID = createAsyncThunk(
+  "amazon/reviewID",
+  async (params, { rejectWithValue }) => {
+    try {
+      const res = await Axios.post("/api/amazon/reviewID", params);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const amazonSlice = createSlice({
   name: "amazon",
   initialState,
@@ -125,6 +141,18 @@ const amazonSlice = createSlice({
       state.amazonReviews = action.payload;
     });
     builder.addCase(getProductReviews.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getReviewID.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getReviewID.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.amazonReviewID = action.payload;
+    });
+    builder.addCase(getReviewID.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

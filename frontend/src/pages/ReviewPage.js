@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Carousel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import { getProductAsin, getProductReviews } from "../slice/amazonSlice";
+import { getProductReviews } from "../slice/amazonSlice";
 
 import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
@@ -30,7 +30,6 @@ export default function ReviewPage() {
     else if (!data) {
       dispatch(
         getProductReviews({
-          type: "reviews",
           asin: asin,
           page: page,
         })
@@ -48,7 +47,7 @@ export default function ReviewPage() {
       {data ? (
         <Container fluid className="py-4">
           <Row className="px-4 py-3">
-            <Col xs={12} lg={2}>
+            <Col xs={12} sm={12} lg={2}>
               <div className="review-histogram">
                 <h3>Customer Reviews</h3>
                 <div className="d-flex gap-1">
@@ -62,7 +61,7 @@ export default function ReviewPage() {
                 <RatingHistogram asin={asin} distribution={data.histogram} />
               </div>
             </Col>
-            <Col xs={12} lg={7}>
+            <Col xs={12} sm={12} lg={9}>
               <div className="d-flex">
                 <div className="img-xs">
                   <img src={data.img} alt={data.pname}></img>

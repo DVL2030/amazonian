@@ -77,8 +77,22 @@ amazonRouter.post(
 );
 
 amazonRouter.post(
-  "/reviewAsin",
-  expressAsyncHandler(async (req, res) => {})
+  "/reviewID",
+  expressAsyncHandler(async (req, res) => {
+    const { id } = req.body;
+    console.log(id);
+    try {
+      const data = await AmazonScrape({
+        type: "reviewID",
+        reviewId: id,
+      });
+      return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
 );
 
 export default amazonRouter;

@@ -93,7 +93,7 @@ const startScraper = async ({
     case "reviewID":
       if (!reviewId)
         return console.error("You need a review ID to search a review details");
-      apiEndpoint = `${CONST.host}gp/customer-reviews/${reviewId}/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8`;
+      apiEndpoint = `${CONST.host}/gp/customer-reviews/${reviewId}/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8`;
       resBody = await buildHttpRequest(apiEndpoint);
       result = scrapeReviewPage(resBody);
       return result;

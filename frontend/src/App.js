@@ -14,6 +14,7 @@ import Searchbox from "./components/Searchbox";
 import { signout } from "./slice/userAuthSlice";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ReviewPage from "./pages/ReviewPage";
+import ReviewIdPage from "./pages/ReviewIdPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -346,6 +347,8 @@ function App() {
               exact
               element={<ReviewPage />}
             />
+
+            <Route path="/review/:id" exact element={<ReviewIdPage />} />
           </Routes>
         </main>
         <footer id="footer1">
