@@ -15,11 +15,12 @@ import { signout } from "./slice/userAuthSlice";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewIdPage from "./pages/ReviewIdPage";
+import CartPage from "./pages/CartPage";
 
 function App() {
   const dispatch = useDispatch();
-  // const cartState = useSelector((state) => state.cart);
-  // const { cartItems } = cartState;
+  const cartState = useSelector((state) => state.cart);
+  const { cartItems } = cartState;
   const userState = useSelector((state) => state.userAuth);
   const { userInfo } = userState;
 
@@ -270,14 +271,14 @@ function App() {
                     <i className="fa-regular fa-user fa-2xl text-white"></i>
                   </span>
                 </Nav.Link>
-                <Nav.Link href="#cart" className="d-flex">
+                <Nav.Link href="/cart" className="d-flex">
                   <div className="nav-cart-count-container d-flex">
                     <span
                       id="nav-cart-count"
                       aria-hidden="true"
                       className="nav-cart-count"
                     >
-                      0
+                      {cartItems.length}
                     </span>
                     <div className="img-cart">
                       <i className="fa-brands fa-opencart fa-2xl"></i>
@@ -349,6 +350,7 @@ function App() {
             />
 
             <Route path="/review/:id" exact element={<ReviewIdPage />} />
+            <Route path="/cart" exact element={<CartPage />} />
           </Routes>
         </main>
         <footer id="footer1">

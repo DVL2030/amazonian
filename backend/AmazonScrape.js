@@ -330,7 +330,7 @@ const scrapeProductDetailsPage = (body) => {
     }
 
     // scrape price
-    const price = scrapePrice($("#corePriceDisplay_desktop_feature_div"));
+    const price = scrapePrice(body);
     product["price"] = price;
 
     // scrape overview
@@ -338,14 +338,16 @@ const scrapeProductDetailsPage = (body) => {
 
     // scrape shipping info
     const deliveryMessages = [];
-    $("#deliveryBlockMessage div.a-spacing-base").each((i, item) => {
-      deliveryMessages.push($(item).text());
+    $("#deliveryBlockMessage div.a-spacing-base").each((_, item) => {
+      deliveryMessages.push($(item).children("span").first().text());
     });
     product["delivery"] = deliveryMessages;
-    product["availability"] = $("#availability > span")
-      .text()
-      .trim()
-      .includes("In")
+    product["availability"] = $("#availability > span").text().trim();
+    if (!product["availability"])
+      product["availability"] = $("#outOfStock > span.a-text-bold")
+        .text()
+        .trim();
+    product["available"] = product["availability"].toLowerCase().includes("in")
       ? true
       : false;
 
@@ -548,7 +550,7 @@ function scrapeCarousel(carousel, type = "a") {
           title = $(a).children("span").text();
           img =
             $(a).find("img").prop("data-src") || $(a).find("img").attr("src");
-          link = a.attribs.href;
+          link = "/product/" + scrapeAsinFromLink(a.attribs.href);
 
           body.push({ title: title, link: link, img: img });
         });
@@ -588,32 +590,46 @@ function scrapeAsinFromLink(link) {
 /* Product scrape Functions */
 
 function scrapePrice(body) {
-  const $ = cheerio.load(cheerio.html(body));
+  const $ = cheerio.load(body);
 
-  let price, discount;
+  let price, discountPrice, discount;
 
-  const currentPrice =
-    $('span[data-a-size="m"]')[0] ||
-    $('span[data-a-size="l"]')[0] ||
-    $('span[data-a-size="xl"]')[0] ||
-    $("span.a-color-price")[0];
-  const beforePrice = $('span[data-a-strike="true"]').children().first().text();
+  try {
+    const currentPrice =
+      $('span[data-a-size="m"]')[0] ||
+      $('span[data-a-size="l"]')[0] ||
+      $('span[data-a-size="xl"]')[0];
+    const beforePrice = $('span[data-a-strike="true"]')[0];
 
-  if (currentPrice) {
-    price = $(currentPrice.children[0]).text();
-  } else {
-    price = $("span.a-color-price").text();
+    if (currentPrice) {
+      price = $(currentPrice).children().first().text();
+    } else {
+      price = $("#price").text() || $("span.a-color-price").text();
+    }
+
+    if (beforePrice) {
+      discountPrice = $(beforePrice).children().first().text();
+    } else {
+      discountPrice = $("#listPrice").text();
+    }
+
+    if (price && discountPrice) {
+      discount = Math.round(
+        (1 -
+          parseFloat(price.substring(1)) /
+            parseFloat(discountPrice.substring(1))) *
+          100
+      );
+    }
+
+    return {
+      currentPrice: price,
+      beforePrice: discountPrice,
+      discount: discount,
+    };
+  } catch (error) {
+    throw error;
   }
-
-  if (price && beforePrice) {
-    discount = Math.round(
-      (1 -
-        parseFloat(price.substring(1)) / parseFloat(beforePrice.substring(1))) *
-        100
-    );
-  }
-
-  return { currentPrice: price, beforePrice: beforePrice, discount: discount };
 }
 
 function scrapeProductImages(body) {
@@ -635,8 +651,14 @@ function scrapeProductImages(body) {
     const $ = cheerio.load(cheerio.html(body));
     const thumbnail = $("#imageBlock li.item").each((_, item) => {
       const img = $(item).find("img").attr("src");
-      images.push(img);
+      images.push({ image: img });
     });
+  }
+
+  if (images.length == 0) {
+    const $ = cheerio.load(body);
+    const img = $("#booksImageBlock_feature_div").find("img").attr("src");
+    images.push({ image: img });
   }
 
   return images;
@@ -661,7 +683,7 @@ function scrapeProductOverview($) {
       overview[key] = value;
     });
 
-  if (!Object.keys(overview).length) {
+  if ($("#bookDescription_feature_div")) {
     overview["bookDes"] = $("#bookDescription_feature_div").text().trim();
   }
 
@@ -744,7 +766,6 @@ function scrapeReviews(body) {
   const $ = cheerio.load(cheerio.html(body));
 
   const reviewList = [];
-  let review = {};
 
   try {
     $("div")
@@ -755,6 +776,7 @@ function scrapeReviews(body) {
          * Get Review ID
          */
         let review_id = item.attribs.id;
+        const review = {};
 
         if (review_id && $(item).prop("data-hook") === "review") {
           /**
@@ -870,5 +892,11 @@ function scrapeReviews(body) {
   }
   return reviewList;
 }
+// const result = await startScraper({
+//   type: "productAsin",
+//   asin: "B0BTQ7LCB8",
+// });
+
+// console.log(result);
 
 export default startScraper;

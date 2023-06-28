@@ -2,10 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import Axios from "axios";
 
+const historyItems = localStorage.getItem("historyItems")
+  ? JSON.parse(localStorage.getItem("historyItems"))
+  : [];
+
 const initialState = {
   data: null,
   loading: false,
   error: null,
+  historyItems,
 };
 
 // All async func definition
@@ -47,7 +52,12 @@ export const getProductAsin = createAsyncThunk(
   "amazon/productAsin",
   async (asin, { rejectWithValue }) => {
     try {
-      const res = await Axios.post("/api/amazon/productAsin", asin);
+      const res = await Axios.post("/api/amazon/productAsin", { asin: asin });
+      if (historyItems.find((x) => x.asin === asin).lengh == 0) {
+        const newHistory = [{ asin: asin, ...res.data }, ...historyItems];
+        localStorage.setItem("historyItems", JSON.stringify(newHistory));
+      }
+
       return res.data;
     } catch (error) {
       return rejectWithValue(

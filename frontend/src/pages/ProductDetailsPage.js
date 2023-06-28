@@ -10,6 +10,8 @@ import Rating from "../components/Rating";
 import SorryBox from "../components/SorryBox";
 import RatingHistogram from "../components/RatingHistogram";
 import Review from "../components/Review";
+import { addItemToCart } from "../slice/cartSlice";
+import { getItemFromHistory } from "../slice/historySlice";
 
 export default function ProductDetailsPage() {
   const dispatch = useDispatch();
@@ -18,13 +20,15 @@ export default function ProductDetailsPage() {
   const amazonState = useSelector((state) => state.amazon);
   const { amazonProductAsin: data, loading, error } = amazonState;
 
+  // const historyState = useSelector((state) => state.history);
+  // const { historyItems } = historyState;
+
   const [qty, setQty] = useState(1);
 
   const param = useParams();
   const { asin } = param;
 
   const changeMainImage = (idx) => {
-    // console.log(idx);
     const listEl = document.getElementsByClassName("main-image-item");
     for (let list of listEl) {
       if (list.getAttribute("data-index") == idx) {
@@ -38,20 +42,33 @@ export default function ProductDetailsPage() {
   };
 
   const addToCartHandler = () => {
-    // navigate(`/cart/${productId}?qty=${qty}`);
+    const cartItem = {
+      asin: asin,
+      title: data.title,
+      image: data.images[0].image,
+      currentPrice: data.price.currentPrice,
+      beforePrice: data.price.beforePrice,
+      discount: data.price.discount,
+      available: data.available,
+      availability: data.availability,
+      delivery: data.delivery,
+      qty: qty,
+    };
+    dispatch(addItemToCart(cartItem));
   };
 
   const zoomInImage = () => {};
 
   useEffect(() => {
     if (!asin) navigate("/");
-    else if (!data) {
-      dispatch(
-        getProductAsin({
-          type: "product",
-          asin: asin,
-        })
-      );
+    // else if (
+    //   historyItems.length != 0 &&
+    //   historyItems.find((x) => x.asin === asin).length !== 0
+    // ) {
+    //   dispatch(getItemFromHistory(asin));
+    // }
+    else {
+      dispatch(getProductAsin(asin));
     }
   }, []);
 
@@ -76,7 +93,7 @@ export default function ProductDetailsPage() {
                     className="myCarousel"
                   >
                     {data.images.map((item, idx) => (
-                      <Carousel.Item>
+                      <Carousel.Item key={idx}>
                         <img
                           className="product-details-carousel-img"
                           key={idx}
@@ -89,41 +106,47 @@ export default function ProductDetailsPage() {
                 )}
               </Col>
               <Col lg={4} className="d-none d-lg-block">
-                <div className="image-block d-flex">
-                  <div className="imageThumbnail">
-                    {data.images && (
-                      <ul className="no-list-style imageThumbnail-list">
-                        {data.images.map((item, idx) => (
-                          <li
-                            key={idx}
-                            onMouseOver={() => changeMainImage(idx)}
-                          >
-                            <img src={item.thumb} alt={idx}></img>
-                          </li>
-                        ))}
+                <div className="product-details-image-container">
+                  <div className="image-block d-flex">
+                    <div className="imageThumbnail">
+                      {data.images && (
+                        <ul className="no-list-style imageThumbnail-list">
+                          {data.images.map(
+                            (item, idx) =>
+                              item.thumb && (
+                                <li
+                                  key={idx}
+                                  onMouseOver={() => changeMainImage(idx)}
+                                >
+                                  <img src={item.thumb} alt={idx}></img>
+                                </li>
+                              )
+                          )}
+                        </ul>
+                      )}
+                    </div>
+                    <div className="main-image-container">
+                      <ul>
+                        {data.images &&
+                          data.images.map((item, idx) => (
+                            <li
+                              key={idx}
+                              data-index={idx}
+                              className={
+                                idx === 0
+                                  ? "main-image-item d-block"
+                                  : "main-image-item d-none"
+                              }
+                            >
+                              <img
+                                src={item.image}
+                                alt={idx}
+                                onMouseOver={zoomInImage}
+                              ></img>
+                            </li>
+                          ))}
                       </ul>
-                    )}
-                  </div>
-                  <div className="main-image-container">
-                    <ul>
-                      {data.images.map((item, idx) => (
-                        <li
-                          key={idx}
-                          data-index={idx}
-                          className={
-                            idx === 0
-                              ? "main-image-item d-block"
-                              : "main-image-item d-none"
-                          }
-                        >
-                          <img
-                            src={item.image}
-                            alt={idx}
-                            onMouseOver={zoomInImage}
-                          ></img>
-                        </li>
-                      ))}
-                    </ul>
+                    </div>
                   </div>
                 </div>
               </Col>
@@ -134,11 +157,14 @@ export default function ProductDetailsPage() {
                   </div>
                   <div className="product-details-rating d-flex">
                     <Rating
-                      rating={data.reviewData.avgRating || 0}
+                      rating={
+                        data.reviewData.avgRating
+                          ? data.reviewData.avgRating
+                          : 0
+                      }
                       size="fa-sm"
                     ></Rating>
                     <Link className="ml-2">
-                      {" "}
                       {data.reviewData.totalReviewCount}
                     </Link>
                   </div>
@@ -180,6 +206,16 @@ export default function ProductDetailsPage() {
                                   </tr>
                                 )
                             )}
+                            {Object.entries(data.overview).map(
+                              ([k, v], idx) =>
+                                k == "bookDes" && (
+                                  <tr key={idx}>
+                                    <td className="py-1 px-5">
+                                      <p>{v}</p>
+                                    </td>
+                                  </tr>
+                                )
+                            )}
                           </tbody>
                         </table>
                         <hr></hr>
@@ -187,23 +223,25 @@ export default function ProductDetailsPage() {
                     )}
                   </div>
                   <div className="product-details-variants"></div>
-                  <div className="product-details-about">
-                    <b>About this item</b>
-                    <ul>
-                      {data.overview.aboutItem &&
-                        data.overview.aboutItem.map((about, idx) => (
+
+                  {data.overview.aboutItem.length !== 0 && (
+                    <div className="product-details-about">
+                      <b>About this item</b>
+                      <ul>
+                        {data.overview.aboutItem.map((about, idx) => (
                           <li key={idx}>{about}</li>
                         ))}
-                    </ul>
-                  </div>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </Col>
               <Col lg={3} className="d-none d-lg-block">
                 <div className="buy-box box">
                   <div className="buy-box-price mb-4">
-                    <h5 className="a-price display-6">
-                      {data.price.currentPrice}
-                    </h5>
+                    <h4 className="a-price">
+                      <big>{data.price.currentPrice}</big>
+                    </h4>
                   </div>
                   <div className="buy-box-delivery-info">
                     {data.delivery.map((d, idx) => (
@@ -212,17 +250,19 @@ export default function ProductDetailsPage() {
                       </div>
                     ))}
                   </div>
-                  <div className="buy-box-availability mt-2">
+                  <div className="buy-box-availability mt-4">
                     <h4
                       className={
-                        data.availability ? "text-success" : "text-danger"
+                        data.availability === "In Stock"
+                          ? "text-success"
+                          : "text-danger"
                       }
                     >
-                      {data.availability ? "In Stock" : "Out of Stock"}
+                      {data.availability}
                     </h4>
                   </div>
                   {data.availability && (
-                    <div className="buy-box-qty mb-4">
+                    <div className="buy-box-qty my-4">
                       Qty:{" "}
                       <span>
                         <select
@@ -239,7 +279,7 @@ export default function ProductDetailsPage() {
                     </div>
                   )}
 
-                  {data.availability && (
+                  {data.available && (
                     <div className="buy-box-button">
                       <button
                         onClick={addToCartHandler}
@@ -277,12 +317,13 @@ export default function ProductDetailsPage() {
             <hr></hr>
             {data.information && (
               <Row>
-                <Col>
+                <Col xs={12} lg={6}>
+                  <h3>Product Information</h3>
                   <table id="product-details-info" cellSpacing="2">
                     <tbody>
                       {Object.entries(data.information).map(([k, v], idx) => (
                         <tr key={idx}>
-                          <th className="bg-grey py-4 px-3">{k}</th>
+                          <th className="bg-grey py-3 px-3">{k}</th>
                           <td className="px-3">{v}</td>
                         </tr>
                       ))}
