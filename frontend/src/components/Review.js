@@ -11,9 +11,10 @@ export default function Review(props) {
           <img
             src={review.avatar ? review.avatar : "imgs/default-avatar.jpeg"}
             alt={review.name}
+            className="round"
           ></img>
         </div>
-        <div className="profile-name">
+        <div className="profile-name m-2">
           <span>{review.name}</span>
         </div>
       </div>

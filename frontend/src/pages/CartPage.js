@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import MessageBox from "../components/MessageBox";
+import LoadingBox from "../components/LoadingBox";
 
 import { removeItemFromCart, updateCartQuantity } from "../slice/cartSlice";
 
@@ -11,11 +12,10 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartState = useSelector((state) => state.cart);
-  const { cartItems } = cartState;
+  const { cartItems, toggle, error } = cartState;
 
   const qtyHandler = (asin, q) => {
-    console.log("qty Handler", asin);
-    dispatch(updateCartQuantity({ asin: asin, q: q }));
+    dispatch(updateCartQuantity({ asin: asin, qty: q }));
   };
 
   const saveForLater = (asin, q) => {
@@ -29,18 +29,21 @@ export default function CartPage() {
   const checkoutHandler = () => {
     navigate("/signin?redirect=/shipping");
   };
-  return (
+  return error ? (
+    <MessageBox variants="danger">{error}</MessageBox>
+  ) : (
     <div id="cart-page-container">
       <Container fluid>
         <Row className="p-5">
-          <Col lg={10}>
+          <Col md={8} lg={9}>
             <div className="box bg-white">
               <div>
                 <h2>Shopping Cart</h2>
               </div>
               <hr></hr>
+
               {cartItems.length === 0 ? (
-                <MessageBox variants="danger">
+                <MessageBox>
                   <h1>Your Amazonian cart is empty.</h1>
                   <Link to="/">Go Shopping!</Link>
                 </MessageBox>
@@ -49,20 +52,25 @@ export default function CartPage() {
                   <div key={idx}>
                     <Container fluid>
                       <Row className="cart-item">
-                        <Col lg={2}>
+                        <Col xs={12} sm={4} lg={2}>
                           <Link to={`/product/${item.asin}`}>
                             <div className="img-xs text-align-center">
                               <img
-                                className="text-align-center"
+                                className=" text-align-center"
                                 src={item.image}
                                 alt={item.title}
                               ></img>
                             </div>
                           </Link>
                         </Col>
-                        <Col lg={9}>
+                        <Col xs={12} sm={8} lg={9}>
                           <Link to={`/product/${item.asin}`}>
-                            <h5>{item.title}</h5>
+                            <h5 className="cart-item-header d-none d-lg-block">
+                              {item.title}
+                            </h5>
+                            <h5 className="d-block d-lg-none">
+                              {item.title.substring(0, 20)}...
+                            </h5>
                           </Link>
                           <h5>{item.currentPrice}</h5>
                           <ul className="no-list-style">
@@ -88,7 +96,7 @@ export default function CartPage() {
                               </small>
                             </li>
                             <li>
-                              <label className="">Qty:{"   "}</label>
+                              <label className="">Qty: </label>
                               <select
                                 className="cart"
                                 value={item.qty}
@@ -102,21 +110,25 @@ export default function CartPage() {
                                   </option>
                                 ))}
                               </select>
-                              <small
-                                className="cart-button blue px-3"
-                                onClick={() => removeFromCartHandler(item.asin)}
-                              >
-                                Delete
-                              </small>
-                              <small
-                                className="cart-button blue px-3"
-                                onClick={() => saveForLater(item.asin)}
-                              >
-                                Save for later
-                              </small>
-                              <small className="cart-button blue">
-                                See more like this
-                              </small>
+                              <div class="cart-item-action d-inline-block">
+                                <small
+                                  className="cart-button blue px-3"
+                                  onClick={() =>
+                                    removeFromCartHandler(item.asin)
+                                  }
+                                >
+                                  Delete
+                                </small>
+                                <small
+                                  className="cart-button blue px-3"
+                                  onClick={() => saveForLater(item.asin)}
+                                >
+                                  Save for later
+                                </small>
+                                <small className="cart-button blue d-none d-lg-inline-block">
+                                  See more like this
+                                </small>
+                              </div>
                             </li>
                           </ul>
                         </Col>
@@ -133,19 +145,21 @@ export default function CartPage() {
                   items):{" "}
                   <strong>
                     $
-                    {cartItems.reduce(
-                      (total, x) =>
-                        total +
-                        Number(x.qty) * Number(x.currentPrice.substring(1)),
-                      0
-                    )}
+                    {cartItems
+                      .reduce(
+                        (total, x) =>
+                          total +
+                          Number(x.qty) * Number(x.currentPrice.substring(1)),
+                        0
+                      )
+                      .toFixed(2)}
                   </strong>
                 </big>
               </div>
             </div>
           </Col>
 
-          <Col lg={2}>
+          <Col md={4} lg={3}>
             {cartItems.length !== 0 && (
               <div className="box bg-white">
                 <div className="mb-2">
@@ -173,11 +187,13 @@ export default function CartPage() {
                     items):{" "}
                     <strong>
                       $
-                      {cartItems.reduce(
-                        (total, x) =>
-                          Number(x.qty) * Number(x.currentPrice.substring(1)),
-                        0
-                      )}
+                      {cartItems
+                        .reduce(
+                          (total, x) =>
+                            Number(x.qty) * Number(x.currentPrice.substring(1)),
+                          0
+                        )
+                        .toFixed(2)}
                     </strong>
                   </big>
                 </div>

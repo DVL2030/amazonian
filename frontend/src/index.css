@@ -346,6 +346,10 @@ img {
   margin: auto;
 }
 
+img.round {
+  border-radius: 50%;
+}
+
 div.img-logo {
   max-width: 10rem;
   max-height: fit-content;
@@ -362,7 +366,7 @@ div.img-xxs {
 }
 
 div.img-xs {
-  width: 8rem;
+  width: 5rem;
   height: auto;
 }
 
@@ -575,6 +579,10 @@ button.rect {
 
 button.create-account {
   width: 100%;
+}
+
+button.sign {
+  min-width: 15rem;
 }
 
 button.yellow {
@@ -806,6 +814,11 @@ i.fa-star-half-stroke {
   cursor: pointer;
 }
 
+.profile-name {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* =====================================================================================
    Responsive Layout
    ===================================================================================== */
@@ -824,9 +837,21 @@ i.fa-star-half-stroke {
   }
   .crd h5,
   .product-title h5,
-  .crd-footer small {
+  .crd-footer small,
+  h5.cart-item-header {
     font-size: 0.7rem;
   }
+
+  .cart-item-action small {
+    font-size: 0.5rem;
+  }
+
+  select.cart {
+    font-size: 0.4rem;
+    min-width: 2rem;
+    max-width: 3rem;
+  }
+
   .card-grid small {
     font-size: 0.4rem;
   }

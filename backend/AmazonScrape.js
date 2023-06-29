@@ -323,7 +323,7 @@ const scrapeProductDetailsPage = (body) => {
     // scrape imgs
     product["images"] = scrapeProductImages(body);
 
-    if (!product.images.length) {
+    if (product.images.length == 0) {
       product["images"] = [
         $("booksImageBlock_feature_div").find("img").attr("src"),
       ];

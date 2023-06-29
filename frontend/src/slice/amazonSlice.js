@@ -53,10 +53,10 @@ export const getProductAsin = createAsyncThunk(
   async (asin, { rejectWithValue }) => {
     try {
       const res = await Axios.post("/api/amazon/productAsin", { asin: asin });
-      if (historyItems.find((x) => x.asin === asin).lengh == 0) {
-        const newHistory = [{ asin: asin, ...res.data }, ...historyItems];
-        localStorage.setItem("historyItems", JSON.stringify(newHistory));
-      }
+      // if (historyItems.find((x) => x.asin === asin).length == 0) {
+      //   const newHistory = [{ asin: asin, ...res.data }, ...historyItems];
+      //   localStorage.setItem("historyItems", JSON.stringify(newHistory));
+      // }
 
       return res.data;
     } catch (error) {
