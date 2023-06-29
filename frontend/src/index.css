@@ -560,6 +560,10 @@ form.register input {
   height: 2.5rem;
 }
 
+form.shipping {
+  max-width: 30rem;
+}
+
 .buy-box-qty select {
   border-radius: 1.5rem;
   font-size: 0.9rem;
@@ -717,7 +721,7 @@ i.fa-star-half-stroke {
 }
 
 /* =====================================================================================
-   MISCELL
+   PAGE CSS
    ===================================================================================== */
 .refinement-col a {
   color: black;
@@ -817,6 +821,39 @@ i.fa-star-half-stroke {
 .profile-name {
   display: inline-block;
   vertical-align: middle;
+}
+
+/* Progress bar */
+.progress-bar {
+  position: relative;
+  display: flex;
+  margin-top: 2rem;
+}
+
+.progress-bar > div {
+  border-top: 0.4rem #c0c0c0 solid;
+  color: #c0c0c0;
+  padding: 1rem;
+  font-weight: bold;
+  /* width: 20%; */
+}
+
+.progress-bar > div.enabled {
+  border-top-color: #ff8000;
+  color: #ff8000;
+}
+
+.progress-bar i {
+  display: none;
+}
+
+div.active > i {
+  position: absolute;
+  z-index: 5;
+  display: block;
+  left: 45%;
+  top: -1rem;
+  /* bottom: 1rem; */
 }
 
 /* =====================================================================================

@@ -191,7 +191,7 @@ export default function ProductDetailsPage() {
                           </div>
                         )}
 
-                        <div className="buy-box">
+                        <div className="buy-box d-lg-none">
                           <div className="buy-box-delivery-info">
                             {data.delivery.map((d, idx) => (
                               <div className="mb-2" key={idx}>
@@ -388,7 +388,7 @@ export default function ProductDetailsPage() {
             <hr></hr>
             {data.reviewData && (
               <Row className="py-4">
-                <Col lg={5} className="d-none d-lg-block">
+                <Col lg={4} className="d-none d-lg-block">
                   <div className="review-histogram">
                     <h3>Customer Reviews</h3>
                     <div className="d-flex gap-1">

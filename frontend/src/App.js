@@ -16,6 +16,7 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewIdPage from "./pages/ReviewIdPage";
 import CartPage from "./pages/CartPage";
+import OrderShippingPage from "./pages/OrderShippingPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -292,6 +293,7 @@ function App() {
 
             <Route path="/review/:id" exact element={<ReviewIdPage />} />
             <Route path="/cart" exact element={<CartPage />} />
+            <Route path="/shipping" exact element={<OrderShippingPage />} />
           </Routes>
         </main>
         <footer id="footer1">
@@ -525,7 +527,7 @@ function App() {
 
           <hr />
         </footer>
-        <footer id="footer2" className="d-none d-md-block">
+        <footer id="footer2" className="d-none d-lg-block">
           <Container>
             <table
               className="navFooterMoreOnAmazon"

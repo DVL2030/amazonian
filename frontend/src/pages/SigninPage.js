@@ -35,7 +35,7 @@ export default function SigninPage() {
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate(redirectUrl);
     }
   }, [navigate, userInfo]);
 
