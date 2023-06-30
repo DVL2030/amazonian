@@ -4,6 +4,7 @@ import userRegisterSlice from "./slice/userRegisterSlice";
 import amazonSlice from "./slice/amazonSlice";
 import cartSlice from "./slice/cartSlice";
 import historySlice from "./slice/historySlice";
+import userSlice from "./slice/userSlice";
 
 const initialState = {
   userAuth: {
@@ -20,11 +21,9 @@ const initialState = {
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [],
-  },
-  history: {
-    historyItems: localStorage.getItem("historyItems")
-      ? JSON.parse(localStorage.getItem("historyItems"))
-      : [],
+    shippingAddress: localStorage.getItem("shippingAddress")
+      ? JSON.parse(localStorage.getItem("shippingAddress"))
+      : null,
   },
 };
 
@@ -32,9 +31,9 @@ export const store = configureStore({
   reducer: {
     userAuth: userAuthSlice,
     userRegister: userRegisterSlice,
+    user: userSlice,
     amazon: amazonSlice,
     cart: cartSlice,
-    history: historySlice,
   },
   preloadedState: initialState,
 });

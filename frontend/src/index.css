@@ -508,6 +508,35 @@ div.img-carousel {
 .box.signin {
   max-width: 27rem;
 }
+.box.add-new {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.box.use-old,
+.box.add-new {
+  min-width: 25rem;
+  min-height: 20rem;
+  border-radius: 0.2rem;
+  margin-bottom: 2rem;
+  border: 0.2rem solid rgb(224, 217, 217);
+}
+
+.box.use-old:hover,
+.box.add-new:hover,
+.box.use-old.selected {
+  border: 0.2rem solid #f1951b;
+  border-radius: 0.5rem;
+  background-color: #f0efef40;
+  cursor: pointer;
+}
+
+.box.use-old span {
+  font-size: 1.2rem;
+}
 
 /* ==========================================
    Input, Select, Table, Button
@@ -550,6 +579,11 @@ select.cart {
   margin-left: 0.8rem;
 }
 
+input.save-address {
+  display: inline-block;
+  left: 0;
+}
+
 form:not(.search, #question, .review) > div {
   display: flex;
   flex-direction: column;
@@ -562,6 +596,20 @@ form.register input {
 
 form.shipping {
   max-width: 30rem;
+}
+
+form.shipping input {
+  max-height: 3rem;
+  width: 100%;
+  border-radius: 0.2rem;
+}
+
+form.shipping label {
+  font-weight: bold;
+}
+
+form.add-new {
+  min-width: 30rem;
 }
 
 .buy-box-qty select {
@@ -625,7 +673,8 @@ button.helpful {
   margin-bottom: 0.6rem;
 }
 
-button.cart {
+button.cart,
+button.shipping {
   width: 100%;
   /* max-width: 100%; */
 }
@@ -824,26 +873,25 @@ i.fa-star-half-stroke {
 }
 
 /* Progress bar */
-.progress-bar {
+.order-progress-bar {
   position: relative;
   display: flex;
-  margin-top: 2rem;
 }
 
-.progress-bar > div {
+.order-progress-bar > div {
   border-top: 0.4rem #c0c0c0 solid;
   color: #c0c0c0;
   padding: 1rem;
   font-weight: bold;
-  /* width: 20%; */
+  flex: 1;
 }
 
-.progress-bar > div.enabled {
+.order-progress-bar > div.enabled {
   border-top-color: #ff8000;
   color: #ff8000;
 }
 
-.progress-bar i {
+.order-progress-bar i {
   display: none;
 }
 
@@ -851,9 +899,7 @@ div.active > i {
   position: absolute;
   z-index: 5;
   display: block;
-  left: 45%;
-  top: -1rem;
-  /* bottom: 1rem; */
+  top: 1rem;
 }
 
 /* =====================================================================================
@@ -894,6 +940,16 @@ div.active > i {
   }
   .crd-body img {
     max-height: 11rem;
+  }
+
+  .box.use-old,
+  .box.add-new {
+    min-width: 5rem;
+    min-height: 10rem;
+  }
+  .box.use-old span,
+  .box.use-old h5 {
+    font-size: 0.2rem;
   }
 }
 

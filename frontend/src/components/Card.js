@@ -14,7 +14,9 @@ export default function Card(props) {
     <div className={`crd ${carousel ? "crd-carousel" : ""}`}>
       {header && (
         <div className="crd-head">
-          <h5>{header}</h5>
+          <h5>
+            {header.length < 30 ? header : `${header.substring(0, 30)}...`}
+          </h5>
         </div>
       )}
 

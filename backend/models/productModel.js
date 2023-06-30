@@ -17,6 +17,6 @@ const productSchema = new mongoose.Schema({
   reviewData: { type: mongoose.SchemaTypes.Mixed },
 });
 
-const Address = mongoose.model("shipping", productSchema);
+const Product = mongoose.model("Product", productSchema);
 
-export default Address;
+export default Product;

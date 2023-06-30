@@ -4,8 +4,13 @@ const cartItems = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
+const shippingAddress = localStorage.getItem("shippingAddress")
+  ? JSON.parse(localStorage.getItem("shippingAddress"))
+  : null;
+
 const initialState = {
   cartItems,
+  shippingAddress,
   loading: false,
   error: false,
 };
@@ -49,10 +54,18 @@ const cartSlice = createSlice({
         state.error = error.message;
       }
     },
+    saveShippingAddress(action) {
+      console.log(action.payload);
+      localStorage.setItem("shippingAddress", JSON.stringify(action.payload));
+    },
   },
 });
 
-export const { addItemToCart, removeItemFromCart, updateCartQuantity } =
-  cartSlice.actions;
+export const {
+  addItemToCart,
+  removeItemFromCart,
+  updateCartQuantity,
+  saveShippingAddress,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

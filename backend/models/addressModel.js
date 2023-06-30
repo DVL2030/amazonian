@@ -11,6 +11,6 @@ const addressSchema = new mongoose.Schema({
   country: { type: String, required: true },
 });
 
-const Address = mongoose.model("shipping", addressSchema);
+const Address = mongoose.model("Address", addressSchema);
 
 export default Address;

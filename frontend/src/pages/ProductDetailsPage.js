@@ -406,20 +406,35 @@ export default function ProductDetailsPage() {
                   </div>
                 </Col>
                 <Col lg={8} className="">
-                  <div className="reviews-local ">
-                    <h4>Top reviews from the United States</h4>
-                    {data.reviewData.reviewListLocal.map((review, idx) => (
-                      <Review review={review} key={idx}></Review>
-                    ))}
-                  </div>
-                  <hr></hr>
-                  <div className="reviews-global py-5">
-                    <h4>Top reviews from other countries</h4>
+                  {data.reviewData.reviewListLocal &&
+                  data.reviewData.reviewListLocal.length !== 0 ? (
+                    <div className="reviews-local ">
+                      <h4>Top reviews from the United States</h4>
+                      {data.reviewData.reviewListLocal.map((review, idx) => (
+                        <Review review={review} key={idx}></Review>
+                      ))}
+                      <hr></hr>
+                    </div>
+                  ) : (
+                    <div>
+                      <h4>
+                        There is no Review for this product yet. <br></br> You
+                        can be the first one to create a review!
+                      </h4>
+                    </div>
+                  )}
 
-                    {data.reviewData.reviewListGlobal.map((review, idx) => (
-                      <Review review={review} key={idx}></Review>
-                    ))}
-                  </div>
+                  {data.reviewData.reviewListGlobal &&
+                    data.reviewData.reviewListGlobal.length !== 0 && (
+                      <div className="reviews-local ">
+                        <h4>Top reviews from other countries</h4>
+
+                        {data.reviewData.reviewListGlobal.map((review, idx) => (
+                          <Review review={review} key={idx}></Review>
+                        ))}
+                        <hr></hr>
+                      </div>
+                    )}
                 </Col>
               </Row>
             )}

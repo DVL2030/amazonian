@@ -1,13 +1,30 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
+import Address from "../models/addressModel";
 
 const orderRouter = express.Router();
 
-orderRouter.get(
-  "/home",
+orderRouter.post(
+  "/getAddress",
   expressAsyncHandler(async (req, res) => {
     try {
-      const data = await AmazonScrape({ type: "home" });
+      const userId = req.body;
+      const data = await Address.find({ userId: userId });
+      return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
+);
+
+orderRouter.post(
+  "/saveAddress",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const param = req.body;
+      const data = await Address.save({ userId: userId });
       return res.send(data);
     } catch (error) {
       return res.status(401).send({

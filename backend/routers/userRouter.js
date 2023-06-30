@@ -2,8 +2,9 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import data from "../data.js";
 import User from "../models/userModel.js";
+import Address from "../models/addressModel.js";
 import bcrypt from "bcryptjs";
-import { generateToken, isAuth, isAdmin } from "../utils.js";
+import { generateToken, isAuth } from "../utils.js";
 
 const userRouter = express.Router();
 
@@ -62,6 +63,65 @@ userRouter.post(
             "A user with that email has already registered. Please use a different email..",
         });
       }
+    }
+  })
+);
+
+userRouter.post(
+  "/getAddress",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { userId } = req.body;
+    console.log(userId);
+    if (userId == null || userId.length == 0)
+      return res.status(401).send({
+        message: "You need a user ID to save this address",
+      });
+    try {
+      const data = await Address.find({ userId: userId });
+      Address.find();
+      return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
+);
+
+userRouter.post(
+  "/saveAddress",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.body.userId;
+
+    if (userId == null || userId.length == 0)
+      return res.status(401).send({
+        message: "You need a user ID to create a new address",
+      });
+    try {
+      const newAddress = new Address({
+        userId: req.body.userId,
+        fullName: req.body.fullName,
+        address1: req.body.address1,
+        address2: req.body.address2,
+        city: req.body.city,
+        province: req.body.province,
+        postalCode: req.body.postalCode,
+        country: req.body.country,
+      });
+
+      const addressCreated = await newAddress.save();
+      if (addressCreated) res.send(addressCreated);
+      return res.status(401).send({
+        message: "Failed to create a new address",
+      });
+
+      if (data) return res.send(data);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
     }
   })
 );

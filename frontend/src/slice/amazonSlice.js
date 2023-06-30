@@ -2,15 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import Axios from "axios";
 
-const historyItems = localStorage.getItem("historyItems")
-  ? JSON.parse(localStorage.getItem("historyItems"))
-  : [];
-
 const initialState = {
   data: null,
   loading: false,
   error: null,
-  historyItems,
 };
 
 // All async func definition
