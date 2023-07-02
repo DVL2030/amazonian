@@ -12,7 +12,7 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartState = useSelector((state) => state.cart);
-  const { cartItems, toggle, error } = cartState;
+  const { cart, error } = cartState;
 
   const qtyHandler = (asin, q) => {
     dispatch(updateCartQuantity({ asin: asin, qty: q }));
@@ -42,13 +42,13 @@ export default function CartPage() {
               </div>
               <hr></hr>
 
-              {cartItems.length === 0 ? (
+              {cart.length === 0 ? (
                 <MessageBox>
                   <h1>Your Amazonian cart is empty.</h1>
                   <Link to="/">Go Shopping!</Link>
                 </MessageBox>
               ) : (
-                cartItems.map((item, idx) => (
+                cart.map((item, idx) => (
                   <div key={idx}>
                     <Container fluid>
                       <Row className="cart-item">
@@ -141,11 +141,10 @@ export default function CartPage() {
               <div>
                 <big className="float-right">
                   Subtotal (
-                  {cartItems.reduce((total, x) => total + Number(x.qty), 0)}{" "}
-                  items):{" "}
+                  {cart.reduce((total, x) => total + Number(x.qty), 0)} items):{" "}
                   <strong>
                     $
-                    {cartItems
+                    {cart
                       .reduce(
                         (total, x) =>
                           total +
@@ -160,7 +159,7 @@ export default function CartPage() {
           </Col>
 
           <Col md={4} lg={3}>
-            {cartItems.length !== 0 && (
+            {cart.length !== 0 && (
               <div className="box bg-white">
                 <div className="mb-2">
                   <i
@@ -183,11 +182,11 @@ export default function CartPage() {
                 <div className="mb-2">
                   <big>
                     Subtotal (
-                    {cartItems.reduce((total, x) => total + Number(x.qty), 0)}{" "}
+                    {cart.reduce((total, x) => total + Number(x.qty), 0)}{" "}
                     items):{" "}
                     <strong>
                       $
-                      {cartItems
+                      {cart
                         .reduce(
                           (total, x) =>
                             Number(x.qty) * Number(x.currentPrice.substring(1)),

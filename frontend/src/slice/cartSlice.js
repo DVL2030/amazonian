@@ -10,6 +10,7 @@ const shippingAddress = localStorage.getItem("shippingAddress")
 
 const initialState = {
   cartItems,
+  cart: [],
   shippingAddress,
   loading: false,
   error: false,
@@ -21,6 +22,7 @@ const cartSlice = createSlice({
   reducers: {
     addItemToCart(state, action) {
       try {
+        state.cart.push(action.payload);
         const newCart = [...cartItems, action.payload];
         localStorage.setItem("cartItems", JSON.stringify(newCart));
       } catch (error) {
@@ -29,33 +31,31 @@ const cartSlice = createSlice({
     },
     removeItemFromCart(state, action) {
       try {
-        const newCart = [
-          ...cartItems.filter((x) => x.asin !== action.payload.asin),
-        ];
-        localStorage.setItem("cartItems", JSON.stringify(newCart));
-        setTimeout(() => {}, 500);
+        state.cart = state.cart.filter((x) => x.asin !== action.payload.asin);
+        localStorage.setItem("cartItems", JSON.stringify(state.cart));
       } catch (error) {
         state.error = error.message;
       }
     },
     updateCartQuantity(state, action) {
       try {
-        let selectedItem = {
-          ...cartItems.find((x) => x.asin === action.payload.asin),
-        };
-        selectedItem.qty = action.payload.qty;
+        const newCart = state.cart.map((x) => {
+          if (x.asin === action.payload.asin) {
+            return {
+              ...x,
+              qty: action.payload.qty,
+            };
+          }
+          return x;
+        });
 
-        const newCart = [
-          ...cartItems.filter((x) => x.asin !== action.payload.asin),
-          selectedItem,
-        ];
+        state.cart = newCart;
         localStorage.setItem("cartItems", JSON.stringify(newCart));
       } catch (error) {
         state.error = error.message;
       }
     },
     saveShippingAddress(action) {
-      console.log(action.payload);
       localStorage.setItem("shippingAddress", JSON.stringify(action.payload));
     },
   },
