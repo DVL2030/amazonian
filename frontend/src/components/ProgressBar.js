@@ -37,7 +37,7 @@ export default function ProgressBar(props) {
             : "disabled"
         }
       >
-        PAYMENT
+        PLACE ORDER
         <i className="fa fa-shopping-basket fa-2x" aria-hidden="true"></i>
       </div>
       <div
@@ -49,7 +49,7 @@ export default function ProgressBar(props) {
             : "disabled"
         }
       >
-        PLACE ORDER
+        PAYMENT
         <i className="fa fa-shopping-basket fa-2x" aria-hidden="true"></i>
       </div>
     </div>

@@ -1,15 +1,12 @@
 // import Stripe from "stripe";
-// import { loadStripe } from "@stripe/stripe-js";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { addDays, options, toNum } from "../utils";
 import { removeItemFromCart, updateCartQuantity } from "../slice/cartSlice";
-// import { createOrder } from "../actions/orderActions";
 import { Container, Row, Col } from "react-bootstrap";
 
-import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import ProgressBar from "../components/ProgressBar";
 
@@ -17,8 +14,6 @@ export default function OrderPlacePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //   const orderCreate = useSelector((state) => state.orderCreate);
-  //   const { loading, success, error, order } = orderCreate;
   const userAuthState = useSelector((state) => state.userAuth);
   const { userInfo } = userAuthState;
 
@@ -28,22 +23,14 @@ export default function OrderPlacePage() {
   const shippingAddress = localStorage.getItem("shippingAddress")
     ? JSON.parse(localStorage.getItem("shippingAddress"))
     : null;
-  //   const [sdkReady, setSdkReady] = useState(false);
 
   useEffect(() => {
     if (!userInfo) {
       navigate("/signin?redirect=/placeorder");
     }
-    // enablePaypalScript();
-
-    // if (success) {
-    //   navigate(`/order/${order._id}/pay`);
-    //   dispatch({ type: ORDER_CREATE_RESET });
-    // }
   }, []);
 
   const [saveShippingPaymentInfo, setSaveShippingPaymentInfo] = useState(0);
-  const [code, setCode] = useState("");
   const [deliveryOptions, setDeliveryOptions] = useState({
     price: options[0].price,
     date: options[0].date,
@@ -63,13 +50,7 @@ export default function OrderPlacePage() {
   const expectedDelivery = new Date(deliveryOptions.date);
   const eligibleReturnDate = new Date(addDays(30));
 
-  console.log(subTotal, shippingPrice, total);
-
   // Handler Functions
-  const qtyHandler = (asin, q) => {
-    dispatch(updateCartQuantity(asin, q));
-  };
-
   const removeFromCartHandler = (asin) => {
     dispatch(removeItemFromCart(asin));
   };
@@ -80,27 +61,14 @@ export default function OrderPlacePage() {
 
   const saveForLater = (asin) => {};
 
-  // const enablePaypalScript = async () => {
-  //   const { data } = await Axios.get("/api/config/paypal");
-  //   const script = document.createElement("script");
-  //   script.type = "text/javascript";
-  //   script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
-  //   script.async = true;
-  //   script.onload = () => {
-  //     setSdkReady(true);
-  //   };
-  //   document.body.appendChild(script);
-  // };
-
   const placeOrderHandler = () => {
     // dispatch(createOrder({ ...cart, orderedItems: cart.cartItems }));
+    navigate("/payment");
   };
 
   return (
     <div>
-      <ProgressBar p1 p2 p3 p4="active"></ProgressBar>
-      {/* {loading && <LoadingBox />} */}
-      {/* {error && <MessageBox variants="danger">{error}</MessageBox>} */}
+      <ProgressBar p1 p2 p3="active"></ProgressBar>
       <Container fluid className="pb-5">
         <Row className="order-place-main-container">
           <h1 className="">Review your order</h1>
@@ -144,7 +112,9 @@ export default function OrderPlacePage() {
                   <Col xs={6}>
                     <span>
                       <h2>Shipping address</h2>
-                      <small className="blue ml-2">Change</small>
+                      <Link to="/shipping">
+                        <small className="blue ml-2">Change</small>
+                      </Link>
                     </span>
                     <div>
                       {shippingAddress && (
@@ -170,7 +140,10 @@ export default function OrderPlacePage() {
                   <Col xs={6}>
                     <div>
                       <h2>Billing address </h2>
-                      <small className="blue ml-2">Change</small>
+                      <Link to="/shipping">
+                        <small className="blue ml-2">Change</small>
+                      </Link>
+
                       <div>
                         {shippingAddress && (
                           <ul className="no-list-style">
@@ -249,22 +222,6 @@ export default function OrderPlacePage() {
                                     </small>
                                   </li>
                                   <li>
-                                    <label className="">Qty: </label>
-                                    <select
-                                      className="cart"
-                                      value={item.qty}
-                                      onChange={(e) =>
-                                        qtyHandler(item.asin, e.target.value)
-                                      }
-                                    >
-                                      {[...Array(Number(10)).keys()].map(
-                                        (x) => (
-                                          <option key={x + 1} value={x + 1}>
-                                            {x + 1}
-                                          </option>
-                                        )
-                                      )}
-                                    </select>
                                     <div class="cart-item-action d-inline-block">
                                       <small
                                         className="cart-button blue px-3"

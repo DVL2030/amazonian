@@ -34,6 +34,4 @@ const orderSlice = createSlice({
   },
 });
 
-// export const { signout } = orderSlice.actions;
-
 export default orderSlice.reducer;

@@ -3,10 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import ProgressBar from "../components/ProgressBar";
 import { Container, Row, Col } from "react-bootstrap";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "../components/CheckoutForm";
+import axios from "axios";
 
-export default function PaymentPage() {
+export default function PaymentPage(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [stripePromise, setStripePromise] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
 
   const userAuthState = useSelector((state) => state.userAuth);
   const { userInfo } = userAuthState;
@@ -14,61 +21,45 @@ export default function PaymentPage() {
   const cartState = useSelector((state) => state.cart);
   const { shippingAddress } = cartState;
 
-  const [paymentMethod, setPaymentMethod] = useState("Paypal");
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    navigate("/placeorder");
-  };
+  useEffect(() => {
+    axios.get("/api/config/key").then(async (r) => {
+      const { publicKey } = r.data;
+      setStripePromise(loadStripe(publicKey));
+    });
+  }, []);
 
   useEffect(() => {
-    if (!userInfo) {
-      navigate("/signin?redirect=/cart");
-    }
+    axios
+      .post("/api/config/create-payment-intent", {
+        amount: 150,
+      })
+      .then(async (r) => {
+        const { clientSecret } = r.data;
+        setClientSecret(clientSecret);
+      });
   }, []);
   return (
     <div className="payment-main-container">
-      <ProgressBar p1 p2 p3="active"></ProgressBar>
+      <ProgressBar p1 p2 p3 p4="active"></ProgressBar>
       <Container>
         <Row>
-          <Col className="">
-            <form className="payment" onSubmit={submitHandler}>
-              <div>
-                <h3>Payment</h3>
-              </div>
-              <div>
-                <div>
-                  <input
-                    type="radio"
-                    id="paypal"
-                    value="Paypal"
-                    name="paymentMethod"
-                    required
-                    checked
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  ></input>
-                  <label htmlFor="paypal">PayPal</label>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <input
-                    type="radio"
-                    id="card"
-                    value="Card"
-                    name="paymentMethod"
-                    required
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  ></input>
-                  <label htmlFor="card">Credit / Debit Card</label>
-                </div>
-              </div>
-              <div>
-                <button className="rect yellow" type="submit">
-                  Continue
-                </button>
-              </div>
-            </form>
+          <Col className="d-flex justify-content-center">
+            {stripePromise && clientSecret.length !== 0 && (
+              <Elements
+                stripe={stripePromise}
+                options={{
+                  layout: {
+                    type: "accordion",
+                    defaultCollapsed: false,
+                    radios: false,
+                    spacedAccordionItems: true,
+                  },
+                  clientSecret: clientSecret,
+                }}
+              >
+                <CheckoutForm></CheckoutForm>
+              </Elements>
+            )}
           </Col>
         </Row>
       </Container>

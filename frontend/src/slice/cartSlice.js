@@ -57,7 +57,6 @@ const cartSlice = createSlice({
       }
     },
     saveShippingAddress(state, action) {
-      console.log(action.payload);
       localStorage.setItem("shippingAddress", JSON.stringify(action.payload));
     },
   },

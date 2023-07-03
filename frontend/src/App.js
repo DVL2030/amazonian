@@ -298,8 +298,8 @@ function App() {
             <Route path="/review/:id" exact element={<ReviewIdPage />} />
             <Route path="/cart" exact element={<CartPage />} />
             <Route path="/shipping" exact element={<OrderShippingPage />} />
-            <Route path="/payment" exact element={<PaymentPage />} />
             <Route path="/placeorder" exact element={<OrderPlacePage />} />
+            <Route path="/payment" exact element={<PaymentPage />} />
             <Route
               path="/account/address/add"
               exact
