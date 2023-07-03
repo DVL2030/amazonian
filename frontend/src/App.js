@@ -20,6 +20,7 @@ import OrderShippingPage from "./pages/OrderShippingPage";
 import PaymentPage from "./pages/PaymentPage";
 import Footer from "./components/Footer";
 import AddressAddPage from "./pages/Account/AddressAddPage";
+import OrderPlacePage from "./pages/OrderPlacePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -298,6 +299,7 @@ function App() {
             <Route path="/cart" exact element={<CartPage />} />
             <Route path="/shipping" exact element={<OrderShippingPage />} />
             <Route path="/payment" exact element={<PaymentPage />} />
+            <Route path="/placeorder" exact element={<OrderPlacePage />} />
             <Route
               path="/account/address/add"
               exact

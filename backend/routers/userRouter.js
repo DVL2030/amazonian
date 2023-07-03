@@ -72,7 +72,6 @@ userRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-    console.log(userId);
     if (userId == null || userId.length == 0)
       return res.status(401).send({
         message: "You need a user ID to save this address",

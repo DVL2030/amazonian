@@ -18,13 +18,7 @@ export default function OrderShippingPage() {
   const userAuthState = useSelector((state) => state.userAuth);
   const { userInfo } = userAuthState;
 
-  const [selectAddress, setSelectAddress] = useState(0);
-
-  // const selectAddress = (idx) => {
-  //   setBoxBorder(idx);
-  //   dispatch(saveShippingAddress(address[idx]));
-  //   navigate("payment");
-  // };
+  const [selectAddress, setSelectAddress] = useState(-1);
 
   const changeAddress = (idx) => {
     setSelectAddress(idx);
@@ -39,8 +33,12 @@ export default function OrderShippingPage() {
   };
 
   const continueHandler = () => {
-    dispatch(saveShippingAddress(address[selectAddress]));
-    navigate("/payment");
+    if (selectAddress < 0) alert("You must choose an address to continue..");
+    else {
+      // console.log(address[selectAddress]);
+      dispatch(saveShippingAddress(address[selectAddress]));
+      navigate("/payment");
+    }
   };
 
   useEffect(() => {
@@ -65,8 +63,8 @@ export default function OrderShippingPage() {
           There was a problem... Please try again.
         </MessageBox>
       )}
-      <Container className="p-5">
-        <Row>
+      <Container className="p-1">
+        <Row className="p-0">
           {address && (
             <Col xs={12}>
               <div>
@@ -85,7 +83,7 @@ export default function OrderShippingPage() {
                   </Col>
                   {address.length !== 0 &&
                     address.map((a, idx) => (
-                      <Col xs={4} key={idx}>
+                      <Col md={12} lg={4} key={idx} className="">
                         <div
                           data-index={idx}
                           className="box shipping use-old"
@@ -112,7 +110,7 @@ export default function OrderShippingPage() {
             <button
               className="shipping rect orange"
               type="submit"
-              onClick={() => continueHandler}
+              onClick={() => continueHandler()}
             >
               Continue
             </button>

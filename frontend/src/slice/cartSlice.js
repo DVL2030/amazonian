@@ -24,6 +24,7 @@ const cartSlice = createSlice({
       try {
         state.cart.push(action.payload);
         const newCart = [...cartItems, action.payload];
+        console.log(newCart);
         localStorage.setItem("cartItems", JSON.stringify(newCart));
       } catch (error) {
         state.error = error.message;
@@ -55,7 +56,8 @@ const cartSlice = createSlice({
         state.error = error.message;
       }
     },
-    saveShippingAddress(action) {
+    saveShippingAddress(state, action) {
+      console.log(action.payload);
       localStorage.setItem("shippingAddress", JSON.stringify(action.payload));
     },
   },
