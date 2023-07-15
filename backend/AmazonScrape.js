@@ -45,9 +45,9 @@ const startScraper = async ({
       apiEndpoint = `${CONST.host}/s?k=${keyword}${
         department ? `&i=${department}` : ""
       }${page ? `&page=${page}` : ""}`;
+      console.log(apiEndpoint);
       resBody = await buildHttpRequest(apiEndpoint);
       result = scrapeProductSearchPage(resBody);
-      console.log(result);
       return result;
     case "productAsin":
       if (!asin)
@@ -601,8 +601,6 @@ function scrapePrice(body) {
       $('span[data-a-size="xl"]')[0] ||
       $('span[data-a-size="b"]')[0];
     const beforePrice = $('span[data-a-strike="true"]')[0];
-
-    console.log(currentPrice);
 
     if (currentPrice) {
       price = $(currentPrice).children().first().text();

@@ -59,7 +59,7 @@ export default function RatingHistogram(props) {
           <div className="rating-bar">
             <div
               className={distribution[1] === 0 ? "zero" : ""}
-              style={{ width: `${distribution[1]}` }}
+              style={{ width: `${distribution[1] ? distribution[1] : "0"}` }}
             ></div>
           </div>
           <span>{distribution[1]}</span>

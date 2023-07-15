@@ -8,6 +8,7 @@ import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
 import Rating from "../components/Rating";
 import SorryBox from "../components/SorryBox";
+import Paginate from "../components/Paginate";
 
 export default function ProductSearchPage() {
   const dispatch = useDispatch();
@@ -46,12 +47,12 @@ export default function ProductSearchPage() {
         getProductList({
           type: "products",
           keyword: keyword,
-          department: department ? department : {},
+          ...(department && { department: department }),
           page: page,
         })
       );
     }
-  }, []);
+  }, [page]);
 
   return loading ? (
     <LoadingBox />
@@ -138,7 +139,7 @@ export default function ProductSearchPage() {
           </Col>
           <Col xs={12} lg={9}>
             <Container>
-              {data ? (
+              {data &&
                 data.items.map((item, idx) => (
                   <Row key={idx} className="products-search-row">
                     <Col xs={3} className="products-search-img">
@@ -178,99 +179,30 @@ export default function ProductSearchPage() {
                       ))}
                     </Col>
                   </Row>
-                ))
-              ) : (
-                <div></div>
+                ))}
+            </Container>
+            <Container>
+              {data && data.totalPage && (
+                <Row className="py-3">
+                  <Col className="d-flex justify-content-center d-sm-none">
+                    <Paginate
+                      path={`products/${keyword}`}
+                      label={false}
+                      page={Number(page)}
+                      totalPage={data.totalPage}
+                    ></Paginate>
+                  </Col>
+                  <Col className="d-none d-sm-flex justify-content-center">
+                    <Paginate
+                      path={`products/${keyword}`}
+                      label={true}
+                      page={Number(page)}
+                      totalPage={20}
+                    ></Paginate>
+                  </Col>
+                </Row>
               )}
             </Container>
-            {data && data.totalPage ? (
-              <div className="pagination">
-                <span>
-                  <Link
-                    className={page === 1 && "link-disabled"}
-                    // onClick={linkHandler(`/products/${keyword}/page/${1}`)}
-                    to={`/products/${keyword}/page/${page - 1}`}
-                  >
-                    <i className="fa-solid fa-angle-left fa-xs"></i> Prev
-                  </Link>
-                </span>
-
-                {page > 3 && (
-                  <>
-                    <Link to={`/products/${keyword}/page/${1}`}>1</Link>
-                    <span>...</span>
-                  </>
-                )}
-                {page === 1 ? (
-                  <>
-                    <Link to="#" className="active link-disabled">
-                      1
-                    </Link>
-                    <Link
-                      to={`/products/${keyword}/page/${2}`}
-                      // onClick={linkHandler(`/products/${keyword}/page/${2}`)}
-                    >
-                      2
-                    </Link>
-                    <Link to={`/products/${keyword}/page/${3}`}>3</Link>
-                  </>
-                ) : page === data.totalPage ? (
-                  <>
-                    <Link to={`/products/${keyword}/page/${1}`}>
-                      {Number(data.totalPage) - 2}
-                    </Link>
-                    <Link to={`/products/${keyword}/page/${1}`}>
-                      {data.totalPage - 1}
-                    </Link>
-                    <Link
-                      to={`/products/${keyword}/page/${1}`}
-                      class="active link-disabled"
-                    >
-                      {data.totalPage}
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      to={`/products/${keyword}/page/${1}`}
-                      // onClick={linkHandler(`/products/${keyword}/page/${1}`)}
-                    >
-                      {Number(page) - 1}
-                    </Link>
-                    <Link
-                      to={`/products/${keyword}/page/${1}`}
-                      class="active link-disabled"
-                    >
-                      {page}
-                    </Link>
-                    <Link to={`/products/${keyword}/page/${1}`}>
-                      {Number(page) + 1}
-                    </Link>
-                  </>
-                )}
-                {page + 1 < data.totalPage ? (
-                  <>
-                    {page < data.totalPage - 2 && <span>...</span>}
-
-                    <Link to={`/products/${keyword}/page/${1}`}>
-                      {data.totalPage}
-                    </Link>
-                  </>
-                ) : (
-                  <span>...</span>
-                )}
-                <span>
-                  <Link
-                    className={page === data.totalPage && "link-disabled"}
-                    to={`/products/${keyword}/page/${1}`}
-                  >
-                    Next <i className="fa-solid fa-angle-right fa-xs"></i>
-                  </Link>
-                </span>
-              </div>
-            ) : (
-              <></>
-            )}
           </Col>
         </Row>
       </Container>

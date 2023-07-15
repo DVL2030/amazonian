@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { Col, Container, Row, Carousel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getHomePage } from "../slice/amazonSlice";
 import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
 
 import MultiCarousel from "../components/MultiCarousel";
 import Card from "../components/Card";
+import Paginate from "../components/Paginate";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -15,9 +16,12 @@ export default function HomePage() {
   const amazonState = useSelector((state) => state.amazon);
   const { amazonHome, loading, error } = amazonState;
 
+  const param = useParams();
+  const { page = 1 } = param;
+
   useEffect(() => {
     if (!amazonHome) dispatch(getHomePage());
-  }, []);
+  }, [page]);
 
   return (
     <>
@@ -25,6 +29,18 @@ export default function HomePage() {
         <LoadingBox />
       ) : (
         <div id="home">
+          {/* <Container>
+            <Row className="py-3">
+              <Col className="d-flex justify-content-center">
+                <Paginate
+                  path="home"
+                  label={true}
+                  page={Number(page)}
+                  totalPage={20}
+                ></Paginate>
+              </Col>
+            </Row>
+          </Container> */}
           <Carousel
             fade
             slide
