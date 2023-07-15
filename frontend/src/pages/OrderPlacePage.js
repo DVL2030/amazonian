@@ -4,8 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { addDays, options, toNum } from "../utils";
-import { removeItemFromCart, updateCartQuantity } from "../slice/cartSlice";
-import { Container, Row, Col } from "react-bootstrap";
+import {
+  removeItemFromCart,
+  saveOrderInfo,
+  updateCartQuantity,
+} from "../slice/cartSlice";
+import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 
 import MessageBox from "../components/MessageBox";
 import ProgressBar from "../components/ProgressBar";
@@ -24,11 +28,9 @@ export default function OrderPlacePage() {
     ? JSON.parse(localStorage.getItem("shippingAddress"))
     : null;
 
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/signin?redirect=/placeorder");
-    }
-  }, []);
+  // Bootstrap Modal
+  const [show, setShow] = useState(false);
+  const [selectAsin, setSelectAsin] = useState("0");
 
   const [saveShippingPaymentInfo, setSaveShippingPaymentInfo] = useState(0);
   const [deliveryOptions, setDeliveryOptions] = useState({
@@ -51,8 +53,20 @@ export default function OrderPlacePage() {
   const eligibleReturnDate = new Date(addDays(30));
 
   // Handler Functions
+  const qtyHandler = (asin, q) => {
+    dispatch(updateCartQuantity({ asin: asin, qty: q }));
+  };
+
   const removeFromCartHandler = (asin) => {
-    dispatch(removeItemFromCart(asin));
+    setShow(true);
+    setSelectAsin(asin);
+  };
+
+  const handleConfirm = (val) => {
+    if (val === "true") {
+      dispatch(removeItemFromCart({ asin: selectAsin }));
+    }
+    setShow(false);
   };
 
   const deliveryOptionsHandler = (price, date) => {
@@ -62,12 +76,28 @@ export default function OrderPlacePage() {
   const saveForLater = (asin) => {};
 
   const placeOrderHandler = () => {
-    // dispatch(createOrder({ ...cart, orderedItems: cart.cartItems }));
+    dispatch(
+      saveOrderInfo({
+        userId: userInfo._id,
+        shippingPrice: shippingPrice,
+        total: total,
+        tax: tax,
+        final: final,
+        expectedDelivery: expectedDelivery,
+        eligibleReturnDate: eligibleReturnDate,
+      })
+    );
     navigate("/payment");
   };
 
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/signin?redirect=/placeorder");
+    }
+  }, [cartItems]);
+
   return (
-    <div>
+    <div id="order-place-container">
       <ProgressBar p1 p2 p3="active"></ProgressBar>
       <Container fluid className="pb-5">
         <Row className="order-place-main-container">
@@ -96,7 +126,7 @@ export default function OrderPlacePage() {
                       }}
                     ></input>
                     <label
-                      className="dark-grey"
+                      className="dark-grey d-inline-block ms-2"
                       htmlFor="saveShippingPaymentInfo"
                     >
                       Check this box to default to these delivery and payment
@@ -188,18 +218,18 @@ export default function OrderPlacePage() {
                     )}
                   <Container fluid>
                     <Row>
-                      <Col xs={9}>
+                      <Col xs={12} lg={9}>
                         <Container>
                           {cartItems.map((item, idx) => (
-                            <Row>
-                              <Col xs={2}>
+                            <Row key={idx} className="my-2">
+                              <Col md={3} className="d-none d-md-block">
                                 <Link to={`/product/${item.asin}`}>
                                   <div className="sm">
                                     <img src={item.image} alt={item.name}></img>
                                   </div>
                                 </Link>
                               </Col>
-                              <Col>
+                              <Col xs md={9}>
                                 <Link to={`/product/${item.asin}`}>
                                   <big>
                                     <strong>{item.title}</strong>
@@ -221,18 +251,38 @@ export default function OrderPlacePage() {
                                       {item.availability}
                                     </small>
                                   </li>
-                                  <li>
-                                    <div class="cart-item-action d-inline-block">
+                                  <li className="d-block d-sm-flex gap-3">
+                                    <div className="">
+                                      <label>Qty: </label>
+                                      <select
+                                        className="cart"
+                                        value={item.qty}
+                                        onChange={(e) =>
+                                          qtyHandler(item.asin, e.target.value)
+                                        }
+                                      >
+                                        {[...Array(Number(10)).keys()].map(
+                                          (x) => (
+                                            <option key={x + 1} value={x + 1}>
+                                              {x + 1}
+                                            </option>
+                                          )
+                                        )}
+                                      </select>
+                                    </div>
+                                    <div>
                                       <small
-                                        className="cart-button blue px-3"
+                                        className="cart-button blue"
                                         onClick={() =>
                                           removeFromCartHandler(item.asin)
                                         }
                                       >
                                         Delete
                                       </small>
+                                    </div>
+                                    <div>
                                       <small
-                                        className="cart-button blue px-3"
+                                        className="cart-button blue"
                                         onClick={() => saveForLater(item.asin)}
                                       >
                                         Save for later
@@ -246,78 +296,34 @@ export default function OrderPlacePage() {
                           ))}
                         </Container>
                       </Col>
-                      <Col xs={3}>
+                      <Col xs lg={3}>
                         <strong>Choose a delivery option: </strong>
-                        <form id="deliveryOptions">
-                          <div>
-                            <div>
+                        <form id="deliveryOptions" className="my-4">
+                          {options.map((op, idx) => (
+                            <div className="d-flex mb-3" key={idx}>
                               <input
                                 type="radio"
-                                id="option1"
+                                id={`option${idx + 1}`}
                                 name="deliveryOptions"
                                 onChange={() =>
-                                  deliveryOptionsHandler(
-                                    options[0].price,
-                                    options[0].date
-                                  )
+                                  deliveryOptionsHandler(op.price, op.date)
                                 }
                               ></input>
-                              <label htmlFor="option1">
-                                <strong className="green">
-                                  {options[0].date}
+                              <label
+                                className="d-inline-block ms-2"
+                                htmlFor={`option${idx + 1}`}
+                              >
+                                <strong className="text-success">
+                                  {op.date}
                                 </strong>
-                                <div className="grey">
-                                  {options[0].price} - Standard Shipping
+                                <div>
+                                  <span className="text-secondary">
+                                    {op.price} - {op.label}
+                                  </span>
                                 </div>
                               </label>
                             </div>
-                          </div>
-                          <div>
-                            <div>
-                              <input
-                                type="radio"
-                                id="option2"
-                                name="deliveryOptions"
-                                onChange={() =>
-                                  deliveryOptionsHandler(
-                                    options[1].price,
-                                    options[1].date
-                                  )
-                                }
-                              ></input>
-                              <label htmlFor="option2">
-                                <strong className="green">
-                                  {options[1].date}
-                                </strong>
-                                <div className="grey">
-                                  {options[1].price} - Standard 3-Day Shipping
-                                </div>
-                              </label>
-                            </div>
-                          </div>
-                          <div>
-                            <div>
-                              <input
-                                type="radio"
-                                id="option3"
-                                name="deliveryOptions"
-                                onChange={() =>
-                                  deliveryOptionsHandler(
-                                    options[2].price,
-                                    options[2].date
-                                  )
-                                }
-                              ></input>
-                              <label htmlFor="option3">
-                                <strong className="green">
-                                  {options[2].date}
-                                </strong>
-                                <div className="grey">
-                                  {options[2].price} - Standard 5-Day Shipping
-                                </div>
-                              </label>
-                            </div>
-                          </div>
+                          ))}
                         </form>
                       </Col>
                     </Row>
@@ -384,6 +390,30 @@ export default function OrderPlacePage() {
                   </li>
                 </ul>
               </div>
+              <Modal show={show} onHide={() => setShow(false)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirm Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Are you sure you want to delete this item?
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    value={false}
+                    onClick={(e) => handleConfirm(e.target.value)}
+                  >
+                    No
+                  </Button>
+                  <Button
+                    variant="primary"
+                    value={true}
+                    onClick={(e) => handleConfirm(e.target.value)}
+                  >
+                    Yes
+                  </Button>
+                </Modal.Footer>
+              </Modal>
             </div>
           </Col>
         </Row>

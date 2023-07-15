@@ -435,6 +435,11 @@ export default function ProductDetailsPage() {
                         <hr></hr>
                       </div>
                     )}
+                  <div className="mb-2">
+                    <Link to={`/product-reviews/${asin}`}>
+                      See more reviews
+                    </Link>
+                  </div>
                 </Col>
               </Row>
             )}

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ProgressBar from "../components/ProgressBar";
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
-import { getAddress, saveAddress } from "../slice/userSlice";
+import { Container, Row, Col } from "react-bootstrap";
+import { getAddress } from "../slice/userSlice";
 import { saveShippingAddress } from "../slice/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 import MessageBox from "../components/MessageBox";

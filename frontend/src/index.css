@@ -292,7 +292,7 @@ hr.grad {
   font-size: 1.6rem;
   font-weight: 400;
 }
-/* 
+/*
 .discount-box {
   background-color: #cc0c39;
   padding: 0.3rem 0.2rem;
@@ -577,6 +577,9 @@ select {
 select.cart {
   display: inline-block;
   margin-left: 0.8rem;
+  min-width: 2rem;
+  max-width: 4rem;
+  font-size: 90%;
 }
 
 input.save-address {
@@ -584,7 +587,7 @@ input.save-address {
   left: 0;
 }
 
-form:not(.search, #question, .review) > div {
+form:not(.search, #question, .review, #deliveryOptions) > div {
   display: flex;
   flex-direction: column;
   margin: 1rem;
@@ -944,6 +947,15 @@ div.active > i {
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
+  #order-place-container {
+    font-size: 70%;
+  }
+  #order-place-container h1,
+  #order-place-container h2,
+  #order-place-container strong,
+  #order-place-container small {
+    font-size: 80%;
+  }
   #nav-cart-count {
     top: -0.2rem;
   }
@@ -961,12 +973,6 @@ div.active > i {
     font-size: 0.5rem;
   }
 
-  select.cart {
-    font-size: 0.4rem;
-    min-width: 2rem;
-    max-width: 3rem;
-  }
-
   .card-grid small {
     font-size: 0.4rem;
   }
@@ -977,6 +983,16 @@ div.active > i {
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
+  #order-place-container {
+    font-size: 75%;
+  }
+  #order-place-container h1,
+  #order-place-container h2,
+  #order-place-container strong,
+  #order-place-container small {
+    font-size: 85%;
+  }
+
   #nav-cart-count {
     top: -0.2rem;
   }
@@ -999,6 +1015,16 @@ div.active > i {
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
+  #order-place-container {
+    font-size: 80%;
+  }
+  #order-place-container h1,
+  #order-place-container h2,
+  #order-place-container strong,
+  #order-place-container small {
+    font-size: 90%;
+  }
+
   #search-nav-container > *:not(#search-form):hover {
     border: 0.15rem solid #ffffff;
   }
@@ -1032,4 +1058,13 @@ div.active > i {
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+  #order-place-container {
+    font-size: 100%;
+  }
+  #order-place-container h1,
+  #order-place-container h2,
+  #order-place-container strong,
+  #order-place-container small {
+    font-size: 100%;
+  }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { Button, Col, Modal, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { removeItemFromCart, updateCartQuantity } from "../slice/cartSlice";
@@ -9,6 +9,11 @@ export default function CartItem(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { item } = props;
+
+  // Bootstrap Modal
+  const [show, setShow] = useState(false);
+  const [selectAsin, setSelectAsin] = useState("0");
+
   const qtyHandler = (asin, q) => {
     dispatch(updateCartQuantity({ asin: asin, qty: q }));
   };
@@ -18,7 +23,15 @@ export default function CartItem(props) {
   };
 
   const removeFromCartHandler = (asin) => {
-    dispatch(removeItemFromCart({ asin }));
+    setShow(true);
+    setSelectAsin(asin);
+  };
+
+  const handleConfirm = (val) => {
+    if (val === "true") {
+      dispatch(removeItemFromCart({ asin: selectAsin }));
+    }
+    setShow(false);
   };
 
   return (
@@ -86,6 +99,28 @@ export default function CartItem(props) {
             </div>
           </li>
         </ul>
+        <Modal show={show} onHide={() => setShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              value={false}
+              onClick={(e) => handleConfirm(e.target.value)}
+            >
+              No
+            </Button>
+            <Button
+              variant="primary"
+              value={true}
+              onClick={(e) => handleConfirm(e.target.value)}
+            >
+              Yes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Col>
     </Row>
   );

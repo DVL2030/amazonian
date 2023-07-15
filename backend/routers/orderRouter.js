@@ -1,110 +1,59 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
-import Address from "../models/addressModel";
+import Order from "../models/orderModel.js";
+import { isAuth } from "../utils.js";
 
 const orderRouter = express.Router();
 
 orderRouter.post(
-  "/getAddress",
+  "/create",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
-    try {
-      const userId = req.body;
-      const data = await Address.find({ userId: userId });
-      return res.send(data);
-    } catch (error) {
-      return res.status(401).send({
-        message: error.message,
+    if (req.body.orderedItems.length === 0) {
+      return res.status(401).send({ message: "Cart is empty." });
+    } else {
+      const order = new Order({
+        userId: req.user._id,
+        orderedItems: req.body.orderedItems,
+        shippingAddress: req.body.shippingAddress,
+        shippingPrice: req.body.shippingPrice,
+        total: req.body.total,
+        tax: req.body.tax,
+        final: req.body.final,
+        expectedDelivery: req.body.expectedDelivery,
+        eligibleReturnDate: req.body.eligibleReturnDate,
       });
+      const newOrder = await order.save();
+      return res
+        .status(201)
+        .send({ message: "Created new order.", order: newOrder });
     }
   })
 );
 
-orderRouter.post(
-  "/saveAddress",
+orderRouter.get(
+  "/:id",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
-    try {
-      const param = req.body;
-      const data = await Address.save({ userId: userId });
-      return res.send(data);
-    } catch (error) {
-      return res.status(401).send({
-        message: error.message,
-      });
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      res.send(order);
+    } else {
+      return res.status(404).send({ message: "Order Not Found" });
     }
   })
 );
 
-orderRouter.post(
-  "/products",
+orderRouter.get(
+  "/mine",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
-    const { keyword, department, page } = req.body;
-    try {
-      const data = await AmazonScrape({
-        type: "products",
-        keyword: keyword,
-        department: department,
-        page: page,
-      });
-      return res.send(data);
-    } catch (error) {
-      return res.status(401).send({
-        message: error.message,
-      });
-    }
-  })
-);
-
-orderRouter.post(
-  "/productAsin",
-  expressAsyncHandler(async (req, res) => {
-    const { asin } = req.body;
-    try {
-      const data = await AmazonScrape({
-        type: "productAsin",
-        asin: asin,
-      });
-      return res.send(data);
-    } catch (error) {
-      return res.status(401).send({
-        message: error.message,
-      });
-    }
-  })
-);
-
-orderRouter.post(
-  "/reviews",
-  expressAsyncHandler(async (req, res) => {
-    const { asin, reviewFilter } = req.body;
-    try {
-      const data = await AmazonScrape({
-        type: "reviews",
-        asin: asin,
-        reviewFilter: reviewFilter,
-      });
-      return res.send(data);
-    } catch (error) {
-      return res.status(401).send({
-        message: error.message,
-      });
-    }
-  })
-);
-
-orderRouter.post(
-  "/reviewID",
-  expressAsyncHandler(async (req, res) => {
-    const { id } = req.body;
-    console.log(id);
-    try {
-      const data = await AmazonScrape({
-        type: "reviewID",
-        reviewId: id,
-      });
-      return res.send(data);
-    } catch (error) {
-      return res.status(401).send({
-        message: error.message,
+    const orders = await Order.find({ user: req.user._id });
+    if (orders) {
+      res.send(orders);
+    } else {
+      res.send({
+        message: "You haven't made any order with Amazonian Yet. Go shopping!",
       });
     }
   })

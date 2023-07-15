@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 import ProgressBar from "../components/ProgressBar";
 import { Container, Row, Col } from "react-bootstrap";
 import { loadStripe } from "@stripe/stripe-js";
@@ -8,18 +9,19 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../components/CheckoutForm";
 import axios from "axios";
 
-export default function PaymentPage(props) {
+export default function OrderPaymentPage(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
-  const userAuthState = useSelector((state) => state.userAuth);
-  const { userInfo } = userAuthState;
-
   const cartState = useSelector((state) => state.cart);
-  const { shippingAddress } = cartState;
+  const { orderInfo } = cartState;
+
+  const orderState = useSelector((state) => state.order);
+  const { createOrder, loading, error } = orderState;
 
   useEffect(() => {
     axios.get("/api/config/key").then(async (r) => {
@@ -29,15 +31,18 @@ export default function PaymentPage(props) {
   }, []);
 
   useEffect(() => {
-    axios
-      .post("/api/config/create-payment-intent", {
-        amount: 150,
-      })
-      .then(async (r) => {
-        const { clientSecret } = r.data;
-        setClientSecret(clientSecret);
-      });
-  }, []);
+    if (orderInfo)
+      axios
+        .post("/api/config/create-payment-intent", {
+          amount: parseInt(orderInfo.final),
+        })
+        .then(async (r) => {
+          const { clientSecret } = r.data;
+          setClientSecret(clientSecret);
+        });
+
+    if (createOrder) navigate(`/ordersummary/${createOrder._id}`);
+  }, [orderInfo, createOrder]);
   return (
     <div className="payment-main-container">
       <ProgressBar p1 p2 p3 p4="active"></ProgressBar>
@@ -46,6 +51,7 @@ export default function PaymentPage(props) {
           <Col className="d-flex justify-content-center">
             {stripePromise && clientSecret.length !== 0 && (
               <Elements
+                key={clientSecret}
                 stripe={stripePromise}
                 options={{
                   layout: {

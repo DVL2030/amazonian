@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import MessageBox from "../components/MessageBox";
-
+import LoadingBox from "../components/LoadingBox";
 import CartItem from "../components/CartItem";
 
 export default function CartPage() {
@@ -12,15 +12,17 @@ export default function CartPage() {
   const navigate = useNavigate();
 
   const cartState = useSelector((state) => state.cart);
-  const { cartItems, cart, error } = cartState;
-
-  let cartItem =
-    cart.length !== 0 ? cart : cartItems.length !== 0 ? cartItems : [];
+  const { cartItems, loading, error } = cartState;
 
   const checkoutHandler = () => {
     navigate("/signin?redirect=/shipping");
   };
-  return error ? (
+
+  useEffect(() => {}, [cartItems]);
+
+  return loading ? (
+    <LoadingBox />
+  ) : error ? (
     <MessageBox variants="danger">{error}</MessageBox>
   ) : (
     <div id="cart-page-container">
@@ -33,9 +35,9 @@ export default function CartPage() {
               </div>
               <hr></hr>
 
-              {cartItem.length !== 0 ? (
-                <Container>
-                  {cartItem.map((item, idx) => (
+              {cartItems.length !== 0 ? (
+                <Container fluid>
+                  {cartItems.map((item, idx) => (
                     <CartItem key={idx} item={item}></CartItem>
                   ))}
                   <hr></hr>
@@ -50,11 +52,11 @@ export default function CartPage() {
               <div>
                 <big className="float-right">
                   Subtotal (
-                  {cartItem.reduce((total, x) => total + Number(x.qty), 0)}{" "}
+                  {cartItems.reduce((total, x) => total + Number(x.qty), 0)}{" "}
                   items):{" "}
                   <strong>
                     $
-                    {cartItem
+                    {cartItems
                       .reduce(
                         (total, x) =>
                           total +
@@ -69,7 +71,7 @@ export default function CartPage() {
           </Col>
 
           <Col md={4} lg={3}>
-            {cartItem.length !== 0 && (
+            {cartItems.length !== 0 && (
               <div className="box bg-white">
                 <div className="mb-2">
                   <i
@@ -92,13 +94,14 @@ export default function CartPage() {
                 <div className="mb-2">
                   <big>
                     Subtotal (
-                    {cartItem.reduce((total, x) => total + Number(x.qty), 0)} =
+                    {cartItems.reduce((total, x) => total + Number(x.qty), 0)} =
                     items):{" "}
                     <strong>
                       $
-                      {cartItem
+                      {cartItems
                         .reduce(
                           (total, x) =>
+                            total +
                             Number(x.qty) * Number(x.currentPrice.substring(1)),
                           0
                         )

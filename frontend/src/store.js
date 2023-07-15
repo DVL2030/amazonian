@@ -5,6 +5,7 @@ import amazonSlice from "./slice/amazonSlice";
 import cartSlice from "./slice/cartSlice";
 import historySlice from "./slice/historySlice";
 import userSlice from "./slice/userSlice";
+import orderSlice from "./slice/orderSlice";
 
 const initialState = {
   userAuth: {
@@ -18,12 +19,14 @@ const initialState = {
       : null,
   },
   cart: {
-    cart: [],
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [],
     shippingAddress: localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
+      : null,
+    orderInfo: localStorage.getItem("orderInfo")
+      ? JSON.parse(localStorage.getItem("orderInfo"))
       : null,
   },
 };
@@ -35,6 +38,7 @@ export const store = configureStore({
     user: userSlice,
     amazon: amazonSlice,
     cart: cartSlice,
+    order: orderSlice,
   },
   preloadedState: initialState,
 });

@@ -10,9 +10,17 @@ export const addDays = (n) => {
 // Constants
 export const baseRate = 11.99;
 export const options = [
-  { price: baseRate, date: addDays(2) },
-  { price: toNum(baseRate * 0.8), date: addDays(3) },
-  { price: toNum(baseRate * 0.6), date: addDays(5) },
+  { price: baseRate, date: addDays(2), label: "Standard Shipping" },
+  {
+    price: toNum(baseRate * 0.8),
+    date: addDays(3),
+    label: "Standard 3-Day Shipping",
+  },
+  {
+    price: toNum(baseRate * 0.6),
+    date: addDays(5),
+    label: "Standard 5-Day Shipping",
+  },
 ];
 
 export const prices = [
