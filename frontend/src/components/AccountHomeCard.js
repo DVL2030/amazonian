@@ -9,7 +9,7 @@ export default function AccountHomeCard(props) {
   return (
     <Container className="box home-card">
       <Row>
-        <Col xs={12} sm={6} md={3}>
+        <Col xs={12} sm={4} md={3}>
           <img src={img} alt={heading}></img>
         </Col>
         <Col xs sm md>

@@ -9,7 +9,7 @@ export default function UserHomePage() {
   const navigate = useNavigate();
 
   return (
-    <Container className="p-5">
+    <Container className="p-5 min-vh-70">
       <Row>
         <Col xs={12}>
           <h3>Your Account</h3>

@@ -24,6 +24,7 @@ import OrderPlacePage from "./pages/OrderPlacePage";
 import OrderSummaryPage from "./pages/OrderSummaryPage";
 import OrderHistoryPage from "./pages/Account/OrderHistory";
 import UserHomePage from "./pages/Account/UserHomePage";
+import UserSecurityPage from "./pages/Account/UserSecurityPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -299,6 +300,7 @@ function App() {
             element={<OrderSummaryPage />}
           />
           <Route path="/user/home" exact element={<UserHomePage />} />
+          <Route path="/user/security" exact element={<UserSecurityPage />} />
           <Route path="/user/address/add" exact element={<AddressAddPage />} />
           <Route
             path="/user/order/history"

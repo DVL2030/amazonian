@@ -3,6 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 
 const initialState = {
+  status: true,
+  update: { status: false, message: null },
   address: null,
   favourite: null,
   loading: false,

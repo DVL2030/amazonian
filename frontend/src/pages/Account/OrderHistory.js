@@ -25,11 +25,12 @@ export default function OrderHistoryPage() {
     <MessageBox variants="danger">{error}</MessageBox>
   ) : (
     history && (
-      <Container>
+      <Container className="p-2">
         <Row>
           <Col>
+            <h3>Your Order History</h3>
             {history.map((order, idx) => (
-              <div key={idx} className="box my-5">
+              <div key={idx} className="box my-4">
                 <div>
                   <table className="table">
                     <thead>

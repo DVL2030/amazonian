@@ -487,6 +487,13 @@ div.img-carousel {
   height: 100%;
 }
 
+.card.security-card {
+  width: 100%;
+  max-width: 40rem;
+}
+.card.security-card {
+}
+
 /* ==========================================
    Box
    ==========================================*/
@@ -545,7 +552,7 @@ div.img-carousel {
 }
 .box.home-card {
   margin-bottom: 2rem;
-  height: 9rem;
+  min-height: 9rem;
 }
 
 /* ==========================================
@@ -672,6 +679,11 @@ button.review {
   outline: none;
   margin: 1rem 0;
   width: 75%;
+}
+
+button.security {
+  background-color: #fff;
+  box-shadow: 0px 0px 1.3rem #cecece;
 }
 
 button.helpful {
@@ -950,6 +962,10 @@ div.active > i {
   padding-bottom: 0.3rem;
 }
 
+.min-vh-70 {
+  min-height: 70vh;
+}
+
 /* =====================================================================================
    Responsive Layout
    ===================================================================================== */
@@ -992,6 +1008,15 @@ div.active > i {
   .crd-body img {
     max-height: 11rem;
   }
+
+  .box.home-card h5 {
+    font-size: 90%;
+  }
+
+  .box.home-card {
+    font-size: 60%;
+    min-height: 10.5rem;
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -1024,6 +1049,13 @@ div.active > i {
   .crd-body img {
     max-height: 15.5rem;
   }
+
+  .box.home-card h5 {
+    font-size: 100%;
+  }
+  .box.home-card {
+    font-size: 70%;
+  }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -1046,6 +1078,13 @@ div.active > i {
   }
   .crd {
     height: 24rem;
+  }
+
+  .box.home-card h5 {
+    font-size: 100%;
+  }
+  .box.home-card {
+    font-size: 100%;
   }
 }
 
