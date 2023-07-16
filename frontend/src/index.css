@@ -543,6 +543,10 @@ div.img-carousel {
 .box.use-old span {
   font-size: 1.2rem;
 }
+.box.home-card {
+  margin-bottom: 2rem;
+  height: 9rem;
+}
 
 /* ==========================================
    Input, Select, Table, Button

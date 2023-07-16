@@ -23,6 +23,7 @@ import AddressAddPage from "./pages/Account/AddressAddPage";
 import OrderPlacePage from "./pages/OrderPlacePage";
 import OrderSummaryPage from "./pages/OrderSummaryPage";
 import OrderHistoryPage from "./pages/Account/OrderHistory";
+import UserHomePage from "./pages/Account/UserHomePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -297,6 +298,7 @@ function App() {
             exact
             element={<OrderSummaryPage />}
           />
+          <Route path="/user/home" exact element={<UserHomePage />} />
           <Route path="/user/address/add" exact element={<AddressAddPage />} />
           <Route
             path="/user/order/history"
