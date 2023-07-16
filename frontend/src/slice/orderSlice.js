@@ -3,8 +3,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 
 const initialState = {
-  order: null,
-  createOrder: null,
   loading: false,
   error: null,
 };
@@ -19,7 +17,7 @@ export const getOrder = createAsyncThunk(
       const res = await Axios({
         method: "post",
         url: "/api/order/get",
-        data: { orderId: orderId },
+        data: { userId: userInfo._id, orderId: orderId },
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       return res.data;
@@ -62,6 +60,31 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+export const getOrderHistory = createAsyncThunk(
+  "order/history",
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      userAuth: { userInfo },
+    } = getState();
+    try {
+      const res = await Axios({
+        method: "post",
+        url: "/api/order/history",
+        data: { userId: userInfo._id },
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -88,6 +111,18 @@ const orderSlice = createSlice({
       state.order = action.payload;
     });
     builder.addCase(getOrder.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getOrderHistory.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getOrderHistory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.history = action.payload;
+    });
+    builder.addCase(getOrderHistory.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

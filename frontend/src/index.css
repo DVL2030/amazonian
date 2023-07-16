@@ -943,7 +943,7 @@ div.active > i {
 }
 
 .order-summary-price-table td {
-  padding-bottom: 1rem;
+  padding-bottom: 0.3rem;
 }
 
 /* =====================================================================================

@@ -88,7 +88,7 @@ export default function OrderSummaryPage(props) {
                           <span>Your order will be sent to:</span>
                           <h5>{userInfo.name}</h5>
                         </div>
-                        <table className="w-100">
+                        <table className="w-100 order-summary-price-table">
                           <tr>
                             <td>
                               <span>Total Before Tax:</span>

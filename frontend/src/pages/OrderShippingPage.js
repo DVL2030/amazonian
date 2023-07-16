@@ -74,7 +74,7 @@ export default function OrderShippingPage() {
                   <Col xs={4}>
                     <Link
                       className="box shipping add-new"
-                      to="/account/address/add?redirect=/shipping"
+                      to="/user/address/add?redirect=/shipping"
                     >
                       <i className="fa-solid fa-plus text-secondary fa-2xl"></i>
                       <h2 className="text-secondary">Add Address</h2>

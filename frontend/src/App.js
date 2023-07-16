@@ -22,6 +22,7 @@ import Footer from "./components/Footer";
 import AddressAddPage from "./pages/Account/AddressAddPage";
 import OrderPlacePage from "./pages/OrderPlacePage";
 import OrderSummaryPage from "./pages/OrderSummaryPage";
+import OrderHistoryPage from "./pages/Account/OrderHistory";
 
 function App() {
   const dispatch = useDispatch();
@@ -189,7 +190,7 @@ function App() {
             </Nav>
             <Nav>
               <Nav.Link
-                href="#pricing"
+                href="/user/order/history"
                 className=" d-flex flex-column d-none d-md-flex gap-0"
               >
                 <span className="nav-line-1">
@@ -296,10 +297,11 @@ function App() {
             exact
             element={<OrderSummaryPage />}
           />
+          <Route path="/user/address/add" exact element={<AddressAddPage />} />
           <Route
-            path="/account/address/add"
+            path="/user/order/history"
             exact
-            element={<AddressAddPage />}
+            element={<OrderHistoryPage />}
           />
         </Routes>
       </main>
