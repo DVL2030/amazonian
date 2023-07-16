@@ -45,7 +45,6 @@ const startScraper = async ({
       apiEndpoint = `${CONST.host}/s?k=${keyword}${
         department ? `&i=${department}` : ""
       }${page ? `&page=${page}` : ""}`;
-      console.log(apiEndpoint);
       resBody = await buildHttpRequest(apiEndpoint);
       result = scrapeProductSearchPage(resBody);
       return result;

@@ -17,6 +17,7 @@ orderRouter.post(
         orderedItems: req.body.orderedItems,
         shippingAddress: req.body.shippingAddress,
         shippingPrice: req.body.shippingPrice,
+        paymentResult: req.body.paymentResult,
         total: req.body.total,
         tax: req.body.tax,
         final: req.body.final,
@@ -31,11 +32,12 @@ orderRouter.post(
   })
 );
 
-orderRouter.get(
-  "/:id",
+orderRouter.post(
+  "/get",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const { orderId } = req.body;
+    const order = await Order.findOne({ "paymentResult.id": orderId });
     if (order) {
       res.send(order);
     } else {

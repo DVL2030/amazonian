@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderedItems: [
       {
-        asin: { type: String, required: true, unique: true },
+        asin: { type: String, required: true },
         title: { type: String, required: true },
         qty: { type: String, required: true },
         image: { type: String, required: true },
@@ -22,15 +22,14 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     paymentResult: {
-      id: String,
-      status: String,
-      update_time: String,
+      id: { type: String, unique: true, required: true },
+      status: { type: String, required: true },
+      update_time: { type: String, required: true },
     },
     shippingPrice: { type: Number, required: true },
     total: { type: Number, required: true },
     tax: { type: Number, required: true },
     final: { type: Number, required: true },
-    isPaid: { type: Boolean, default: false },
     dateOfPayment: { type: Date },
     isDelivered: { type: Boolean, default: false },
     expectedDelivery: { type: Date, required: true },

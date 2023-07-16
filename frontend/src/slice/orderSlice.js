@@ -3,11 +3,35 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 
 const initialState = {
-  getOrder: null,
+  order: null,
   createOrder: null,
   loading: false,
   error: null,
 };
+
+export const getOrder = createAsyncThunk(
+  "order/get",
+  async (orderId, { getState, rejectWithValue }) => {
+    const {
+      userAuth: { userInfo },
+    } = getState();
+    try {
+      const res = await Axios({
+        method: "post",
+        url: "/api/order/get",
+        data: { orderId: orderId },
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
 
 export const createOrder = createAsyncThunk(
   "order/create",
@@ -23,9 +47,9 @@ export const createOrder = createAsyncThunk(
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       if (res) {
-        // localStorage.removeItem("cartItems");
-        // localStorage.removeItem("shippingAddress");
-        // localStorage.removeItem("orderInfo");
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("shippingAddress");
+        localStorage.removeItem("orderInfo");
       }
       return res.data;
     } catch (error) {
@@ -52,6 +76,18 @@ const orderSlice = createSlice({
       state.createOrder = action.payload;
     });
     builder.addCase(createOrder.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getOrder.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getOrder.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.order = action.payload;
+    });
+    builder.addCase(getOrder.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

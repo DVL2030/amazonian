@@ -38,7 +38,12 @@ export default function CartPage() {
               {cartItems.length !== 0 ? (
                 <Container fluid>
                   {cartItems.map((item, idx) => (
-                    <CartItem key={idx} item={item}></CartItem>
+                    <>
+                      <CartItem key={idx} item={item} modify={true}></CartItem>
+                      {cartItems.length > 1 && idx + 1 !== cartItems.length && (
+                        <hr className="my-2"></hr>
+                      )}
+                    </>
                   ))}
                   <hr></hr>
                 </Container>

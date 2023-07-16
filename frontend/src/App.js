@@ -291,7 +291,11 @@ function App() {
           <Route path="/shipping" exact element={<OrderShippingPage />} />
           <Route path="/placeorder" exact element={<OrderPlacePage />} />
           <Route path="/payment" exact element={<OrderPaymentPage />} />
-          <Route path="/ordersummary" exact element={<OrderSummaryPage />} />
+          <Route
+            path="/ordersummary/:id"
+            exact
+            element={<OrderSummaryPage />}
+          />
           <Route
             path="/account/address/add"
             exact

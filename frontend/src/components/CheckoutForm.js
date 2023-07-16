@@ -31,7 +31,7 @@ export default function CheckoutForm() {
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/ordersummary`,
+        return_url: `${window.location.origin}/ordersummary/`,
       },
       redirect: "if_required",
     });
@@ -52,7 +52,6 @@ export default function CheckoutForm() {
           price: item.currentPrice,
         };
       });
-      console.log(paymentIntent.id);
       const newOrder = {
         userId: userInfo._id,
         orderedItems: items,
@@ -60,7 +59,7 @@ export default function CheckoutForm() {
         paymentResult: {
           id: paymentIntent.id,
           status: paymentIntent.status,
-          update_time: Date.now(),
+          update_time: new Date().toISOString(),
         },
         shippingPrice: orderInfo.shippingPrice,
         total: orderInfo.total,
@@ -68,10 +67,10 @@ export default function CheckoutForm() {
         final: orderInfo.final,
         expectedDelivery: orderInfo.expectedDelivery,
         eligibleReturnDate: orderInfo.eligibleReturnDate,
-        isPaid: true,
-        dateOfPayment: Date.now(),
+        dateOfPayment: new Date().toISOString(),
       };
       dispatch(createOrder(newOrder));
+      navigate(`/ordersummary/${paymentIntent.id}`);
     } else {
       setMessage("An unexpected error occured.");
     }
