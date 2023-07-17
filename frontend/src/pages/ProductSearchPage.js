@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Carousel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -9,25 +9,22 @@ import LoadingBox from "../components/LoadingBox";
 import Rating from "../components/Rating";
 import SorryBox from "../components/SorryBox";
 import Paginate from "../components/Paginate";
+import { filterProductSearch } from "../utils";
 
 export default function ProductSearchPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const param = useParams();
-  const {
-    keyword,
-    department,
-    minPrice = 0,
-    maxPrice = Infinity,
-    minRating = 0,
-    sortOrder = "newest",
-    page = 1,
-    // availability = false,
-  } = param;
+  const { keyword, department, page = 1 } = param;
 
   const amazonState = useSelector((state) => state.amazon);
-  const { data, loading, error } = amazonState;
+  const { data: searchData, loading, error } = amazonState;
+
+  const [data, setData] = useState(null);
+
+  const [filteredData, setFilteredData] = useState(null);
+
   const totalItems =
     data && data.totalPage ? data.totalPage * data.items.length : 100;
 
@@ -36,11 +33,31 @@ export default function ProductSearchPage() {
     high: data ? Number(data.items.length * page) : 1,
   };
 
-  // const linkHandler = (link) => {
-  //   navigate(link);
-  // };
+  const filter = { sort: null, rating: null, price: null };
+
+  const filterSearchHandler = (field, value) => {
+    if (filter[field] === value) {
+      filter[field] = null;
+    } else {
+      filter[field] = value;
+    }
+
+    if (searchData) setData(filterProductSearch(searchData, filter));
+  };
 
   useEffect(() => {
+    // const ul = document.getElementsByClassName("search-filter");
+    // for (let i = 0; i < ul.length; i++) {
+    //   const lis = ul[i].children;
+    //   for (let i = 0; i < lis.length; i++) {
+    //     const dset = lis[i].dataset;
+    //     lis[i].addEventListener(
+    //       "click",
+    //       filterSearchHandler(lis[i], dset.field, dset.val)
+    //     );
+    //   }
+    // }
+
     if (!keyword) navigate("/");
     else {
       dispatch(
@@ -51,6 +68,7 @@ export default function ProductSearchPage() {
           page: page,
         })
       );
+      setData(searchData);
     }
   }, [page]);
 
@@ -76,40 +94,72 @@ export default function ProductSearchPage() {
           <Col lg={3} className="d-none d-lg-block refinement-col">
             <div>
               <h6>Sort by</h6>
-              <ul className="no-list-style">
-                <li>
+              <ul className="no-list-style search-filter search-filter-sort">
+                <li
+                  data-field="sort"
+                  data-val="lowFirst"
+                  onClick={() => filterSearchHandler("sort", "lowFirst")}
+                >
                   <Link>Price: Low to High</Link>
                 </li>
-                <li>
+                <li
+                  data-field="sort"
+                  data-val="highFirst"
+                  onClick={() => filterSearchHandler("sort", "highFirst")}
+                >
                   <Link>Price: High to Low</Link>
                 </li>
-                <li>
+                <li
+                  data-field="sort"
+                  data-val="topRated"
+                  onClick={() => filterSearchHandler("sort", "topRated")}
+                >
                   <Link>Avg. Customer Reviews</Link>
                 </li>
-                <li>
+                <li
+                  data-field="sort"
+                  data-val="newest"
+                  onClick={() => filterSearchHandler("sort", "newest")}
+                >
                   <Link>Newest Arrivals</Link>
                 </li>
               </ul>
             </div>
             <div>
               <h6>Customer Review</h6>
-              <ul className="no-list-style">
-                <li>
+              <ul className="no-list-style search-filter search-filter-rating">
+                <li
+                  data-field="rating"
+                  data-val="gt4"
+                  onClick={() => filterSearchHandler("rating", "gt4")}
+                >
                   <Link>
                     <Rating rating="4"></Rating> & up
                   </Link>
                 </li>
-                <li>
+                <li
+                  data-field="rating"
+                  data-val="gt3"
+                  onClick={() => filterSearchHandler("rating", "gt3")}
+                >
                   <Link>
                     <Rating rating="3"></Rating> & up
                   </Link>
                 </li>
-                <li>
+                <li
+                  data-field="rating"
+                  data-val="gt2"
+                  onClick={() => filterSearchHandler("rating", "gt2")}
+                >
                   <Link>
                     <Rating rating="2"></Rating> & up
                   </Link>
                 </li>
-                <li>
+                <li
+                  data-field="rating"
+                  data-val="gt1"
+                  onClick={() => filterSearchHandler("rating", "gt1")}
+                >
                   <Link>
                     <Rating rating="1"></Rating> & up
                   </Link>
@@ -118,21 +168,41 @@ export default function ProductSearchPage() {
             </div>
             <div>
               <h6>{keyword} Price</h6>
-              <ul className="no-list-style">
-                <li>
-                  <Link>Under $10</Link>
+              <ul className="no-list-style search-filter search-filter-price">
+                <li
+                  data-field="price"
+                  data-val="<25"
+                  onClick={() => filterSearchHandler("price", "<25")}
+                >
+                  <Link>Under $25</Link>
                 </li>
-                <li>
-                  <Link>$10 to $15</Link>
+                <li
+                  data-field="price"
+                  data-val="25-50"
+                  onClick={() => filterSearchHandler("price", "25-50")}
+                >
+                  <Link>$25 to $50</Link>
                 </li>
-                <li>
-                  <Link>$15 to $25</Link>
+                <li
+                  data-field="price"
+                  data-val="50-100"
+                  onClick={() => filterSearchHandler("price", "50-100")}
+                >
+                  <Link>$50 to $100</Link>
                 </li>
-                <li>
-                  <Link>$25 to $35</Link>
+                <li
+                  data-field="price"
+                  data-val="100-200"
+                  onClick={() => filterSearchHandler("price", "100-200")}
+                >
+                  <Link>$100 to $200</Link>
                 </li>
-                <li>
-                  <Link>$35 & Above</Link>
+                <li
+                  data-field="price"
+                  data-val=">200"
+                  onClick={() => filterSearchHandler("price", ">200")}
+                >
+                  <Link>$200 & Above</Link>
                 </li>
               </ul>
             </div>

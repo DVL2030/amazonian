@@ -7,7 +7,86 @@ export const addDays = (n) => {
   return newDate.toDateString();
 };
 
-export const filterProductSearch = (products, filter) => {};
+export const filterProductSearch = (data, filter) => {
+  let temp = [...data.items];
+  if (filter.sort) {
+    switch (filter.sort) {
+      case "lowFirst":
+        temp.sort(
+          (a, b) =>
+            a.price.currentPrice.substring(1) -
+            b.price.currentPrice.substring(1)
+        );
+        break;
+      case "highFirst":
+        temp.sort(
+          (a, b) =>
+            b.price.currentPrice.substring(1) -
+            a.price.currentPrice.substring(1)
+        );
+        break;
+      case "topRated":
+        temp.sort((a, b) => b.rating - a.rating);
+        break;
+      case "newest":
+        temp.sort((a, b) => a.name - b.name);
+        break;
+    }
+  }
+  if (filter.rating) {
+    switch (filter.rating) {
+      case "gt4":
+        temp = temp.filter((t) => t.rating >= 4.0);
+        break;
+      case "gt3":
+        temp = temp.filter((t) => t.rating >= 3.0);
+        break;
+      case "gt2":
+        temp = temp.filter((t) => t.rating >= 2.0);
+        break;
+      case "gt1":
+        temp = temp.filter((t) => t.rating >= 1.0);
+        break;
+    }
+  }
+  if (filter.price) {
+    switch (filter.price) {
+      case "<25":
+        temp = temp.filter(
+          (t) => Number(t.price.currentPrice.substring(1)) <= 25
+        );
+        break;
+      case "25-50":
+        temp = temp.filter(
+          (t) =>
+            Number(t.price.currentPrice.substring(1)) >= 25 &&
+            Number(t.price.currentPrice.substring(1)) <= 50
+        );
+        break;
+      case "50-100":
+        temp = temp.filter(
+          (t) =>
+            Number(t.price.currentPrice.substring(1)) >= 50 &&
+            Number(t.price.currentPrice.substring(1)) <= 100
+        );
+        break;
+      case "100-200":
+        temp = temp.filter(
+          (t) =>
+            Number(t.price.currentPrice.substring(1)) >= 100 &&
+            Number(t.price.currentPrice.substring(1)) <= 200
+        );
+        break;
+      case ">200":
+        temp = temp.filter(
+          (t) => Number(t.price.currentPrice.substring(1)) >= 200
+        );
+        break;
+    }
+  }
+
+  return { totalPage: data.totalPage, items: temp };
+};
 
 // Constants
 export const baseRate = 11.99;

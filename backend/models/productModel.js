@@ -2,18 +2,17 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
   asin: { type: String, required: true, unique: true },
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
   images: [{ type: mongoose.SchemaTypes.Mixed }],
-  overview: { type: [String], required: true },
-  description: { type: [String], required: true },
   overview: { type: mongoose.SchemaTypes.Mixed },
+  information: { type: mongoose.SchemaTypes.Mixed },
   description: { type: mongoose.SchemaTypes.Mixed },
   tabularFeature: { type: mongoose.SchemaTypes.Mixed },
   brandInfo: { type: mongoose.SchemaTypes.Mixed },
-  currentPrice: { type: Number, required: true },
-  discountPrice: { type: Number, required: true },
+  price: { type: mongoose.SchemaTypes.Mixed },
   available: { type: Boolean, required: true },
-  maxQty: { type: Number },
+  availability: String,
+  delivery: [String],
   reviewData: { type: mongoose.SchemaTypes.Mixed },
 });
 

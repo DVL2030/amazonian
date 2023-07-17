@@ -173,8 +173,8 @@ function App() {
                             </Link>
                           </li>
                           <li>
-                            <Link to={userInfo ? "/user/savedItems" : "/"}>
-                              <span className="dark-grey">Your Save Items</span>
+                            <Link to={userInfo ? "/user/favourite" : "/"}>
+                              <span className="dark-grey">Your Favourites</span>
                             </Link>
                           </li>
                           <li>

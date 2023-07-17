@@ -78,11 +78,11 @@ const startScraper = async ({
           : ""
       }${
         reviewFilter && reviewFilter.mediaType
-          ? `&sortBy=${reviewFilter.mediaType}`
+          ? `&mediaType=${reviewFilter.mediaType}`
           : ""
       }${
         reviewFilter && reviewFilter.filterByStar
-          ? `&sortBy=${reviewFilter.filterByStar}`
+          ? `&filterByStar=${reviewFilter.filterByStar}`
           : ""
       }&pageNumber=${page ? page : 1}`;
       resBody = await buildHttpRequest(apiEndpoint);

@@ -7,31 +7,11 @@ export default function Paginate(props) {
   const { path, label, totalPage, page } = props;
   const navigate = useNavigate();
   const handlePageChange = (event) => {
-    console.log(path);
     const target = Number(event.target.innerText);
     if (target) navigate(`/${path}/page/${target}`);
   };
 
   return (
-    // <ReactPaginate
-    //   previousLabel="<"
-    //   nextLabel=">"
-    //   pageClassName="page-item"
-    //   pageLinkClassName="page-link"
-    //   previousClassName={label ? "page-item" : "d-none"}
-    //   previousLinkClassName="page-link"
-    //   nextClassName={label ? "page-item" : "d-none"}
-    //   nextLinkClassName="page-link"
-    //   breakLabel="..."
-    //   breakClassName="page-item"
-    //   breakLinkClassName="page-link"
-    //   pageCount={Number(totalPage)}
-    //   marginPagesDisplayed={2}
-    //   pageRangeDisplayed={2}
-    //   onPageChange={handlePageChange}
-    //   containerClassName="pagination"
-    //   activeClassName="active"
-    // />
     <Pagination onClick={handlePageChange}>
       {label && (
         <>

@@ -36,7 +36,6 @@ favRouter.post(
           { userId: userId },
           { $addToSet: { [type]: product._id || review._id } }
         );
-        console.log(addToFav);
         if (!addToFav.acknowledged)
           return res.status(401).send({
             message: "Failed to add a favourite",
