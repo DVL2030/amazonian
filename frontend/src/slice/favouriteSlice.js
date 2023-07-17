@@ -148,6 +148,7 @@ const favouriteSlice = createSlice({
     builder.addCase(addItemToFavourite.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.success = false;
     });
   },
 });

@@ -30,7 +30,6 @@ favRouter.post(
           review = await Review.create(item);
         }
       }
-
       const userFav = await Favourite.findOne({ userId: userId });
       if (userFav) {
         const addToFav = await Favourite.updateOne(

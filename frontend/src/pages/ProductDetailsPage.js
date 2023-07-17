@@ -12,6 +12,9 @@ import RatingHistogram from "../components/RatingHistogram";
 import Review from "../components/Review";
 import { addItemToCart } from "../slice/cartSlice";
 import { addItemToFavourite } from "../slice/favouriteSlice";
+
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { getItemFromHistory } from "../slice/historySlice";
 
 export default function ProductDetailsPage() {
@@ -75,6 +78,23 @@ export default function ProductDetailsPage() {
         })
       );
       const id = toast.loading("Please wait...");
+      setTimeout(() => {
+        if (success) {
+          toast.update(id, {
+            render: "Added!",
+            type: "success",
+            isLoading: false,
+            autoClose: 1000,
+          });
+        } else if (favError) {
+          toast.update(id, {
+            render: "There was an error... Please try again",
+            type: "error",
+            autoClose: 1000,
+            isLoading: false,
+          });
+        }
+      }, 1500);
     }
   };
 
@@ -91,6 +111,7 @@ export default function ProductDetailsPage() {
     <SorryBox />
   ) : (
     <div>
+      <ToastContainer autoClose={1000} />
       {error && <MessageBox variants="danger">{error}</MessageBox>}
       {data && (
         <>
