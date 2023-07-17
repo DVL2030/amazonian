@@ -11,7 +11,8 @@ import SorryBox from "../components/SorryBox";
 import RatingHistogram from "../components/RatingHistogram";
 import Review from "../components/Review";
 import { addItemToCart } from "../slice/cartSlice";
-import { getItemFromHistory } from "../slice/historySlice";
+import { addItemToFavourite } from "../slice/favouriteSlice";
+// import { getItemFromHistory } from "../slice/historySlice";
 
 export default function ProductDetailsPage() {
   const dispatch = useDispatch();
@@ -19,6 +20,9 @@ export default function ProductDetailsPage() {
 
   const amazonState = useSelector((state) => state.amazon);
   const { amazonProductAsin: data, loading, error } = amazonState;
+
+  const userAuthState = useSelector((state) => state.userAuth);
+  const { userInfo } = userAuthState;
 
   // const historyState = useSelector((state) => state.history);
   // const { historyItems } = historyState;
@@ -58,16 +62,19 @@ export default function ProductDetailsPage() {
     navigate("/cart");
   };
 
-  const zoomInImage = () => {};
+  const addToFavourite = () => {
+    if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
+    if (data)
+      dispatch(
+        addItemToFavourite({
+          item: { asin: asin, ...data },
+          type: "products",
+        })
+      );
+  };
 
   useEffect(() => {
     if (!asin) navigate("/");
-    // else if (
-    //   historyItems.length != 0 &&
-    //   historyItems.find((x) => x.asin === asin).length !== 0
-    // ) {
-    //   dispatch(getItemFromHistory(asin));
-    // }
     else {
       dispatch(getProductAsin(asin));
     }
@@ -140,11 +147,7 @@ export default function ProductDetailsPage() {
                                   : "main-image-item d-none"
                               }
                             >
-                              <img
-                                src={item.image}
-                                alt={idx}
-                                onMouseOver={zoomInImage}
-                              ></img>
+                              <img src={item.image} alt={idx}></img>
                             </li>
                           ))}
                       </ul>
@@ -223,6 +226,15 @@ export default function ProductDetailsPage() {
                               <button className="rect orange">Buy Now</button>
                             </div>
                           )}
+                          <hr></hr>
+                          <div className="buy-box-button">
+                            <button
+                              className="rect orange"
+                              onClick={addToFavourite}
+                            >
+                              Save this for later
+                            </button>
+                          </div>
                           {data.tabularFeature && (
                             <div>
                               <table id="buy-box-tabular">

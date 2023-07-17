@@ -46,7 +46,7 @@ export default function RegisterPage() {
     if (success) {
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 1500);
     }
   }, [navigate, userInfo, success, redirectUrl]);
 

@@ -61,6 +61,38 @@ export const saveAddress = createAsyncThunk(
   }
 );
 
+export const updateUserSecurity = createAsyncThunk(
+  "user/update",
+  async (param, { getState, rejectWithValue }) => {
+    const {
+      userAuth: { userInfo },
+    } = getState();
+    try {
+      const res = await Axios({
+        method: "post",
+        url: "/api/users/update",
+        data: { userId: userInfo._id, ...param },
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      const { field, value } = param;
+      const current = JSON.parse(localStorage.getItem("userInfo"));
+      if (param.field !== "password") {
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify({ ...current, [field]: value })
+        );
+      }
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -87,6 +119,17 @@ const userSlice = createSlice({
       state.success = true;
     });
     builder.addCase(saveAddress.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(updateUserSecurity.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateUserSecurity.fulfilled, (state, action) => {
+      state.loading = false;
+      state.update = action.payload;
+    });
+    builder.addCase(updateUserSecurity.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

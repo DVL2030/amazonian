@@ -58,7 +58,8 @@ export default function UserSecurityPage() {
                 <div className="d-flex px-1 py-3">
                   <div className="flex-fill">
                     <div>
-                      <strong>Email: {userInfo.email}</strong>
+                      <strong>Email: </strong>
+                      {userInfo.email}
                     </div>
                   </div>
                   <div className="">
@@ -75,10 +76,10 @@ export default function UserSecurityPage() {
                 <div className="d-flex px-1 py-3">
                   <div className="flex-fill">
                     <div>
-                      <strong>Mobile Phone Number:</strong>
+                      <strong>Mobile Phone Number: </strong>
                     </div>
                     {userInfo.phone ? (
-                      <div className>{userInfo.phone}</div>
+                      <> {userInfo.phone}</>
                     ) : (
                       <div className="blue">why add a mobile phone number?</div>
                     )}

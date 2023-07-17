@@ -8,8 +8,6 @@ const initialState = {
   error: null,
 };
 
-// All async func definition
-
 export const getHomePage = createAsyncThunk(
   "amazon/home",
   async (_, { rejectWithValue }) => {
@@ -31,7 +29,6 @@ export const getProductList = createAsyncThunk(
   "amazon/products",
   async (searchParams, { rejectWithValue }) => {
     try {
-      console.log(searchParams);
       const res = await Axios.post("/api/amazon/products", searchParams);
       return res.data;
     } catch (error) {

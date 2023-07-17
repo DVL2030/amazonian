@@ -599,6 +599,10 @@ select.cart {
   font-size: 90%;
 }
 
+input {
+  max-height: 3rem;
+}
+
 input.save-address {
   display: inline-block;
   left: 0;
@@ -619,7 +623,6 @@ form.shipping {
 }
 
 form.shipping input {
-  max-height: 3rem;
   width: 100%;
   border-radius: 0.2rem;
 }

@@ -7,6 +7,8 @@ export const addDays = (n) => {
   return newDate.toDateString();
 };
 
+export const filterProductSearch = (products, filter) => {};
+
 // Constants
 export const baseRate = 11.99;
 export const options = [

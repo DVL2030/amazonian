@@ -6,6 +6,7 @@ import userRouter from "./routers/userRouter.js";
 import amazonRouter from "./routers/amazonRouter.js";
 import Stripe from "stripe";
 import orderRouter from "./routers/orderRouter.js";
+import favRouter from "./routers/favouriteRouter.js";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.post("/api/config/create-payment-intent", async (req, res) => {
 app.use("/api/users", userRouter);
 app.use("/api/amazon", amazonRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/favourite", favRouter);
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });

@@ -68,17 +68,43 @@ userRouter.post(
 );
 
 userRouter.post(
+  "/update",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { userId, field, value } = req.body;
+    let updateValue = value;
+    if (field === "password") updateValue = bcrypt.hashSync(value);
+
+    try {
+      const update = await User.findByIdAndUpdate(userId, {
+        [field]: updateValue,
+      });
+      if (update) {
+        return res.send({
+          status: true,
+          message: `You have successfully changed your ${field}.`,
+        });
+      } else {
+        return res.send({
+          status: false,
+          message: `Failed to update your ${field}.. Please try again`,
+        });
+      }
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
+);
+
+userRouter.post(
   "/getAddress",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-    if (userId == null || userId.length == 0)
-      return res.status(401).send({
-        message: "You need a user ID to save this address",
-      });
     try {
       const data = await Address.find({ userId: userId });
-      Address.find();
       return res.send(data);
     } catch (error) {
       return res.status(401).send({
@@ -93,11 +119,6 @@ userRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const userId = req.body.userId;
-
-    if (userId == null || userId.length == 0)
-      return res.status(401).send({
-        message: "You need a user ID to create a new address",
-      });
     try {
       const newAddress = new Address({
         userId: req.body.userId,
@@ -115,8 +136,6 @@ userRouter.post(
       return res.status(401).send({
         message: "Failed to create a new address",
       });
-
-      if (data) return res.send(data);
     } catch (error) {
       return res.status(401).send({
         message: error.message,
