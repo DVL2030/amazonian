@@ -132,7 +132,7 @@ export const getFavouriteReviews = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
+const favouriteSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
@@ -152,4 +152,4 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export default favouriteSlice.reducer;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   avater: { type: String },
@@ -15,6 +15,6 @@ const productSchema = new mongoose.Schema({
   verified: { type: Boolean },
 });
 
-const Product = mongoose.model("Product", productSchema);
+const Review = mongoose.model("Review", reviewSchema);
 
-export default Product;
+export default Review;

@@ -4,6 +4,7 @@ import expressAsyncHandler from "express-async-handler";
 import { isAuth } from "../utils.js";
 import Favourite from "../models/favouriteModel.js";
 import Product from "../models/productModel.js";
+import Review from "../models/reviewModel.js";
 
 const favRouter = express.Router();
 
@@ -11,45 +12,49 @@ favRouter.post(
   "/add",
   expressAsyncHandler(async (req, res) => {
     const { userId, item, type } = req.body;
+
     try {
-      const add = await Favourite.update(
-        { userId: userId },
-        { $addToSet: { [type]: [item.asin || item.id] } }
-      );
+      let product, review;
+      if (type === "products") {
+        const product_exist = await Product.findOne({ asin: item.asin });
+        if (product_exist) {
+          product = product_exist;
+        } else {
+          product = await Product.create(item);
+        }
+      } else if (type === "reviews") {
+        const review_exist = await Product.findOne({ asin: item.asin });
+        if (review_exist) {
+          review = review_exist;
+        } else {
+          review = await Review.create(item);
+        }
+      }
 
-      if (type === "products")
-        await Product.update(
-          { asin: item.asin },
-          { $setOnInsert: { _id: asin, ...item } },
-          { upsert: true }
+      const userFav = await Favourite.findOne({ userId: userId });
+      if (userFav) {
+        const addToFav = await Favourite.updateOne(
+          { userId: userId },
+          { $addToSet: { [type]: product._id || review._id } }
         );
-      else if (type === "reviews")
-        await Review.update(
-          { _id: item.id },
-          { $setOnInsert: { _id: id, ...item } },
-          { upsert: true }
-        );
-
-      if (add) {
-        return res.send({
-          status: true,
-        });
+        console.log(addToFav);
+        if (!addToFav.acknowledged)
+          return res.status(401).send({
+            message: "Failed to add a favourite",
+          });
       } else {
         const newFav = await Favourite.create({
           userId: userId,
-          [type]: [item.asin || item.id],
+          [type]: [product._id || review._id],
         });
-        if (newFav) {
-          return res.send({
-            status: true,
-          });
-        } else {
+        if (!newFav)
           return res.status(401).send({
-            message:
-              "Failed to create a new Favourite Entry.. Please try again.",
+            message: `Failed to create a new Favourite for user ${userId}`,
           });
-        }
       }
+      return res.send({
+        status: true,
+      });
     } catch (error) {
       return res.status(401).send({
         message: error.message,

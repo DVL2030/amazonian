@@ -6,6 +6,7 @@ import cartSlice from "./slice/cartSlice";
 import historySlice from "./slice/historySlice";
 import userSlice from "./slice/userSlice";
 import orderSlice from "./slice/orderSlice";
+import favouriteSlice from "./slice/favouriteSlice";
 
 const initialState = {
   userAuth: {
@@ -39,6 +40,7 @@ export const store = configureStore({
     amazon: amazonSlice,
     cart: cartSlice,
     order: orderSlice,
+    favourite: favouriteSlice,
   },
   preloadedState: initialState,
 });

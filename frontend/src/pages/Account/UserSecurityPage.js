@@ -19,6 +19,8 @@ export default function UserSecurityPage() {
     navigate(`/user/security/update?field=${reqField}`);
   };
 
+  useEffect(() => {}, [userInfo]);
+
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : (

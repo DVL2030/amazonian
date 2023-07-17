@@ -24,6 +24,9 @@ export default function ProductDetailsPage() {
   const userAuthState = useSelector((state) => state.userAuth);
   const { userInfo } = userAuthState;
 
+  const favState = useSelector((state) => state.favourite);
+  const { success, loading: favLoading, error: favError } = favState;
+
   // const historyState = useSelector((state) => state.history);
   // const { historyItems } = historyState;
 
@@ -64,13 +67,15 @@ export default function ProductDetailsPage() {
 
   const addToFavourite = () => {
     if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
-    if (data)
+    if (data) {
       dispatch(
         addItemToFavourite({
           item: { asin: asin, ...data },
           type: "products",
         })
       );
+      const id = toast.loading("Please wait...");
+    }
   };
 
   useEffect(() => {
@@ -175,87 +180,86 @@ export default function ProductDetailsPage() {
                   </div>
                   <hr></hr>
                   <div className="product-details-price">
-                    {data.price.currentPrice && (
-                      <>
-                        <div>
-                          <span className="product-details-discount dark-red">
-                            {data.price.discount && `${data.price.discount}%`}{" "}
-                          </span>
-                          <span className="product-details-a-price">
-                            {data.price.currentPrice}
-                          </span>
-                        </div>
-                        {data.price.beforePrice && (
-                          <div>
-                            <small className="a-price-label">List Price:</small>
-                            <small className="a-discout-price">
-                              {data.price.beforePrice}
-                            </small>
-                          </div>
-                        )}
-
-                        <div className="buy-box d-lg-none">
-                          <div className="buy-box-delivery-info">
-                            {data.delivery.map((d, idx) => (
-                              <div className="mb-2" key={idx}>
-                                <b>{d}</b>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="buy-box-availability mt-4">
-                            <h4
-                              className={
-                                data.availability === "In Stock"
-                                  ? "text-success"
-                                  : "text-danger"
-                              }
-                            >
-                              {data.availability}
-                            </h4>
-                          </div>
-
-                          {data.available && (
-                            <div className="buy-box-button">
-                              <button
-                                onClick={addToCartHandler}
-                                className="rect yellow"
-                              >
-                                Add to Cart
-                              </button>
-
-                              <button className="rect orange">Buy Now</button>
-                            </div>
-                          )}
-                          <hr></hr>
-                          <div className="buy-box-button">
-                            <button
-                              className="rect orange"
-                              onClick={addToFavourite}
-                            >
-                              Save this for later
-                            </button>
-                          </div>
-                          {data.tabularFeature && (
-                            <div>
-                              <table id="buy-box-tabular">
-                                <tbody>
-                                  {Object.entries(data.tabularFeature).map(
-                                    ([k, v], idx) => (
-                                      <tr key={idx}>
-                                        <th className="py-2 px-2">{k}</th>
-                                        <td className="py-1 px-2">{v}</td>
-                                      </tr>
-                                    )
-                                  )}
-                                </tbody>
-                              </table>
-                            </div>
-                          )}
-                        </div>
-
-                        <hr></hr>
-                      </>
+                    <div>
+                      <span className="product-details-discount dark-red">
+                        {data.price.discount && `${data.price.discount}%`}{" "}
+                      </span>
+                      <span className="product-details-a-price">
+                        {data.price.currentPrice && data.price.currentPrice}
+                      </span>
+                    </div>
+                    {data.price.beforePrice && (
+                      <div>
+                        <small className="a-price-label">List Price:</small>
+                        <small className="a-discout-price">
+                          {data.price.beforePrice}
+                        </small>
+                      </div>
                     )}
+                    <div className="buy-box d-lg-none">
+                      {data.delivery && (
+                        <div className="buy-box-delivery-info">
+                          {data.delivery.map((d, idx) => (
+                            <div className="mb-2" key={idx}>
+                              <b>{d}</b>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {data.availability && (
+                        <div className="buy-box-availability mt-4">
+                          <h4
+                            className={
+                              data.availability === "In Stock"
+                                ? "text-success"
+                                : "text-danger"
+                            }
+                          >
+                            {data.availability}
+                          </h4>
+                        </div>
+                      )}
+
+                      {data.available && (
+                        <div className="buy-box-button">
+                          <button
+                            onClick={addToCartHandler}
+                            className="rect yellow"
+                          >
+                            Add to Cart
+                          </button>
+
+                          <button className="rect orange">Buy Now</button>
+                        </div>
+                      )}
+                      <hr></hr>
+                      <div className="buy-box-button">
+                        <button
+                          className="rect orange"
+                          onClick={addToFavourite}
+                        >
+                          Save this for later
+                        </button>
+                      </div>
+                      {data.tabularFeature && (
+                        <div>
+                          <table id="buy-box-tabular">
+                            <tbody>
+                              {Object.entries(data.tabularFeature).map(
+                                ([k, v], idx) => (
+                                  <tr key={idx}>
+                                    <th className="py-2 px-2">{k}</th>
+                                    <td className="py-1 px-2">{v}</td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+
+                    <hr></hr>
 
                     {data.overview && (
                       <>
@@ -308,54 +312,64 @@ export default function ProductDetailsPage() {
                       <big>{data.price.currentPrice}</big>
                     </h4>
                   </div>
-                  <div className="buy-box-delivery-info">
-                    {data.delivery.map((d, idx) => (
-                      <div className="mb-2" key={idx}>
-                        <b>{d}</b>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="buy-box-availability mt-4">
-                    <h4
-                      className={
-                        data.availability === "In Stock"
-                          ? "text-success"
-                          : "text-danger"
-                      }
-                    >
-                      {data.availability}
-                    </h4>
-                  </div>
+                  {data.delivery && (
+                    <div className="buy-box-delivery-info">
+                      {data.delivery.map((d, idx) => (
+                        <div className="mb-2" key={idx}>
+                          <b>{d}</b>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {data.availability && (
-                    <div className="buy-box-qty my-4">
-                      Qty:{" "}
-                      <span>
-                        <select
-                          value={qty}
-                          onChange={(e) => setQty(e.target.value)}
-                        >
-                          {[...Array(Number(10)).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
-                        </select>
-                      </span>
+                    <div className="buy-box-availability mt-4">
+                      <h4
+                        className={
+                          data.availability === "In Stock"
+                            ? "text-success"
+                            : "text-danger"
+                        }
+                      >
+                        {data.availability}
+                      </h4>
                     </div>
                   )}
 
                   {data.available && (
-                    <div className="buy-box-button">
-                      <button
-                        onClick={addToCartHandler}
-                        className="rect yellow"
-                      >
-                        Add to Cart
-                      </button>
+                    <>
+                      <div className="buy-box-qty my-4">
+                        Qty:{" "}
+                        <span>
+                          <select
+                            value={qty}
+                            onChange={(e) => setQty(e.target.value)}
+                          >
+                            {[...Array(Number(10)).keys()].map((x) => (
+                              <option key={x + 1} value={x + 1}>
+                                {x + 1}
+                              </option>
+                            ))}
+                          </select>
+                        </span>
+                      </div>
+                      <div className="buy-box-button">
+                        <button
+                          onClick={addToCartHandler}
+                          className="rect yellow"
+                        >
+                          Add to Cart
+                        </button>
 
-                      <button className="rect orange">Buy Now</button>
-                    </div>
+                        <button className="rect orange">Buy Now</button>
+                      </div>
+                    </>
                   )}
+                  <div className="buy-box-button">
+                    <button className="rect orange" onClick={addToFavourite}>
+                      Save this for later
+                    </button>
+                  </div>
                   {data.tabularFeature && (
                     <div>
                       <table id="buy-box-tabular">

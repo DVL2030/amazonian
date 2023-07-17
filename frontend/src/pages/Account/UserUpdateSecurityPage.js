@@ -35,7 +35,7 @@ export default function UserUpdateSecurityPage() {
     }
     dispatch(
       updateUserSecurity({
-        field: field,
+        field: field === "mobile" ? "phone" : field,
         value: newVal,
       })
     );
