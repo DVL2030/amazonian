@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Card } from "react-bootstrap";
+import { Col, Container, Row, Card, Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   getFavouriteProductList,
   getFavouriteReviewList,
+  removeItemFromFavourite,
 } from "../../slice/favouriteSlice";
 import Rating from "../../components/Rating";
 import { addItemToCart } from "../../slice/cartSlice";
@@ -19,9 +20,14 @@ export default function FavouritePage() {
   const dispatch = useDispatch();
 
   const favState = useSelector((state) => state.favourite);
-  const { favProducts, favReviews, loading, error } = favState;
+  const { favProducts, favReviews, loading, error, success } = favState;
+
+  const [removeSelect, setRemoveSelect] = useState(null);
 
   const [show, setShow] = useState("products");
+
+  // Bootstrap Modal
+  const [showModal, setShowModal] = useState(false);
 
   const addToCartHandler = (data) => {
     const cartItem = wrapCartItem(data);
@@ -30,9 +36,20 @@ export default function FavouritePage() {
     navigate("/cart");
   };
 
+  const removeFromFavourite = (id, type) => {
+    setRemoveSelect({ id: id, type: type });
+    setShowModal(true);
+  };
+
+  const handleConfirm = (val) => {
+    if (val === "true") {
+      dispatch(removeItemFromFavourite(removeSelect));
+    }
+    setShowModal(false);
+  };
+
   const changeShowFavourites = (select) => {
     setShow(select);
-
     if (select === "products") {
       dispatch(getFavouriteProductList());
     } else if (select === "reviews") {
@@ -41,6 +58,8 @@ export default function FavouritePage() {
   };
 
   useEffect(() => {
+    dispatch(getFavouriteProductList());
+
     const elP = document.getElementById("fav-products");
     const elR = document.getElementById("fav-reviews");
     if (show === "products") {
@@ -50,13 +69,11 @@ export default function FavouritePage() {
       elR.classList.add("selected");
       elP.classList.remove("selected");
     }
-
-    dispatch(getFavouriteProductList());
-  }, []);
+  }, [success]);
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : (
-    <Container>
+    <Container className="py-5 mb-5">
       <Row>
         <Col>
           <h4>Your Favourites</h4>
@@ -162,7 +179,15 @@ export default function FavouritePage() {
                                       <button className="rect orange">
                                         Buy Now
                                       </button>
-                                      <button className="rect orange">
+                                      <button
+                                        className="rect orange"
+                                        onClick={() =>
+                                          removeFromFavourite(
+                                            item._id,
+                                            "products"
+                                          )
+                                        }
+                                      >
                                         Remove
                                       </button>
                                     </div>
@@ -171,6 +196,37 @@ export default function FavouritePage() {
                                 </ul>
                               </Col>
                               <hr></hr>
+                              <Modal
+                                show={showModal}
+                                onHide={() => setShowModal(false)}
+                              >
+                                <Modal.Header closeButton>
+                                  <Modal.Title>Confirm Delete</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                  Are you sure you want to delete this item?
+                                </Modal.Body>
+                                <Modal.Footer>
+                                  <Button
+                                    variant="secondary"
+                                    value={false}
+                                    onClick={(e) =>
+                                      handleConfirm(e.target.value)
+                                    }
+                                  >
+                                    No
+                                  </Button>
+                                  <Button
+                                    variant="primary"
+                                    value={true}
+                                    onClick={(e) =>
+                                      handleConfirm(e.target.value)
+                                    }
+                                  >
+                                    Yes
+                                  </Button>
+                                </Modal.Footer>
+                              </Modal>
                             </Row>
                           ))
                         )}

@@ -77,9 +77,10 @@ favRouter.post(
     try {
       const removeFromFav = await Favourite.updateOne(
         { userId: userId },
-        { $pullAll: { [type]: id } }
+        { $pullAll: { [type]: [id] } }
       );
       return res.send({
+        status: true,
         message: "You have successfully removed your favourite item",
       });
     } catch (error) {

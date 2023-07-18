@@ -177,6 +177,19 @@ const favouriteSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
+    builder.addCase(removeItemFromFavourite.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(removeItemFromFavourite.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.success = action.payload.status;
+    });
+    builder.addCase(removeItemFromFavourite.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
     builder.addCase(getFavouriteProductList.pending, (state) => {
       state.loading = true;
     });
