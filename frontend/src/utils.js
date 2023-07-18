@@ -7,9 +7,9 @@ export const addDays = (n) => {
   return newDate.toDateString();
 };
 
-export const wrapCartItem = (data, qty = 1) => {
+export const wrapCartItem = (asin, data, qty = 1) => {
   const cartItem = {
-    asin: data.asin,
+    asin: asin,
     title: data.title,
     image: data.images[0].image,
     currentPrice: data.price.currentPrice,

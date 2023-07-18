@@ -30,7 +30,7 @@ export default function FavouritePage() {
   const [showModal, setShowModal] = useState(false);
 
   const addToCartHandler = (data) => {
-    const cartItem = wrapCartItem(data);
+    const cartItem = wrapCartItem(data.asin, data);
 
     dispatch(addItemToCart(cartItem));
     navigate("/cart");

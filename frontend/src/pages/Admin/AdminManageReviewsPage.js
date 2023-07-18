@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function AdminManageProductsPage() {
+export default function AdminManageReviewsPage() {
   return <div>AdminManageProducts</div>;
 }

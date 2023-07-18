@@ -7,6 +7,7 @@ import amazonRouter from "./routers/amazonRouter.js";
 import Stripe from "stripe";
 import orderRouter from "./routers/orderRouter.js";
 import favRouter from "./routers/favouriteRouter.js";
+import adminRouter from "./routers/adminRouter.js";
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use("/api/users", userRouter);
 app.use("/api/amazon", amazonRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/favourite", favRouter);
+app.use("/api/admin", adminRouter);
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });

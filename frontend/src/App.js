@@ -32,6 +32,7 @@ import AdminManageOrdersPage from "./pages/Admin/AdminManageOrdersPage";
 import AdminManageProductsPage from "./pages/Admin/AdminManageProductsPage";
 import AdminManageUsersPage from "./pages/Admin/AdminManageUsersPage";
 import AdminManageReviewsPage from "./pages/Admin/AdminManageReviewsPage";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,7 +79,7 @@ function App() {
             </Nav>
             <Searchbox mobile={false} />
             <Nav>
-              <Nav.Link
+              <Nav.Item
                 id="sign-in-dropdown"
                 href="/signin"
                 className="d-flex flex-column d-none d-md-flex"
@@ -218,7 +219,7 @@ function App() {
                     </Row>
                   </Container>
                 </div>
-              </Nav.Link>
+              </Nav.Item>
             </Nav>
             <Nav>
               <Nav.Link
@@ -348,27 +349,47 @@ function App() {
           <Route
             path="/admin/dashboard"
             exact
-            element={<AdminDashBoardPage />}
+            element={
+              <AdminRoute>
+                <AdminDashBoardPage />
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/manage/orders"
             exact
-            element={<AdminManageOrdersPage />}
+            element={
+              <AdminRoute>
+                <AdminManageOrdersPage />
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/manage/products"
             exact
-            element={<AdminManageProductsPage />}
+            element={
+              <AdminRoute>
+                <AdminManageProductsPage />
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/manage/reviews"
             exact
-            element={<AdminManageReviewsPage />}
+            element={
+              <AdminRoute>
+                <AdminManageReviewsPage />
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/manage/users"
             exact
-            element={<AdminManageUsersPage />}
+            element={
+              <AdminRoute>
+                <AdminManageUsersPage />
+              </AdminRoute>
+            }
           />
         </Routes>
       </main>

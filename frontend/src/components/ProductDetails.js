@@ -15,6 +15,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { wrapCartItem } from "../utils";
+import ReadMore from "./ReadMore";
 
 export default function ProductDetails(props) {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ export default function ProductDetails(props) {
   };
 
   const addToCartHandler = () => {
-    const cartItem = wrapCartItem(data, qty);
+    const cartItem = wrapCartItem(asin, data, qty);
 
     dispatch(addItemToCart(cartItem));
     navigate("/cart");
@@ -300,10 +301,13 @@ export default function ProductDetails(props) {
                         )}
                         {Object.entries(data.overview).map(
                           ([k, v], idx) =>
-                            k == "bookDes" && (
+                            k == "bookDes" &&
+                            k.length > 0 && (
                               <tr key={idx}>
                                 <td className="py-1 px-5">
-                                  <p>{v}</p>
+                                  <p>
+                                    <ReadMore text={v}></ReadMore>
+                                  </p>
                                 </td>
                               </tr>
                             )

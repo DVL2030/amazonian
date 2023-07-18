@@ -9,11 +9,10 @@ const initialState = {
 };
 
 const historySlice = createSlice({
-  name: "cart",
+  name: "history",
   initialState,
   reducers: {
     getItemFromHistory(state, action) {
-      console.log(action.payload);
       return historyItems.find((x) => x.asin === action.payload);
     },
   },
