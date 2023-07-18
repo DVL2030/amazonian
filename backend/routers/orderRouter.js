@@ -79,14 +79,7 @@ orderRouter.post(
         },
       ]);
 
-      if (history.length > 0) {
-        res.send(history);
-      } else {
-        res.send({
-          message:
-            "You haven't made any order with Amazonian Yet. Go shopping!",
-        });
-      }
+      return res.status(200).send(history);
     } catch (error) {
       return res.status(404).send({ message: error.message });
     }

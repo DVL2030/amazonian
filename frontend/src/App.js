@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Col, Nav, Navbar, Container, Row } from "react-bootstrap";
@@ -36,6 +36,7 @@ import AdminRoute from "./components/AdminRoute";
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartState = useSelector((state) => state.cart);
   const { cartItems } = cartState;
   const userState = useSelector((state) => state.userAuth);
@@ -45,6 +46,7 @@ function App() {
 
   const signOutHandler = () => {
     dispatch(signout());
+    navigate("/");
   };
 
   return (
@@ -288,7 +290,7 @@ function App() {
       >
         <Routes>
           <Route path="/" exact element={<HomePage />} />
-          {/* <Route path="/home/page/:page" exact element={<HomePage />} /> */}
+          <Route path="/home" exact element={<HomePage />} />
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route

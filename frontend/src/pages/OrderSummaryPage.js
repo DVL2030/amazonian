@@ -81,7 +81,9 @@ export default function OrderSummaryPage(props) {
                         <hr></hr>
 
                         <div>
-                          <Button variant="warning">Manage order</Button>
+                          <Link to="/user/order/history">
+                            <Button variant="warning">Manage order</Button>
+                          </Link>
                         </div>
                       </Col>
                       <Col xs={6}>
@@ -91,46 +93,50 @@ export default function OrderSummaryPage(props) {
                             <h5>{userInfo.name}</h5>
                           </div>
                           <table className="w-100 order-summary-price-table">
-                            <tr>
-                              <td>
-                                <span>Total Before Tax:</span>
-                              </td>
-                              <td className="text-right">
-                                <span className="text-right">
-                                  ${order.total}
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span>Tax:</span>
-                              </td>
-                              <td>
-                                <span className="text-right">${order.tax}</span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span>Shipping Price:</span>
-                              </td>
-                              <td>
-                                <span className="text-right">
-                                  ${order.shippingPrice}
-                                </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <big>
-                                  <b>Order Total:</b>
-                                </big>
-                              </td>
-                              <td>
-                                <big className="text-right">
-                                  <b>${order.final}</b>
-                                </big>
-                              </td>
-                            </tr>
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <span>Total Before Tax:</span>
+                                </td>
+                                <td className="text-right">
+                                  <span className="text-right">
+                                    ${order.total}
+                                  </span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <span>Tax:</span>
+                                </td>
+                                <td>
+                                  <span className="text-right">
+                                    ${order.tax}
+                                  </span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <span>Shipping Price:</span>
+                                </td>
+                                <td>
+                                  <span className="text-right">
+                                    ${order.shippingPrice}
+                                  </span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <big>
+                                    <b>Order Total:</b>
+                                  </big>
+                                </td>
+                                <td>
+                                  <big className="text-right">
+                                    <b>${order.final}</b>
+                                  </big>
+                                </td>
+                              </tr>
+                            </tbody>
                           </table>
                         </div>
                       </Col>
@@ -140,17 +146,13 @@ export default function OrderSummaryPage(props) {
                         {order.orderedItems.length !== 0 && (
                           <Container fluid>
                             {order.orderedItems.map((item, idx) => (
-                              <>
-                                <CartItem
-                                  key={idx}
-                                  item={item}
-                                  modify={false}
-                                ></CartItem>
+                              <div key={idx}>
+                                <CartItem item={item} modify={false}></CartItem>
                                 {order.orderedItems.length > 1 &&
                                   idx + 1 !== order.orderedItems.length && (
                                     <hr className="my-2"></hr>
                                   )}
-                              </>
+                              </div>
                             ))}
                             <hr></hr>
                           </Container>

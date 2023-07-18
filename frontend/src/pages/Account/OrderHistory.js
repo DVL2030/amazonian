@@ -6,6 +6,7 @@ import { Button, Container, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CartItem from "../../components/CartItem";
 import { getOrderHistory } from "../../slice/orderSlice";
+import SorryBox from "../../components/SorryBox";
 
 export default function OrderHistoryPage() {
   const dispatch = useDispatch();
@@ -23,8 +24,8 @@ export default function OrderHistoryPage() {
     <LoadingBox></LoadingBox>
   ) : error ? (
     <MessageBox variants="danger">{error}</MessageBox>
-  ) : (
-    history && (
+  ) : history ? (
+    history.length > 0 ? (
       <Container className="p-2">
         <Row>
           <Col>
@@ -109,6 +110,13 @@ export default function OrderHistoryPage() {
           </Col>
         </Row>
       </Container>
+    ) : (
+      <SorryBox
+        header="Go Shopping!"
+        message="You have not made any order yet"
+      ></SorryBox>
     )
+  ) : (
+    <></>
   );
 }

@@ -53,7 +53,8 @@ export default function ProductDetails(props) {
     navigate("/cart");
   };
 
-  const addToFavourite = () => {
+  const addToFavourite = (e) => {
+    e.preventDefault();
     if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
     if (!loading) {
       if (data) {
@@ -87,7 +88,8 @@ export default function ProductDetails(props) {
     }
   };
 
-  const removeFromFav = () => {
+  const removeFromFav = (e) => {
+    e.preventDefault();
     if (!loading) {
       dispatch(
         removeItemFromFavourite({
@@ -258,11 +260,17 @@ export default function ProductDetails(props) {
                   )}
                   <div className="buy-box-button">
                     {fav && fav.length > 0 ? (
-                      <button className="rect orange" onClick={removeFromFav}>
+                      <button
+                        className="rect orange"
+                        onClick={(e) => removeFromFav(e)}
+                      >
                         Remove from Fav
                       </button>
                     ) : (
-                      <button className="rect orange" onClick={addToFavourite}>
+                      <button
+                        className="rect orange"
+                        onClick={(e) => addToFavourite(e)}
+                      >
                         Save this for later
                       </button>
                     )}

@@ -49,8 +49,8 @@ export default function OrderPlacePage() {
   const total = toNum(subTotal + shippingPrice);
   const tax = toNum(total * 0.13);
   const final = toNum(total + tax);
-  const expectedDelivery = new Date(deliveryOptions.date);
-  const eligibleReturnDate = new Date(addDays(30));
+  const expectedDelivery = new Date(deliveryOptions.date).toISOString();
+  const eligibleReturnDate = new Date(addDays(30)).toISOString();
 
   // Handler Functions
   const qtyHandler = (asin, q) => {

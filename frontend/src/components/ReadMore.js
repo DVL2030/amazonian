@@ -23,15 +23,21 @@ export default function ReadMore(props) {
   };
   return (
     <div>
-      <span>{text.substring(0, hideLen)}</span>
-      <span className="dots">...</span>
-      <span className="more">{text}</span>
-      <div
-        className="read-more-less text-primary mt-2 "
-        onClick={(e) => handleText(e)}
-      >
-        Read more
-      </div>
+      {text.length < hideLen + 20 ? (
+        <span>{text}</span>
+      ) : (
+        <>
+          <span>{text.substring(0, hideLen)}</span>
+          <span className="dots">...</span>
+          <span className="more">{text}</span>
+          <div
+            className="read-more-less text-primary mt-2 "
+            onClick={(e) => handleText(e)}
+          >
+            Read more
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -82,7 +82,7 @@ export default function CheckoutForm() {
     <form id="payment-form" className="p-0" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
       <button
-        class="payment-button"
+        className="payment-button"
         disabled={isProcessing || !stripe || !elements}
         id="submit"
       >

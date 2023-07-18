@@ -6,7 +6,7 @@ export default function RatingHistogram(props) {
   return (
     <div>
       <div className="rating-progress-bar">
-        <Link to={`/review/product/${asin}/rating/5/?scrollTo=result`}>
+        <Link to={`/product-reviews/${asin}/rating/5/?scrollTo=result`}>
           <span>5 star</span>
           <div className="rating-bar">
             <div
@@ -18,7 +18,7 @@ export default function RatingHistogram(props) {
         </Link>
       </div>
       <div className="rating-progress-bar">
-        <Link to={`/review/product/${asin}/rating/4/?scrollTo=result`}>
+        <Link to={`/product-reviews/${asin}/rating/4/?scrollTo=result`}>
           <span>4 star</span>
           <div className="rating-bar">
             <div
@@ -30,7 +30,7 @@ export default function RatingHistogram(props) {
         </Link>
       </div>
       <div className="rating-progress-bar">
-        <Link to={`/review/product/${asin}/rating/3/?scrollTo=result`}>
+        <Link to={`/product-reviews/${asin}/rating/3/?scrollTo=result`}>
           <span>3 star</span>
           <div className="rating-bar">
             <div
@@ -42,7 +42,7 @@ export default function RatingHistogram(props) {
         </Link>
       </div>
       <div className="rating-progress-bar">
-        <Link to={`/review/product/${asin}/rating/2/?scrollTo=result`}>
+        <Link to={`/product-reviews/${asin}/rating/2/?scrollTo=result`}>
           <span>2 star</span>
           <div className="rating-bar">
             <div
@@ -54,7 +54,7 @@ export default function RatingHistogram(props) {
         </Link>
       </div>
       <div className="rating-progress-bar">
-        <Link to={`/review/product/${asin}/rating/1?scrollTo=result`}>
+        <Link to={`/product-reviews/${asin}/rating/1?scrollTo=result`}>
           <span>1 star</span>
           <div className="rating-bar">
             <div

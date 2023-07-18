@@ -31,15 +31,36 @@ export const signin = createAsyncThunk(
   }
 );
 
+export const signout = createAsyncThunk(
+  "user/signout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const wait = (delay) =>
+        new Promise((resolve, reject) => setTimeout(resolve, delay));
+      await wait(1000);
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("shippingAddress");
+      return null;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
 const userAuthSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    signout() {
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("cartItems");
-      localStorage.removeItem("shippingAddress");
-    },
+    // signout(state) {
+    //   state.userInfo = null;
+    //   localStorage.removeItem("userInfo");
+    //   localStorage.removeItem("cartItems");
+    //   localStorage.removeItem("shippingAddress");
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(signin.pending, (state) => {
@@ -54,9 +75,19 @@ const userAuthSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+    builder.addCase(signout.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(signout.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.userInfo = action.payload;
+    });
+    builder.addCase(signout.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
-
-export const { signout } = userAuthSlice.actions;
 
 export default userAuthSlice.reducer;

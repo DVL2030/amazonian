@@ -13,6 +13,9 @@ import Paginate from "../components/Paginate";
 export default function HomePage() {
   const dispatch = useDispatch();
 
+  const userAuthState = useSelector((state) => state.userAuth);
+  const { userInfo, loading: userLoading } = userAuthState;
+
   const amazonState = useSelector((state) => state.amazon);
   const { amazonHome, loading, error } = amazonState;
 
@@ -21,11 +24,11 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!amazonHome) dispatch(getHomePage());
-  }, [page]);
+  }, [page, userInfo]);
 
   return (
     <>
-      {loading ? (
+      {loading || userLoading ? (
         <LoadingBox />
       ) : (
         <div id="home">
