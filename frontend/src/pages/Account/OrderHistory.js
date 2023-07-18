@@ -82,11 +82,9 @@ export default function OrderHistoryPage() {
                           </strong>
                         </span>
                       </div>
-                      <div>
-                        <Button variant="warning">Buy it again</Button>
-                      </div>
+
                       {order.orderedItems.length !== 0 && (
-                        <Container fluid>
+                        <Container fluid className="my-2">
                           {order.orderedItems.map((item, idx) => (
                             <>
                               <CartItem

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Rating(props) {
   const { rating, size, color, inline } = props;
   return (
-    <div className={`rating ${inline && "inline"}`}>
+    <div className={`rating ${inline && "d-inline-block"}`}>
       <span>
         <i
           className={

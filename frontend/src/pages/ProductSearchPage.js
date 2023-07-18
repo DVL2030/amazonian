@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Carousel } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProductList } from "../slice/amazonSlice";
@@ -21,9 +21,9 @@ export default function ProductSearchPage() {
   const amazonState = useSelector((state) => state.amazon);
   const { data: searchData, loading, error } = amazonState;
 
-  const [data, setData] = useState(null);
-
-  const [filteredData, setFilteredData] = useState(null);
+  const [filterData, setFilterData] = useState(null);
+  const filter = { sort: null, rating: null, price: null };
+  const data = filterData ? filterData : searchData;
 
   const totalItems =
     data && data.totalPage ? data.totalPage * data.items.length : 100;
@@ -33,8 +33,6 @@ export default function ProductSearchPage() {
     high: data ? Number(data.items.length * page) : 1,
   };
 
-  const filter = { sort: null, rating: null, price: null };
-
   const filterSearchHandler = (field, value) => {
     if (filter[field] === value) {
       filter[field] = null;
@@ -42,22 +40,10 @@ export default function ProductSearchPage() {
       filter[field] = value;
     }
 
-    if (searchData) setData(filterProductSearch(searchData, filter));
+    if (searchData) setFilterData(filterProductSearch(searchData, filter));
   };
 
   useEffect(() => {
-    // const ul = document.getElementsByClassName("search-filter");
-    // for (let i = 0; i < ul.length; i++) {
-    //   const lis = ul[i].children;
-    //   for (let i = 0; i < lis.length; i++) {
-    //     const dset = lis[i].dataset;
-    //     lis[i].addEventListener(
-    //       "click",
-    //       filterSearchHandler(lis[i], dset.field, dset.val)
-    //     );
-    //   }
-    // }
-
     if (!keyword) navigate("/");
     else {
       dispatch(
@@ -68,14 +54,11 @@ export default function ProductSearchPage() {
           page: page,
         })
       );
-      setData(searchData);
     }
   }, [page]);
 
   return loading ? (
     <LoadingBox />
-  ) : data && data.items.length === 0 ? (
-    <SorryBox />
   ) : (
     <div>
       {error && <MessageBox variants="danger">{error}</MessageBox>}
@@ -209,7 +192,10 @@ export default function ProductSearchPage() {
           </Col>
           <Col xs={12} lg={9}>
             <Container>
-              {data &&
+              {data && data.items.length === 0 ? (
+                <SorryBox />
+              ) : (
+                data &&
                 data.items.map((item, idx) => (
                   <Row key={idx} className="products-search-row">
                     <Col xs={3} className="products-search-img">
@@ -249,7 +235,8 @@ export default function ProductSearchPage() {
                       ))}
                     </Col>
                   </Row>
-                ))}
+                ))
+              )}
             </Container>
             <Container>
               {data && data.totalPage && (
@@ -267,7 +254,7 @@ export default function ProductSearchPage() {
                       path={`products/${keyword}`}
                       label={true}
                       page={Number(page)}
-                      totalPage={20}
+                      totalPage={data.totalPage}
                     ></Paginate>
                   </Col>
                 </Row>

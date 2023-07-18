@@ -7,6 +7,22 @@ export const addDays = (n) => {
   return newDate.toDateString();
 };
 
+export const wrapCartItem = (data, qty = 1) => {
+  const cartItem = {
+    asin: data.asin,
+    title: data.title,
+    image: data.images[0].image,
+    currentPrice: data.price.currentPrice,
+    beforePrice: data.price.beforePrice,
+    discount: data.price.discount,
+    available: data.available,
+    availability: data.availability,
+    delivery: data.delivery,
+    qty: qty,
+  };
+  return cartItem;
+};
+
 export const filterProductSearch = (data, filter) => {
   let temp = [...data.items];
   if (filter.sort) {
@@ -84,6 +100,8 @@ export const filterProductSearch = (data, filter) => {
         break;
     }
   }
+
+  console.log(temp);
 
   return { totalPage: data.totalPage, items: temp };
 };

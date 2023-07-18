@@ -5,6 +5,7 @@ import { isAuth } from "../utils.js";
 import Favourite from "../models/favouriteModel.js";
 import Product from "../models/productModel.js";
 import Review from "../models/reviewModel.js";
+import mongoose from "mongoose";
 
 const favRouter = express.Router();
 
@@ -15,6 +16,7 @@ favRouter.post(
 
     try {
       let product, review;
+
       if (type === "products") {
         const product_exist = await Product.findOne({ asin: item.asin });
         if (product_exist) {
@@ -23,19 +25,23 @@ favRouter.post(
           product = await Product.create(item);
         }
       } else if (type === "reviews") {
-        const review_exist = await Product.findOne({ asin: item.asin });
+        const review_exist = await Review.findOne({ id: item.id });
         if (review_exist) {
           review = review_exist;
         } else {
           review = await Review.create(item);
+          console.log(review);
         }
       }
+
+      const id = product ? product._id : review ? review._id : null;
       const userFav = await Favourite.findOne({ userId: userId });
       if (userFav) {
         const addToFav = await Favourite.updateOne(
           { userId: userId },
-          { $addToSet: { [type]: product._id || review._id } }
+          { $addToSet: { [type]: id } }
         );
+
         if (!addToFav.acknowledged)
           return res.status(401).send({
             message: "Failed to add a favourite",
@@ -43,13 +49,14 @@ favRouter.post(
       } else {
         const newFav = await Favourite.create({
           userId: userId,
-          [type]: [product._id || review._id],
+          [type]: [id],
         });
         if (!newFav)
           return res.status(401).send({
             message: `Failed to create a new Favourite for user ${userId}`,
           });
       }
+
       return res.send({
         status: true,
       });
@@ -62,25 +69,19 @@ favRouter.post(
 );
 
 favRouter.post(
-  "/update",
+  "/remove",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const { userId, field, value } = req.body;
+    const { userId, id, type } = req.body;
 
     try {
-      const update = await User.findByIdAndUpdate(userId, { [field]: value });
-      const newUser = await User.findById(userId);
-      if (newUser) {
-        return res.send({
-          status: true,
-          message: `You have successfully changed your ${field}.`,
-        });
-      } else {
-        return res.send({
-          status: false,
-          message: `Failed to update your ${field}.. Please try again`,
-        });
-      }
+      const removeFromFav = await Favourite.updateOne(
+        { userId: userId },
+        { $pullAll: { [type]: id } }
+      );
+      return res.send({
+        message: "You have successfully removed your favourite item",
+      });
     } catch (error) {
       return res.status(401).send({
         message: error.message,
@@ -90,13 +91,26 @@ favRouter.post(
 );
 
 favRouter.post(
-  "/getAddress",
+  "/getProducts",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
+    const id = new mongoose.Types.ObjectId(userId);
+
     try {
-      const data = await Address.find({ userId: userId });
-      return res.send(data);
+      const products = await Favourite.aggregate([
+        { $match: { userId: id } },
+        {
+          $lookup: {
+            from: "products",
+            localField: "products",
+            foreignField: "_id",
+            as: "products",
+          },
+        },
+      ]);
+
+      return res.send(products[0].products);
     } catch (error) {
       return res.status(401).send({
         message: error.message,
@@ -106,27 +120,26 @@ favRouter.post(
 );
 
 favRouter.post(
-  "/saveAddress",
+  "/getReviews",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const userId = req.body.userId;
-    try {
-      const newAddress = new Address({
-        userId: req.body.userId,
-        fullName: req.body.fullName,
-        address1: req.body.address1,
-        address2: req.body.address2,
-        city: req.body.city,
-        province: req.body.province,
-        postalCode: req.body.postalCode,
-        country: req.body.country,
-      });
+    const { userId } = req.body;
+    const id = new mongoose.Types.ObjectId(userId);
 
-      const addressCreated = await newAddress.save();
-      if (addressCreated) res.send(addressCreated);
-      return res.status(401).send({
-        message: "Failed to create a new address",
-      });
+    try {
+      const reviews = await Favourite.aggregate([
+        { $match: { userId: id } },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "reviews",
+            foreignField: "_id",
+            as: "reviews",
+          },
+        },
+      ]);
+
+      return res.send(reviews[0].reviews);
     } catch (error) {
       return res.status(401).send({
         message: error.message,

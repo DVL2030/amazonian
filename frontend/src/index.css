@@ -360,7 +360,6 @@ div.img-cart-item {
   max-width: 20rem;
   max-height: 20rem;
   width: 100%;
-  height: auto;
   overflow-y: hidden;
 }
 
@@ -965,8 +964,28 @@ div.active > i {
   padding-bottom: 0.3rem;
 }
 
-.min-vh-70 {
-  min-height: 70vh;
+.fav-list {
+  min-height: 3rem;
+  padding: 2rem;
+}
+
+.fav-list:hover {
+  color: #ff8000;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fav-list.selected {
+  background-color: #ece9e9;
+}
+
+.more {
+  display: none;
+}
+
+.read-more-less:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* =====================================================================================
@@ -975,6 +994,10 @@ div.active > i {
 
 .flex-fill {
   flex: 1 1 auto;
+}
+
+.min-vh-70 {
+  min-height: 70vh;
 }
 
 /* Extra small devices (phones, 600px and down) */

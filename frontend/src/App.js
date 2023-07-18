@@ -26,6 +26,7 @@ import OrderHistoryPage from "./pages/Account/OrderHistory";
 import UserHomePage from "./pages/Account/UserHomePage";
 import UserSecurityPage from "./pages/Account/UserSecurityPage";
 import UserUpdateSecurityPage from "./pages/Account/UserUpdateSecurityPage";
+import FavouritePage from "./pages/Account/FavouritePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -307,6 +308,7 @@ function App() {
             exact
             element={<UserUpdateSecurityPage />}
           />
+          <Route path="/user/favourite" exact element={<FavouritePage />} />
           <Route path="/user/address/add" exact element={<AddressAddPage />} />
           <Route
             path="/user/order/history"

@@ -11,6 +11,7 @@ import { addItemToFavourite } from "../slice/favouriteSlice";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { wrapCartItem } from "../utils";
 
 export default function ProductDetails(props) {
   const dispatch = useDispatch();
@@ -39,53 +40,46 @@ export default function ProductDetails(props) {
   };
 
   const addToCartHandler = () => {
-    const cartItem = {
-      asin: asin,
-      title: data.title,
-      image: data.images[0].image,
-      currentPrice: data.price.currentPrice,
-      beforePrice: data.price.beforePrice,
-      discount: data.price.discount,
-      available: data.available,
-      availability: data.availability,
-      delivery: data.delivery,
-      qty: qty,
-    };
+    const cartItem = wrapCartItem(data, qty);
+
     dispatch(addItemToCart(cartItem));
     navigate("/cart");
   };
 
   const addToFavourite = () => {
     if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
-    if (data) {
-      dispatch(
-        addItemToFavourite({
-          item: { asin: asin, ...data },
-          type: "products",
-        })
-      );
-      const id = toast.loading("Please wait...");
-      setTimeout(() => {
-        console.log(error);
-        if (success) {
-          toast.update(id, {
-            render: "Added!",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000,
-          });
-        } else if (error) {
-          toast.update(id, {
-            render: "There was an error... Please try again",
-            type: "error",
-            autoClose: 1000,
-            isLoading: false,
-          });
-        } else {
-          toast.dismiss();
-        }
-      }, 1500);
+    if(!loading){
+      if (data) {
+        dispatch(
+          addItemToFavourite({
+            item: { asin: asin, ...data },
+            type: "products",
+          })
+        );
+        const id = toast.loading("Please wait...");
+        setTimeout(() => {
+          console.log(error);
+          if (success) {
+            toast.update(id, {
+              render: "Added!",
+              type: "success",
+              isLoading: false,
+              autoClose: 1000,
+            });
+          } else if (error) {
+            toast.update(id, {
+              render: "There was an error... Please try again",
+              type: "error",
+              autoClose: 1000,
+              isLoading: false,
+            });
+          } else {
+            toast.dismiss();
+          }
+        }, 1500);
+      }
     }
+   
   };
 
   return (

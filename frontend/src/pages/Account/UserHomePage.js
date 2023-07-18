@@ -33,7 +33,7 @@ export default function UserHomePage() {
           </Link>
         </Col>
         <Col xs={4}>
-          <Link to="/user/save">
+          <Link to="/user/favourite">
             <AccountHomeCard
               img="/imgs/your_account_list.png"
               heading="Your Saved Items"
