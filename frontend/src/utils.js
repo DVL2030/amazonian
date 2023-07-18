@@ -100,9 +100,6 @@ export const filterProductSearch = (data, filter) => {
         break;
     }
   }
-
-  console.log(temp);
-
   return { totalPage: data.totalPage, items: temp };
 };
 

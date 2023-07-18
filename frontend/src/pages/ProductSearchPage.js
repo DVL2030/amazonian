@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,12 @@ import Paginate from "../components/Paginate";
 import { filterProductSearch } from "../utils";
 
 export default function ProductSearchPage() {
+  const filter = useRef({
+    sort: null,
+    rating: null,
+    price: null,
+  });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,7 +28,7 @@ export default function ProductSearchPage() {
   const { data: searchData, loading, error } = amazonState;
 
   const [filterData, setFilterData] = useState(null);
-  const filter = { sort: null, rating: null, price: null };
+
   const data = filterData ? filterData : searchData;
 
   const totalItems =
@@ -34,13 +40,15 @@ export default function ProductSearchPage() {
   };
 
   const filterSearchHandler = (field, value) => {
-    if (filter[field] === value) {
-      filter[field] = null;
+    console.log(field, value);
+    if (filter.current[field] === value) {
+      filter.current = { ...filter.current, [field]: null };
     } else {
-      filter[field] = value;
+      filter.current = { ...filter.current, [field]: value };
     }
 
-    if (searchData) setFilterData(filterProductSearch(searchData, filter));
+    if (searchData)
+      setFilterData(filterProductSearch(searchData, filter.current));
   };
 
   useEffect(() => {
