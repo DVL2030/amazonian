@@ -40,7 +40,6 @@ export default function ProductSearchPage() {
   };
 
   const filterSearchHandler = (field, value) => {
-    console.log(field, value);
     if (filter.current[field] === value) {
       filter.current = { ...filter.current, [field]: null };
     } else {

@@ -74,6 +74,8 @@ favRouter.post(
   expressAsyncHandler(async (req, res) => {
     const { userId, id, type } = req.body;
 
+    console.log(id, type);
+
     try {
       const removeFromFav = await Favourite.updateOne(
         { userId: userId },
@@ -121,7 +123,76 @@ favRouter.post(
 );
 
 favRouter.post(
+  "/getProductAsins",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { userId } = req.body;
+    const id = new mongoose.Types.ObjectId(userId);
+
+    try {
+      const products = await Favourite.aggregate([
+        { $match: { userId: id } },
+        {
+          $lookup: {
+            from: "products",
+            localField: "products",
+            foreignField: "_id",
+            as: "products",
+          },
+        },
+        {
+          $project: {
+            asin: "$products.asin",
+            id: "$products._id",
+          },
+        },
+      ]);
+      const favProds = [];
+      for (let i = 0; i < products[0].asin.length; i++) {
+        let json = { asin: products[0].asin[i], id: products[0].id[i] };
+        favProds.push(json);
+      }
+
+      return res.send(favProds);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
+);
+
+favRouter.post(
   "/getReviews",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { userId } = req.body;
+    const id = new mongoose.Types.ObjectId(userId);
+
+    try {
+      const reviews = await Favourite.aggregate([
+        { $match: { userId: id } },
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "reviews",
+            foreignField: "_id",
+            as: "reviews",
+          },
+        },
+      ]);
+
+      return res.send(reviews[0].reviews);
+    } catch (error) {
+      return res.status(401).send({
+        message: error.message,
+      });
+    }
+  })
+);
+
+favRouter.post(
+  "/getReviewIds",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;

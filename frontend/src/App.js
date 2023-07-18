@@ -27,6 +27,11 @@ import UserHomePage from "./pages/Account/UserHomePage";
 import UserSecurityPage from "./pages/Account/UserSecurityPage";
 import UserUpdateSecurityPage from "./pages/Account/UserUpdateSecurityPage";
 import FavouritePage from "./pages/Account/FavouritePage";
+import AdminDashBoardPage from "./pages/Admin/AdminDashBoardPage";
+import AdminManageOrdersPage from "./pages/Admin/AdminManageOrdersPage";
+import AdminManageProductsPage from "./pages/Admin/AdminManageProductsPage";
+import AdminManageUsersPage from "./pages/Admin/AdminManageUsersPage";
+import AdminManageReviewsPage from "./pages/Admin/AdminManageReviewsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -127,28 +132,22 @@ function App() {
                         <ul className="drop-down-list no-list-style mb-1">
                           <li>
                             <Link to="#">
-                              <span className="dark-grey">
-                                Create a Wish List
-                              </span>
+                              <span>Create a Wish List</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#">
-                              <span className="dark-grey">
-                                Wish from Any Website
-                              </span>
+                              <span>Wish from Any Website</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#">
-                              <span className="dark-grey">Find a Gift</span>
+                              <span>Find a Gift</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#">
-                              <span className="dark-grey">
-                                Discover Your Style
-                              </span>
+                              <span>Discover Your Style</span>
                             </Link>
                           </li>
                         </ul>
@@ -157,35 +156,64 @@ function App() {
                         <h5 className="text-dark">Your Account</h5>
                         <ul className="drop-down-list no-list-style mb-1">
                           <li>
-                            <Link to={userInfo ? "/user/home" : "/"}>
-                              <span className="dark-grey">Your Account</span>
+                            <Link to="/user/home">
+                              <span>Your Account</span>
                             </Link>
                           </li>
                           <li>
-                            <Link to={userInfo ? "/user/order" : "/"}>
-                              <span className="dark-grey"> Your Orders</span>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="#">
-                              <span className="dark-grey">
-                                Your Recommendations
-                              </span>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to={userInfo ? "/user/favourite" : "/"}>
-                              <span className="dark-grey">Your Favourites</span>
+                            <Link to="/user/order/history">
+                              <span> Your Orders</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#">
-                              <span className="dark-grey">
-                                Memberships & Subscriptions
-                              </span>
+                              <span>Your Recommendations</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/user/favourite">
+                              <span>Your Favourites</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#">
+                              <span>Memberships & Subscriptions</span>
                             </Link>
                           </li>
                         </ul>
+                        {userInfo && userInfo.isAdmin && (
+                          <>
+                            <hr className="text-dark"></hr>
+                            <h5 className="text-dark">Admin</h5>
+                            <ul className="drop-down-list no-list-style mb-1">
+                              <li>
+                                <Link to="/admin/dashboard">
+                                  <span>Dashboard</span>
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/admin/manage/orders">
+                                  <span> Manage Orders</span>
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/admin/manage/orders">
+                                  <span>Manage Products</span>
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/admin/manage/reviews">
+                                  <span>Manage Reviews</span>
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/admin/manage/users">
+                                  <span>Manage Users</span>
+                                </Link>
+                              </li>
+                            </ul>
+                          </>
+                        )}
                       </Col>
                     </Row>
                   </Container>
@@ -314,6 +342,33 @@ function App() {
             path="/user/order/history"
             exact
             element={<OrderHistoryPage />}
+          />
+
+          {/* Admin Routes */}
+          <Route
+            path="/admin/dashboard"
+            exact
+            element={<AdminDashBoardPage />}
+          />
+          <Route
+            path="/admin/manage/orders"
+            exact
+            element={<AdminManageOrdersPage />}
+          />
+          <Route
+            path="/admin/manage/products"
+            exact
+            element={<AdminManageProductsPage />}
+          />
+          <Route
+            path="/admin/manage/reviews"
+            exact
+            element={<AdminManageReviewsPage />}
+          />
+          <Route
+            path="/admin/manage/users"
+            exact
+            element={<AdminManageUsersPage />}
           />
         </Routes>
       </main>

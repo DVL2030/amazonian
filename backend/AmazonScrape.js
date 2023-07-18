@@ -892,11 +892,5 @@ function scrapeReviews(body) {
   }
   return reviewList;
 }
-// const result = await startScraper({
-//   type: "productAsin",
-//   asin: "B0BTQ7LCB8",
-// });
-
-// console.log(result);
 
 export default startScraper;

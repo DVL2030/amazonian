@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function AdminManageOrder() {
+export default function AdminManageOrderPage() {
   return <div>AdminManageOrder</div>;
 }

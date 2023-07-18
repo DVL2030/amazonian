@@ -73,8 +73,8 @@ export default function FavouritePage() {
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : (
-    <Container className="py-5 mb-5">
-      <Row>
+    <Container className="py-5 ">
+      <Row className="mb-5">
         <Col>
           <h4>Your Favourites</h4>
           <Card className="p-1">

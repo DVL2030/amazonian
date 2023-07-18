@@ -6,6 +6,7 @@ const initialState = {
   success: false,
   favProducts: [],
   favProduct: null,
+  favAsins: [],
   favReviews: [],
   favReview: null,
   loading: false,
@@ -96,6 +97,29 @@ export const getFavouriteProduct = createAsyncThunk(
         method: "post",
         url: "/api/favourite/getProduct",
         data: { userId: userInfo._id, productId: id },
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+export const getFavouriteAsins = createAsyncThunk(
+  "favourite/getFavouriteAsins",
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      userAuth: { userInfo },
+    } = getState();
+    try {
+      const res = await Axios({
+        method: "post",
+        url: "/api/favourite/getProductAsins",
+        data: { userId: userInfo._id },
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       return res.data;
@@ -211,6 +235,18 @@ const favouriteSlice = createSlice({
       state.favProduct = action.payload;
     });
     builder.addCase(getFavouriteProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getFavouriteAsins.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getFavouriteAsins.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.favAsins = action.payload;
+    });
+    builder.addCase(getFavouriteAsins.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

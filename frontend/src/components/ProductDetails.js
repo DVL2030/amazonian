@@ -7,7 +7,10 @@ import Rating from "../components/Rating";
 import RatingHistogram from "../components/RatingHistogram";
 import Review from "../components/Review";
 import { addItemToCart } from "../slice/cartSlice";
-import { addItemToFavourite } from "../slice/favouriteSlice";
+import {
+  addItemToFavourite,
+  removeItemFromFavourite,
+} from "../slice/favouriteSlice";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,12 +20,15 @@ export default function ProductDetails(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data, asin } = props;
+  const { data, asin, fav } = props;
+
+  console.log(fav);
 
   const [qty, setQty] = useState(1);
 
   const userAuthState = useSelector((state) => state.userAuth);
   const { userInfo } = userAuthState;
+
   const favState = useSelector((state) => state.favourite);
   const { success, loading, error } = favState;
 
@@ -48,7 +54,7 @@ export default function ProductDetails(props) {
 
   const addToFavourite = () => {
     if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
-    if(!loading){
+    if (!loading) {
       if (data) {
         dispatch(
           addItemToFavourite({
@@ -58,7 +64,6 @@ export default function ProductDetails(props) {
         );
         const id = toast.loading("Please wait...");
         setTimeout(() => {
-          console.log(error);
           if (success) {
             toast.update(id, {
               render: "Added!",
@@ -76,10 +81,40 @@ export default function ProductDetails(props) {
           } else {
             toast.dismiss();
           }
-        }, 1500);
+        }, 2000);
       }
     }
-   
+  };
+
+  const removeFromFav = () => {
+    if (!loading) {
+      dispatch(
+        removeItemFromFavourite({
+          id: fav[0].id,
+          type: "products",
+        })
+      );
+      const id = toast.loading("Please wait...");
+      setTimeout(() => {
+        if (success) {
+          toast.update(id, {
+            render: "Removed!",
+            type: "success",
+            isLoading: false,
+            autoClose: 1000,
+          });
+        } else if (error) {
+          toast.update(id, {
+            render: "There was an error... Please try again",
+            type: "error",
+            autoClose: 1000,
+            isLoading: false,
+          });
+        } else {
+          toast.dismiss();
+        }
+      }, 1500);
+    }
   };
 
   return (
@@ -217,13 +252,19 @@ export default function ProductDetails(props) {
                       </button>
 
                       <button className="rect orange">Buy Now</button>
+                      <hr></hr>
                     </div>
                   )}
-                  <hr></hr>
                   <div className="buy-box-button">
-                    <button className="rect orange" onClick={addToFavourite}>
-                      Save this for later
-                    </button>
+                    {fav && fav.length > 0 ? (
+                      <button className="rect orange" onClick={removeFromFav}>
+                        Remove from Fav
+                      </button>
+                    ) : (
+                      <button className="rect orange" onClick={addToFavourite}>
+                        Save this for later
+                      </button>
+                    )}
                   </div>
                   {data.tabularFeature && (
                     <div>
@@ -242,8 +283,6 @@ export default function ProductDetails(props) {
                     </div>
                   )}
                 </div>
-
-                <hr></hr>
 
                 {data.overview && (
                   <>
@@ -347,9 +386,15 @@ export default function ProductDetails(props) {
                 </>
               )}
               <div className="buy-box-button">
-                <button className="rect orange" onClick={addToFavourite}>
-                  Save this for later
-                </button>
+                {fav && fav.length > 0 ? (
+                  <button className="rect orange" onClick={removeFromFav}>
+                    Remove from Fav
+                  </button>
+                ) : (
+                  <button className="rect orange" onClick={addToFavourite}>
+                    Save this for later
+                  </button>
+                )}
               </div>
               {data.tabularFeature && (
                 <div>

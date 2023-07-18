@@ -96,7 +96,7 @@ button.search {
   right: 2.6rem;
   top: 4rem;
   width: 37rem;
-  height: 28rem;
+  height: auto;
   padding: 1rem 1rem;
   background-color: #ffffff;
   margin: 0rem;
@@ -455,11 +455,8 @@ div.img-carousel {
   max-height: 100%;
 }
 .card-grid-item {
-  /* max-height: 100%; */
+  max-height: 100%;
   min-width: 0;
-}
-
-.card-grid-item img {
 }
 
 .card-grid span {
@@ -490,7 +487,9 @@ div.img-carousel {
   width: 100%;
   max-width: 40rem;
 }
-.card.security-card {
+
+.mainCard .crd .card-grid-item img {
+  height: 5rem;
 }
 
 /* ==========================================

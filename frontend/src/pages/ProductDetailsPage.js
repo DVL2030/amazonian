@@ -11,6 +11,7 @@ import SorryBox from "../components/SorryBox";
 import RatingHistogram from "../components/RatingHistogram";
 import Review from "../components/Review";
 import ProductDetails from "../components/ProductDetails";
+import { getFavouriteAsins } from "../slice/favouriteSlice";
 
 // import { getItemFromHistory } from "../slice/historySlice";
 
@@ -18,18 +19,19 @@ export default function ProductDetailsPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const param = useParams();
+  const { asin } = param;
+
   const amazonState = useSelector((state) => state.amazon);
   const { amazonProductAsin: data, loading, error } = amazonState;
 
-  // const historyState = useSelector((state) => state.history);
-  // const { historyItems } = historyState;
-
-  const param = useParams();
-  const { asin } = param;
+  const favState = useSelector((state) => state.favourite);
+  const { favAsins } = favState;
 
   useEffect(() => {
     if (!asin) navigate("/");
     else {
+      dispatch(getFavouriteAsins());
       dispatch(getProductAsin(asin));
     }
   }, []);
@@ -41,7 +43,13 @@ export default function ProductDetailsPage() {
   ) : (
     <div>
       {error && <MessageBox variants="danger">{error}</MessageBox>}
-      {data && <ProductDetails data={data} asin={asin}></ProductDetails>}
+      {data && favAsins && (
+        <ProductDetails
+          data={data}
+          asin={asin}
+          fav={favAsins.filter((f) => f.asin === asin)}
+        ></ProductDetails>
+      )}
     </div>
   );
 }
