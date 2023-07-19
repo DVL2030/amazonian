@@ -205,7 +205,9 @@ export default function ProductDetails(props) {
               <div className="product-details-price">
                 <div>
                   <span className="product-details-discount dark-red">
-                    {data.price.discount && `${data.price.discount}%`}{" "}
+                    {data.price.discount &&
+                      data.price.discount !== 0 &&
+                      `${data.price.discount}%`}{" "}
                   </span>
                   <span className="product-details-a-price">
                     {data.price.currentPrice && data.price.currentPrice}

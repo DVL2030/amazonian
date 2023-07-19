@@ -44,7 +44,7 @@ export default function AdminDashBoardPage() {
                 <StatBox
                   icon="fa-solid fa-user-plus"
                   number={dashboard.new_users}
-                  increase={dashboard.new_users_percentage}
+                  percentage={dashboard.new_users_percentage}
                   label="New Users"
                 ></StatBox>
               </Col>
@@ -52,7 +52,7 @@ export default function AdminDashBoardPage() {
                 <StatBox
                   icon="fa-solid fa-truck"
                   number={dashboard.new_orders}
-                  increase={dashboard.new_orders_percentage}
+                  percentage={dashboard.new_orders_percentage}
                   label="New Orders"
                 ></StatBox>
               </Col>
@@ -60,7 +60,7 @@ export default function AdminDashBoardPage() {
                 <StatBox
                   icon="fa-solid fa-globe"
                   number={dashboard.total_traffic}
-                  increase={10}
+                  percentage={10}
                   label="Total Visits"
                 ></StatBox>
               </Col>
@@ -68,7 +68,7 @@ export default function AdminDashBoardPage() {
                 <StatBox
                   icon="fa-solid fa-sack-dollar"
                   number={`$${dashboard.total_revenue}`}
-                  increase={20}
+                  percentage={20}
                   label="Total Revenue"
                 ></StatBox>
               </Col>

@@ -1,15 +1,25 @@
-import React from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import "react-data-grid/lib/styles.css";
-import DataGrid from "react-data-grid";
+import "ag-grid-community/styles//ag-grid.css";
+import "ag-grid-community/styles//ag-theme-alpine.css";
 
 export default function AdminTable(props) {
   const { data } = props;
 
   const columns = Object.keys(data[0]).map((k) => {
-    return { key: k, name: k.toLocaleUpperCase() };
+    return { field: k, headerName: k.toLocaleUpperCase(), sortable: true };
   });
 
   const rows = data;
-  return <DataGrid columns={columns} rows={rows} />;
+  return (
+    <div
+      className="ag-theme-alpine"
+      style={{
+        height: "500px",
+        width: "100%",
+      }}
+    >
+      <AgGridReact columnDefs={columns} rowData={rows}></AgGridReact>
+    </div>
+  );
 }

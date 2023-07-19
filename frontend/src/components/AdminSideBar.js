@@ -15,15 +15,14 @@ export default function AdminSideBar(props) {
     <Sidebar collapsed={isCollapsed} collapsedWidth="70px">
       <Menu
         menuItemStyles={{
-          button: ({ active }) => {
-            // only apply styles on first level elements of the tree
+          button: ({ active, disabled }) => {
             if (active)
               return {
                 backgroundColor: "#1b4a79",
                 color: "#b6c8d9",
               };
             return {
-              color: "#13395e",
+              color: disabled ? "#d4e9ff" : "#13395e",
               backgroundColor: active ? "#eecef9" : undefined,
             };
           },
@@ -110,49 +109,50 @@ export default function AdminSideBar(props) {
         <div className="text-center my-3">
           <span className="text-secondary">Others</span>
         </div>
-        <Link to="/admin/calendar">
-          <MenuItem
-            active={path === "calendar"}
-            icon={<i className="fa-solid fa-calendar-days"></i>}
-          >
-            Calendar
-          </MenuItem>
-        </Link>
-        <Link to="/admin/examples">
-          <MenuItem
-            active={path === "examples"}
-            icon={<i className="fa-brands fa-servicestack"></i>}
-          >
-            Examples
-          </MenuItem>
-        </Link>
+
+        <MenuItem
+          disabled={true}
+          active={path === "calendar"}
+          icon={<i className="fa-solid fa-calendar-days"></i>}
+        >
+          Calendar
+        </MenuItem>
+
+        <MenuItem
+          disabled
+          active={path === "examples"}
+          icon={<i className="fa-brands fa-servicestack"></i>}
+        >
+          Examples
+        </MenuItem>
+
         <div className="text-center my-3">
           <span className="text-secondary">Charts</span>
         </div>
-        <Link to="/admin/bar">
-          <MenuItem
-            active={path === "bar"}
-            icon={<i className="fa-solid fa-chart-column"></i>}
-          >
-            Bar Chart
-          </MenuItem>
-        </Link>
-        <Link to="/admin/pie">
-          <MenuItem
-            active={path === "pie"}
-            icon={<i className="fa-solid fa-chart-pie"></i>}
-          >
-            Pie Chart
-          </MenuItem>
-        </Link>
-        <Link to="/admin/line">
-          <MenuItem
-            active={path === "line"}
-            icon={<i className="fa-solid fa-chart-line"></i>}
-          >
-            Line Chart
-          </MenuItem>
-        </Link>
+
+        <MenuItem
+          disabled
+          active={path === "bar"}
+          icon={<i className="fa-solid fa-chart-column"></i>}
+        >
+          Bar Chart
+        </MenuItem>
+
+        <MenuItem
+          disabled
+          active={path === "pie"}
+          icon={<i className="fa-solid fa-chart-pie"></i>}
+        >
+          Pie Chart
+        </MenuItem>
+
+        <MenuItem
+          disabled
+          active={path === "line"}
+          icon={<i className="fa-solid fa-chart-line"></i>}
+        >
+          Line Chart
+        </MenuItem>
       </Menu>
     </Sidebar>
   );

@@ -9,11 +9,11 @@ const initialState = {
   error: null,
 };
 
-export const getProductAsin = createAsyncThunk(
+export const getAsinFromDB = createAsyncThunk(
   "product/getAsin",
   async (asin, { rejectWithValue }) => {
     try {
-      const res = await Axios.post("/api/amazon/productAsin", { asin: asin });
+      const res = await Axios.post("/api/product/getAsin", { asin: asin });
 
       return res.data;
     } catch (error) {
@@ -48,15 +48,15 @@ const productSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getProductAsin.pending, (state) => {
+    builder.addCase(getAsinFromDB.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getProductAsin.fulfilled, (state, action) => {
+    builder.addCase(getAsinFromDB.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
       state.product = action.payload;
     });
-    builder.addCase(getProductAsin.rejected, (state, action) => {
+    builder.addCase(getAsinFromDB.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

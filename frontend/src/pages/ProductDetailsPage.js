@@ -8,9 +8,7 @@ import LoadingBox from "../components/LoadingBox";
 import SorryBox from "../components/SorryBox";
 import ProductDetails from "../components/ProductDetails";
 import { getFavouriteAsins } from "../slice/favouriteSlice";
-import { saveProduct } from "../slice/productSlice";
-
-// import { getItemFromHistory } from "../slice/historySlice";
+import { getAsinFromDB, saveProduct } from "../slice/productSlice";
 
 export default function ProductDetailsPage() {
   const dispatch = useDispatch();
@@ -18,6 +16,13 @@ export default function ProductDetailsPage() {
 
   const param = useParams();
   const { asin } = param;
+
+  const productState = useSelector((state) => state.product);
+  const {
+    product,
+    loading: productLoading,
+    error: productError,
+  } = productState;
 
   const amazonState = useSelector((state) => state.amazon);
   const { amazonProductAsin: data, loading, error } = amazonState;
@@ -27,15 +32,18 @@ export default function ProductDetailsPage() {
 
   useEffect(() => {
     if (!asin) navigate("/");
-    else if (!data) {
-      dispatch(getFavouriteAsins());
-      dispatch(getProductAsin(asin));
+    dispatch(getFavouriteAsins());
+    if (!product) {
+      dispatch(getAsinFromDB(asin));
+      if (!data && productError) {
+        dispatch(getProductAsin(asin));
+        if (data) {
+          const save = { asin: asin, ...data };
+          dispatch(saveProduct(save));
+        }
+      }
     }
-    if (data) {
-      const save = { asin: asin, ...data };
-      dispatch(saveProduct(save));
-    }
-  }, [data]);
+  }, [product, data, productError]);
 
   return loading ? (
     <LoadingBox />
@@ -44,9 +52,9 @@ export default function ProductDetailsPage() {
   ) : (
     <div>
       {error && <MessageBox variants="danger">{error}</MessageBox>}
-      {data && favAsins && (
+      {(data || product) && favAsins && (
         <ProductDetails
-          data={data}
+          data={product || data}
           asin={asin}
           fav={favAsins.filter((f) => f.asin === asin)}
         ></ProductDetails>

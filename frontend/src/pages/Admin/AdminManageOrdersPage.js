@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminOrderOverView } from "../../slice/adminSlice";
-import { Chart } from "react-google-charts";
 import { Col, Container, Row } from "react-bootstrap";
 import AdminSideBar from "../../components/AdminSideBar";
 import StatBox from "../../components/StatBox";
@@ -87,21 +86,21 @@ export default function AdminManageOrdersPage() {
                 </Col>
               )}
             </Row>
-            <Row className="my-5 p-5">
+            <Row className="my-3 p-5">
+              <h3 className="mb-3" style={{ color: "#154c79" }}>
+                Most Sold Products
+              </h3>
               <Col>
                 <AdminTable data={order.most_sold_products} />
               </Col>
-              {/* <Col>
-                <div>
-                  <Chart
-                    chartType="Bar"
-                    width="80%"
-                    height="500px"
-                    data={data}
-                    options={options}
-                  />
-                </div>
-              </Col> */}
+            </Row>
+            <Row className="my-3 p-5">
+              <h3 className="mb-3" style={{ color: "#154c79" }}>
+                All Orders
+              </h3>
+              <Col>
+                <AdminTable data={order.all_orders} />
+              </Col>
             </Row>
           </>
         )}
