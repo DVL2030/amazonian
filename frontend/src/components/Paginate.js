@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
 
 export default function Paginate(props) {
-  const { path, label, totalPage, page } = props;
+  const { path, label, totalPage = 10, page } = props;
   const navigate = useNavigate();
   const handlePageChange = (event) => {
     const target = Number(event.target.innerText);

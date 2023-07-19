@@ -316,6 +316,7 @@ function App() {
             element={<ProductSearchPage />}
           />
           <Route path="/product/:asin" exact element={<ProductDetailsPage />} />
+          <Route path="/product-reviews" element={<ReviewPage />} />
 
           <Route path="/product-reviews/:asin" exact element={<ReviewPage />} />
           <Route

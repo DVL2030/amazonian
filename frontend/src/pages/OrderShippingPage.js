@@ -35,6 +35,7 @@ export default function OrderShippingPage() {
   const continueHandler = () => {
     if (selectAddress < 0) alert("You must choose an address to continue..");
     else {
+      console.log(address[selectAddress]);
       dispatch(saveShippingAddress(address[selectAddress]));
       navigate("/placeorder");
     }

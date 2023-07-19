@@ -2,7 +2,6 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 import { isAuth } from "../utils.js";
-import Address from "../models/addressModel.js";
 import mongoose from "mongoose";
 
 const orderRouter = express.Router();

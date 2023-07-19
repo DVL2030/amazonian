@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 import fs from "fs";
 import { HttpsProxyAgent } from "https-proxy-agent";
 // import UTIL from "./utils.js";
-import CONST from "./constant.js";
+import { CONST } from "./constant.js";
 
 /*************************************************************
  *
@@ -32,6 +32,7 @@ const startScraper = async ({
   reviewId,
 }) => {
   let apiEndpoint, resBody, result;
+  console.log(reviewFilter);
   switch (type) {
     case "home":
       resBody = await buildHttpRequest(CONST.host);
@@ -85,6 +86,7 @@ const startScraper = async ({
           ? `&filterByStar=${reviewFilter.filterByStar}`
           : ""
       }&pageNumber=${page ? page : 1}`;
+      // console.log(apiEndpoint);
       resBody = await buildHttpRequest(apiEndpoint);
       result = scrapeReviewPage(resBody);
       return result;
@@ -346,9 +348,7 @@ const scrapeProductDetailsPage = (body) => {
       product["availability"] = $("#outOfStock > span.a-text-bold")
         .text()
         .trim();
-    product["available"] = product["availability"].toLowerCase().includes("in")
-      ? true
-      : false;
+    product["available"] = $("#add-to-cart-button") ? true : false;
 
     let label, text;
     const tabularFeature = {};
@@ -421,6 +421,7 @@ const scrapeReviewPage = (body) => {
   const img = $('img[data-hook="cr-product-image"]').attr("src");
 
   const pname = $('a[data-hook="product-link"]').text().trim();
+
   const pasin = scrapeAsinFromLink(
     $('a[data-hook="product-link"]').attr("href")
   );
@@ -578,6 +579,7 @@ function scrapeCarousel(carousel, type = "a") {
 }
 
 function scrapeAsinFromLink(link) {
+  if (!link) return "";
   const str = link.split("/");
   let idx = -1;
   for (let i in str) {
@@ -613,7 +615,9 @@ function scrapePrice(body) {
       discountPrice = $("#listPrice").text();
     }
 
-    if (price && discountPrice) {
+    discountPrice = price > discountPrice ? discountPrice : "";
+
+    if (price && discountPrice && price < discountPrice) {
       discount = Math.round(
         (1 -
           parseFloat(price.substring(1)) /

@@ -23,20 +23,24 @@ export default function ReadMore(props) {
   };
   return (
     <>
-      {text.length < hideLen + 20 ? (
+      {text && text.length < hideLen + 20 ? (
         <span>{text}</span>
       ) : (
         <>
-          <span>{text.substring(0, hideLen)}</span>
-          <span className="dots">...</span>
-          <span className="more">{text}</span>
-          <br></br>
-          <span
-            className="read-more-less text-primary mt-2 "
-            onClick={(e) => handleText(e)}
-          >
-            Read more
-          </span>
+          {text && (
+            <>
+              <span>{text.substring(0, hideLen)}</span>
+              <span className="dots">...</span>
+              <span className="more">{text}</span>
+              <br></br>
+              <span
+                className="read-more-less text-primary mt-2 "
+                onClick={(e) => handleText(e)}
+              >
+                Read more
+              </span>
+            </>
+          )}
         </>
       )}
     </>

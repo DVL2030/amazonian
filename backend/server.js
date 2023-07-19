@@ -4,14 +4,14 @@ import dotenv from "dotenv";
 
 import userRouter from "./routers/userRouter.js";
 import amazonRouter from "./routers/amazonRouter.js";
-import Stripe from "stripe";
+
 import orderRouter from "./routers/orderRouter.js";
 import favRouter from "./routers/favouriteRouter.js";
 import adminRouter from "./routers/adminRouter.js";
+import stripeRouter from "./routers/stripeRouter.js";
+import productRouter from "./routers/productRouter.js";
 
 dotenv.config();
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const port = process.env.port || 5000;
 
@@ -25,27 +25,29 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 app.get("/", (req, res) => {});
 
-app.get("/api/config/key", (req, res) => {
-  res.send({ publicKey: process.env.STRIPE_USER_API });
-});
+// app.get("/api/config/key", (req, res) => {
+//   res.send({ publicKey: process.env.STRIPE_USER_API });
+// });
 
-app.post("/api/config/create-payment-intent", async (req, res) => {
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      currency: "USD",
-      amount: req.body.amount,
-      automatic_payment_methods: { enabled: true },
-    });
-    res.send({ clientSecret: paymentIntent.client_secret });
-  } catch (error) {
-    return res.status(400).send({
-      message: error.message,
-    });
-  }
-});
+// app.post("/api/config/create-payment-intent", async (req, res) => {
+//   try {
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       currency: "USD",
+//       amount: req.body.amount,
+//       automatic_payment_methods: { enabled: true },
+//     });
+//     res.send({ clientSecret: paymentIntent.client_secret });
+//   } catch (error) {
+//     return res.status(400).send({
+//       message: error.message,
+//     });
+//   }
+// });
 
 app.use("/api/users", userRouter);
+app.use("/api/stripe", stripeRouter);
 app.use("/api/amazon", amazonRouter);
+app.use("/api/product", productRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/favourite", favRouter);
 app.use("/api/admin", adminRouter);

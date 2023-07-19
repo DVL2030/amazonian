@@ -37,10 +37,10 @@ export default function ProductDetailsPage() {
       dispatch(getAsinFromDB(asin));
       if (!data && productError) {
         dispatch(getProductAsin(asin));
-        if (data) {
-          const save = { asin: asin, ...data };
-          dispatch(saveProduct(save));
-        }
+      }
+      if (data) {
+        const save = { asin: asin, ...data };
+        dispatch(saveProduct(save));
       }
     }
   }, [product, data, productError]);

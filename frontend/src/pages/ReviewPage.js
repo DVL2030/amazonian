@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row, Carousel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
@@ -10,20 +10,31 @@ import Rating from "../components/Rating";
 import SorryBox from "../components/SorryBox";
 import RatingHistogram from "../components/RatingHistogram";
 import Review from "../components/Review";
+import Paginate from "../components/Paginate";
 
 export default function ReviewPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const scrollTo = location.search.split("=")[1];
+  const param = useParams();
+  const { asin, page = 1 } = param;
 
   const amazonState = useSelector((state) => state.amazon);
   const { amazonReviews: data, loading, error } = amazonState;
 
-  const generateRefineURL = () => {};
+  const reviewFilter = useRef({});
 
-  const param = useParams();
-  const { asin, page = 1, reviewFilter = {} } = param;
+  const generateRefineURL = (filter) => {
+    reviewFilter.current = { ...reviewFilter.current, ...filter };
+
+    dispatch(
+      getProductReviews({
+        asin: asin,
+        page: page,
+        reviewFilter: reviewFilter.current,
+      })
+    );
+  };
 
   useEffect(() => {
     if (!asin) navigate("/");
@@ -32,10 +43,11 @@ export default function ReviewPage() {
         getProductReviews({
           asin: asin,
           page: page,
+          reviewFilter: reviewFilter.current,
         })
       );
     }
-  }, []);
+  }, [data, page]);
 
   return loading ? (
     <LoadingBox />
@@ -73,23 +85,7 @@ export default function ReviewPage() {
             </Col>
           </Row>
           <hr></hr>
-          {data.positive ||
-            (data.critical && (
-              <Row>
-                <Col xs={12} lg={9}>
-                  <div className="d-flex">
-                    <div className="top-positive">
-                      <h4>Top positive review </h4>
-                      <Review review={data.positive} />
-                    </div>
-                    <div className="top-negative">
-                      <h4>Top critical review </h4>
-                      <Review review={data.positive} />
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            ))}
+
           <Row>
             <Col xs={12} lg={9}>
               <div>
@@ -112,11 +108,11 @@ export default function ReviewPage() {
                           className="review sort"
                           onChange={(e) => {
                             navigate(
-                              generateRefineURL({ sortOrder: e.target.value })
+                              generateRefineURL({ sortBy: e.target.value })
                             );
                           }}
                         >
-                          <option value="top">Top reviews</option>
+                          <option value="helpful">Top reviews</option>
                           <option value="recent">Most recent</option>
                         </select>
                       </td>
@@ -126,28 +122,34 @@ export default function ReviewPage() {
                           onChange={(e) => {
                             navigate(
                               generateRefineURL({
-                                verifiedFilter: e.target.value,
+                                reviewerType: e.target.value,
                               })
                             );
                           }}
                         >
-                          <option value={false}>All reviewers</option>
-                          <option value={true}>Verified purchase only</option>
+                          <option value="all_reviews">All reviewers</option>
+                          <option value="avp_only_reviews">
+                            Verified purchase only
+                          </option>
                         </select>
                       </td>
                       <td className="filter">
                         <select
                           className="review"
                           onChange={(e) => {
-                            navigate("/");
+                            navigate(
+                              generateRefineURL({
+                                filterByStar: e.target.value,
+                              })
+                            );
                           }}
                         >
                           <option value="all_stars">All stars</option>
-                          <option value="5">5 star only</option>
-                          <option value="4">4 star only</option>
-                          <option value="3">3 star only</option>
-                          <option value="2">2 star only</option>
-                          <option value="1">1 star only</option>
+                          <option value="five_star">5 star only</option>
+                          <option value="four_star">4 star only</option>
+                          <option value="three_star">3 star only</option>
+                          <option value="two_star">2 star only</option>
+                          <option value="one_star">1 star only</option>
                           <option disabled role="separator"></option>
                           <option value="positive">All positive</option>
                           <option value="critical">All critical</option>
@@ -157,18 +159,11 @@ export default function ReviewPage() {
                         <select
                           className="review"
                           onChange={(e) => {
-                            navigate("/");
-                          }}
-                        >
-                          <option value="all">All formats</option>
-                          <option value="current_format">Only Variation</option>
-                        </select>
-                      </td>
-                      <td className="filter">
-                        <select
-                          className="review"
-                          onChange={(e) => {
-                            navigate("/");
+                            navigate(
+                              generateRefineURL({
+                                mediaType: e.target.value,
+                              })
+                            );
                           }}
                         >
                           <option value="all">Text, image, video</option>
@@ -212,6 +207,24 @@ export default function ReviewPage() {
                 ))}
               </div>
               <hr></hr>
+            </Col>
+          </Row>
+          <Row className="py-3">
+            <Col className="d-flex justify-content-center d-sm-none">
+              <Paginate
+                path={`product-reviews/${asin}`}
+                label={false}
+                page={Number(page)}
+                totalPage={data.totalPage}
+              ></Paginate>
+            </Col>
+            <Col className="d-none d-sm-flex justify-content-center">
+              <Paginate
+                path={`product-reviews/${asin}`}
+                label={true}
+                page={Number(page)}
+                totalPage={data.totalPage}
+              ></Paginate>
             </Col>
           </Row>
         </Container>

@@ -30,7 +30,6 @@ favRouter.post(
           review = review_exist;
         } else {
           review = await Review.create(item);
-          console.log(review);
         }
       }
 
@@ -57,7 +56,7 @@ favRouter.post(
           });
       }
 
-      return res.send({
+      return res.status(200).send({
         status: true,
       });
     } catch (error) {
@@ -74,14 +73,12 @@ favRouter.post(
   expressAsyncHandler(async (req, res) => {
     const { userId, id, type } = req.body;
 
-    console.log(id, type);
-
     try {
       const removeFromFav = await Favourite.updateOne(
         { userId: userId },
         { $pullAll: { [type]: [id] } }
       );
-      return res.send({
+      return res.status(200).send({
         status: true,
         message: "You have successfully removed your favourite item",
       });
@@ -112,8 +109,8 @@ favRouter.post(
           },
         },
       ]);
-
-      return res.send(products[0].products);
+      if (products.length === 0) return res.status(200).send([]);
+      else return res.status(200).send(products[0].products);
     } catch (error) {
       return res.status(401).send({
         message: error.message,
@@ -153,7 +150,7 @@ favRouter.post(
         favProds.push(json);
       }
 
-      return res.send(favProds);
+      return res.status(200).send(favProds);
     } catch (error) {
       return res.status(401).send({
         message: error.message,
@@ -182,7 +179,8 @@ favRouter.post(
         },
       ]);
 
-      return res.send(reviews[0].reviews);
+      if (reviews.length === 0) return res.status(200).send([]);
+      else return res.status(200).send(reviews[0].reviews);
     } catch (error) {
       return res.status(401).send({
         message: error.message,
@@ -211,7 +209,7 @@ favRouter.post(
         },
       ]);
 
-      return res.send(reviews[0].reviews);
+      return res.status(200).send(reviews[0].reviews);
     } catch (error) {
       return res.status(401).send({
         message: error.message,
