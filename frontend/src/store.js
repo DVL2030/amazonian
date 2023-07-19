@@ -9,6 +9,7 @@ import orderSlice from "./slice/orderSlice";
 import favouriteSlice from "./slice/favouriteSlice";
 import stripeSlice from "./slice/stripeSlice";
 import adminSlice from "./slice/adminSlice";
+import productSlice from "./slice/productSlice";
 
 const initialState = {
   userAuth: {
@@ -40,6 +41,7 @@ export const store = configureStore({
     userRegister: userRegisterSlice,
     user: userSlice,
     amazon: amazonSlice,
+    product: productSlice,
     cart: cartSlice,
     order: orderSlice,
     favourite: favouriteSlice,

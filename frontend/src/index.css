@@ -995,6 +995,9 @@ div.active > i {
   font-weight: 600;
   padding: 1rem;
 }
+li.ps-menuitem-root a {
+  color: inherit;
+}
 
 li.ps-menuitem-root:hover,
 .admin-dashboard-toggle:hover {

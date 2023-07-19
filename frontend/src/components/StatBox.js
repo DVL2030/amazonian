@@ -2,31 +2,38 @@ import React from "react";
 import { Donut, DonutValue } from "react-donut-component";
 
 export default function StatBox(props) {
-  const { icon, number, label, chart, increase } = props;
+  const { icon, number, label, percentage, showDonut = true } = props;
 
   return (
     <div className="stat-box">
       <div className="d-flex justify-content-between align-items-center">
         <div>
-          <div>
-            <i className={`${icon} fa-2xl`} alt="icon"></i>
-          </div>
-          <div className="my-3">
-            <b style={{ color: "#154c79" }}>+{number}</b>
-          </div>
-          <div>
-            <span className="text-success">{label}</span>
-          </div>
+          {icon && (
+            <div>
+              <i className={`${icon} fa-2xl`} alt="icon"></i>
+            </div>
+          )}
+          {number && (
+            <div className="my-3">
+              <b style={{ color: "#154c79" }}>{number}</b>
+            </div>
+          )}
+
+          {label && (
+            <div>
+              <span className="text-success">{label}</span>
+            </div>
+          )}
         </div>
-        <div>
+        <div className={showDonut ? "d-block" : "d-none"}>
           <Donut
             size={100}
-            indicatorColor="#646496"
+            indicatorColor="#3c3f73"
             strokeWidth={10}
-            trackColor="#4A90E2"
+            trackColor="#dfdff1"
             linecap="round"
           >
-            <DonutValue>{increase}</DonutValue>
+            <DonutValue>{percentage}</DonutValue>
           </Donut>
         </div>
       </div>

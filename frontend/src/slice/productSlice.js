@@ -4,6 +4,7 @@ import Axios from "axios";
 
 const initialState = {
   product: null,
+  succees: false,
   loading: false,
   error: null,
 };
@@ -14,6 +15,23 @@ export const getProductAsin = createAsyncThunk(
     try {
       const res = await Axios.post("/api/amazon/productAsin", { asin: asin });
 
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
+export const saveProduct = createAsyncThunk(
+  "product/saveProduct",
+  async (product, { rejectWithValue }) => {
+    console.log(product);
+    try {
+      const res = await Axios.post("/api/product/save", { product: product });
       return res.data;
     } catch (error) {
       return rejectWithValue(
@@ -39,6 +57,18 @@ const productSlice = createSlice({
       state.product = action.payload;
     });
     builder.addCase(getProductAsin.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(saveProduct.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(saveProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.succees = action.payload;
+    });
+    builder.addCase(saveProduct.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

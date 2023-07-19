@@ -197,22 +197,22 @@ function App() {
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/admin/manage/orders">
+                                <Link to="/admin/orders">
                                   <span> Manage Orders</span>
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/admin/manage/orders">
+                                <Link to="/admin/orders">
                                   <span>Manage Products</span>
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/admin/manage/reviews">
+                                <Link to="/admin/reviews">
                                   <span>Manage Reviews</span>
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/admin/manage/users">
+                                <Link to="/admin/users">
                                   <span>Manage Users</span>
                                 </Link>
                               </li>
@@ -360,7 +360,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/manage/orders"
+            path="/admin/orders"
             exact
             element={
               <AdminRoute>
@@ -369,7 +369,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/manage/products"
+            path="/admin/products"
             exact
             element={
               <AdminRoute>
@@ -378,7 +378,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/manage/reviews"
+            path="/admin/reviews"
             exact
             element={
               <AdminRoute>
@@ -387,7 +387,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/manage/users"
+            path="/admin/users"
             exact
             element={
               <AdminRoute>

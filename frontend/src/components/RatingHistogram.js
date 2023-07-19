@@ -10,11 +10,10 @@ export default function RatingHistogram(props) {
           <span>5 star</span>
           <div className="rating-bar">
             <div
-              className={distribution[5] === 0 ? "zero" : ""}
-              style={{ width: `${distribution[5]}` }}
+              style={{ width: `${distribution[5] ? distribution[5] : "0"}` }}
             ></div>
           </div>
-          <span>{distribution[5] ? distribution[5] : "0"}</span>
+          <span>{distribution[5]}</span>
         </Link>
       </div>
       <div className="rating-progress-bar">
@@ -22,11 +21,10 @@ export default function RatingHistogram(props) {
           <span>4 star</span>
           <div className="rating-bar">
             <div
-              className={distribution[4] === 0 ? "zero" : ""}
-              style={{ width: `${distribution[4]}` }}
+              style={{ width: `${distribution[4] ? distribution[4] : "0"}` }}
             ></div>
           </div>
-          <span>{distribution[4] ? distribution[4] : "0"}</span>
+          <span>{distribution[4]}</span>
         </Link>
       </div>
       <div className="rating-progress-bar">
@@ -34,7 +32,6 @@ export default function RatingHistogram(props) {
           <span>3 star</span>
           <div className="rating-bar">
             <div
-              className={distribution[3] === 0 ? "zero" : ""}
               style={{ width: `${distribution[3] ? distribution[3] : "0"}` }}
             ></div>
           </div>
@@ -46,7 +43,6 @@ export default function RatingHistogram(props) {
           <span>2 star</span>
           <div className="rating-bar">
             <div
-              className={distribution[2] === 0 ? "zero" : ""}
               style={{ width: `${distribution[2] ? distribution[2] : "0"}` }}
             ></div>
           </div>
@@ -58,7 +54,6 @@ export default function RatingHistogram(props) {
           <span>1 star</span>
           <div className="rating-bar">
             <div
-              className={distribution[1] === 0 ? "zero" : ""}
               style={{ width: `${distribution[1] ? distribution[1] : "0"}` }}
             ></div>
           </div>

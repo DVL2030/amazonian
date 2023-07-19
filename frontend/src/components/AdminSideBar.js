@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 
-export default function AdminSideBar() {
+export default function AdminSideBar(props) {
   const userState = useSelector((state) => state.userAuth);
   const { userInfo } = userState;
+
+  const path = window.location.pathname.split("/")[2];
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -60,46 +62,97 @@ export default function AdminSideBar() {
             <h5>{userInfo.name}</h5>
           </div>
         </div>
-
-        <MenuItem active icon={<i className="fa-solid fa-house"></i>}>
-          Dashboard
-        </MenuItem>
+        <Link to="/admin/dashboard">
+          <MenuItem
+            active={path === "dashboard"}
+            icon={<i className="fa-solid fa-house"></i>}
+          >
+            Dashboard
+          </MenuItem>
+        </Link>
 
         <div className="text-center my-3">
           <span className="text-secondary">Data</span>
         </div>
-        <MenuItem icon={<i className="fa-solid fa-receipt"></i>}>
-          Orders
-        </MenuItem>
-        <MenuItem icon={<i className="fa-solid fa-users"></i>}>Users</MenuItem>
-        <MenuItem icon={<i className="fa-solid fa-boxes-stacked"></i>}>
-          Products
-        </MenuItem>
-        <MenuItem icon={<i className="fa-solid fa-comment"></i>}>
-          Reviews
-        </MenuItem>
+        <Link to="/admin/orders">
+          <MenuItem
+            active={path === "orders"}
+            icon={<i className="fa-solid fa-receipt"></i>}
+          >
+            Orders
+          </MenuItem>
+        </Link>
+        <Link to="/admin/users">
+          <MenuItem
+            active={path === "users"}
+            icon={<i className="fa-solid fa-users"></i>}
+          >
+            Users
+          </MenuItem>
+        </Link>
+        <Link to="/admin/products">
+          <MenuItem
+            active={path === "products"}
+            icon={<i className="fa-solid fa-boxes-stacked"></i>}
+          >
+            Products
+          </MenuItem>
+        </Link>
 
+        <Link to="/admin/reviews">
+          <MenuItem
+            active={path === "reviews"}
+            icon={<i className="fa-solid fa-comment"></i>}
+          >
+            Reviews
+          </MenuItem>
+        </Link>
         <div className="text-center my-3">
           <span className="text-secondary">Others</span>
         </div>
-        <MenuItem icon={<i className="fa-solid fa-calendar-days"></i>}>
-          Calendar
-        </MenuItem>
-        <MenuItem icon={<i className="fa-brands fa-servicestack"></i>}>
-          Examples
-        </MenuItem>
+        <Link to="/admin/calendar">
+          <MenuItem
+            active={path === "calendar"}
+            icon={<i className="fa-solid fa-calendar-days"></i>}
+          >
+            Calendar
+          </MenuItem>
+        </Link>
+        <Link to="/admin/examples">
+          <MenuItem
+            active={path === "examples"}
+            icon={<i className="fa-brands fa-servicestack"></i>}
+          >
+            Examples
+          </MenuItem>
+        </Link>
         <div className="text-center my-3">
           <span className="text-secondary">Charts</span>
         </div>
-        <MenuItem icon={<i className="fa-solid fa-chart-column"></i>}>
-          Bar Chart
-        </MenuItem>
-        <MenuItem icon={<i className="fa-solid fa-chart-pie"></i>}>
-          Pie Chart
-        </MenuItem>
-        <MenuItem icon={<i className="fa-solid fa-chart-line"></i>}>
-          Line Chart
-        </MenuItem>
+        <Link to="/admin/bar">
+          <MenuItem
+            active={path === "bar"}
+            icon={<i className="fa-solid fa-chart-column"></i>}
+          >
+            Bar Chart
+          </MenuItem>
+        </Link>
+        <Link to="/admin/pie">
+          <MenuItem
+            active={path === "pie"}
+            icon={<i className="fa-solid fa-chart-pie"></i>}
+          >
+            Pie Chart
+          </MenuItem>
+        </Link>
+        <Link to="/admin/line">
+          <MenuItem
+            active={path === "line"}
+            icon={<i className="fa-solid fa-chart-line"></i>}
+          >
+            Line Chart
+          </MenuItem>
+        </Link>
       </Menu>
     </Sidebar>
   );

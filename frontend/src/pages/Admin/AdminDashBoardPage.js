@@ -15,45 +15,9 @@ export default function AdminDashBoardPage() {
   const adminState = useSelector((state) => state.admin);
   const { dashboard, loading, error } = adminState;
 
-  const data = [
-    ["Month", "Sales", "Expenses", "Profit"],
-    [
-      "Feb",
-      dashboard.monthly_revenue[2].sum * 1.5,
-      dashboard.monthly_revenue[2].sum * 1.5 * 0.7,
-      dashboard.monthly_revenue[2].sum * 1.5 * 0.3,
-    ],
-    [
-      "Mar",
-      dashboard.monthly_revenue[1].sum * 0.5,
-      dashboard.monthly_revenue[1].sum * 0.5 * 0.7,
-      dashboard.monthly_revenue[1].sum * 0.5 * 0.3,
-    ],
-    [
-      "Apr",
-      dashboard.monthly_revenue[0].sum * 2,
-      dashboard.monthly_revenue[0].sum * 2 * 0.7,
-      dashboard.monthly_revenue[0].sum * 2 * 0.3,
-    ],
-    [
-      "May",
-      dashboard.monthly_revenue[2].sum,
-      dashboard.monthly_revenue[2].sum * 0.7,
-      dashboard.monthly_revenue[2].sum * 0.3,
-    ],
-    [
-      "June",
-      dashboard.monthly_revenue[1].sum,
-      dashboard.monthly_revenue[1].sum * 0.7,
-      dashboard.monthly_revenue[1].sum * 0.3,
-    ],
-    [
-      "Jul",
-      dashboard.monthly_revenue[0].sum,
-      dashboard.monthly_revenue[0].sum * 0.7,
-      dashboard.monthly_revenue[0].sum * 0.3,
-    ],
-  ];
+  const data = dashboard
+    ? [["Month", "Sales", "Expenses", "Profit"], ...dashboard.monthly_incomes]
+    : [];
 
   const options = {
     chart: {
