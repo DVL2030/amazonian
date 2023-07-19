@@ -23,8 +23,6 @@ export default function ProductDetails(props) {
 
   const { data, asin, fav } = props;
 
-  console.log(fav);
-
   const [qty, setQty] = useState(1);
 
   const userAuthState = useSelector((state) => state.userAuth);

@@ -14,7 +14,7 @@ export default function RatingHistogram(props) {
               style={{ width: `${distribution[5]}` }}
             ></div>
           </div>
-          <span>{distribution[5]}</span>
+          <span>{distribution[5] ? distribution[5] : "0"}</span>
         </Link>
       </div>
       <div className="rating-progress-bar">
@@ -26,7 +26,7 @@ export default function RatingHistogram(props) {
               style={{ width: `${distribution[4]}` }}
             ></div>
           </div>
-          <span>{distribution[4]}</span>
+          <span>{distribution[4] ? distribution[4] : "0"}</span>
         </Link>
       </div>
       <div className="rating-progress-bar">
@@ -35,7 +35,7 @@ export default function RatingHistogram(props) {
           <div className="rating-bar">
             <div
               className={distribution[3] === 0 ? "zero" : ""}
-              style={{ width: `${distribution[3]}` }}
+              style={{ width: `${distribution[3] ? distribution[3] : "0"}` }}
             ></div>
           </div>
           <span>{distribution[3]}</span>
@@ -47,7 +47,7 @@ export default function RatingHistogram(props) {
           <div className="rating-bar">
             <div
               className={distribution[2] === 0 ? "zero" : ""}
-              style={{ width: `${distribution[2]}` }}
+              style={{ width: `${distribution[2] ? distribution[2] : "0"}` }}
             ></div>
           </div>
           <span>{distribution[2]}</span>

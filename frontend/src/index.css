@@ -1,3 +1,14 @@
+:root {
+  --main-theme-orange: #f08804;
+  --main-anchor-dark: rgb(88, 88, 88);
+  --main-anchor-blue: #cbd7e6;
+  --main-theme-lightblue: #aad7df;
+  --main-theme-aqua: #aad7df;
+  --main-footer-blue: #232f3e;
+  --main-footer-darkblue: #131a22;
+  --main-theme-lightgrey: #fbfbfb;
+}
+
 html {
   box-sizing: border-box;
   scroll-behavior: smooth;
@@ -27,7 +38,7 @@ code {
    Header
    ==========================================*/
 
-#search-nav-container > *:not(#search-form) {
+#search-nav-container > *:not(.search-form) {
   padding: 0.1rem 0.2rem;
   margin-right: 0.5rem;
   border: 0.15rem solid transparent;
@@ -38,7 +49,7 @@ button.search {
   position: relative;
   margin: 0;
   padding: 0;
-  background-color: #f08804;
+  background-color: var(--main-theme-orange);
   border: none;
   border-radius: 0 0.3rem 0.3rem 0;
   width: 4rem;
@@ -52,8 +63,8 @@ button.search {
   cursor: pointer;
 }
 
-#search-input {
-  border-radius: 0 0.3rem 0.3rem 0;
+.search-input {
+  /* border-radius: 0 0.3rem 0.3rem 0; */
 }
 
 .fa-opencart {
@@ -66,7 +77,7 @@ button.search {
   right: 4.7rem;
   /* top: 0.2rem; */
   justify-content: center;
-  color: #f08804;
+  color: var(--main-theme-orange);
   font-weight: 800;
 }
 
@@ -125,7 +136,7 @@ button.search {
 
 .drop-down-list a:hover span {
   text-decoration: underline;
-  color: #f08804;
+  color: var(--main-theme-orange);
 }
 
 .drop-down-list li {
@@ -169,11 +180,11 @@ footer {
 }
 
 footer#footer1 {
-  background-color: #232f3e;
+  background-color: var(--main-footer-blue);
 }
 
 footer#footer2 {
-  background-color: #131a22;
+  background-color: var(--main-footer-darkblue);
 }
 
 footer a:hover,
@@ -434,21 +445,11 @@ div.img-carousel {
 
 .crd-body {
   flex: 1;
-  /* background-color: #f08804; */
-}
-
-.crd-body img {
-  /* height: 95%; */
-  /* max-height: 95%; */
-  /* max-width: 100%; */
-  /* width: 100%; */
 }
 
 .card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* overflow: hidden; */
-  /* column-gap: 0.5rem; */
   gap: 1.5rem 1rem;
   margin: 0;
   padding: 0;
@@ -987,6 +988,25 @@ div.active > i {
   text-decoration: underline;
 }
 
+.admin-dashboard-header {
+  text-align: center;
+  color: #13395e;
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+li.ps-menuitem-root:hover,
+.admin-dashboard-toggle:hover {
+  color: var(--main-theme-orange);
+}
+
+.stat-box {
+  background-color: var(--main-theme-lightgrey);
+  padding: 2rem;
+  color: #33466b;
+}
+
 /* =====================================================================================
    Responsive Layout
    ===================================================================================== */
@@ -1095,7 +1115,7 @@ div.active > i {
     font-size: 90%;
   }
 
-  #search-nav-container > *:not(#search-form):hover {
+  #search-nav-container > *:not(.search-form):hover {
     border: 0.15rem solid #ffffff;
   }
   #nav-cart-count {

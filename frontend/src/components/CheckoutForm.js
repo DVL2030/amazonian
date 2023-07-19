@@ -1,11 +1,12 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { createOrder } from "../slice/orderSlice";
+import MessageBox from "./MessageBox";
 
-export default function CheckoutForm() {
+export default function CheckoutForm(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const stripe = useStripe();
@@ -88,7 +89,14 @@ export default function CheckoutForm() {
       >
         <span id="button-text">{isProcessing ? "Processing" : "Pay now"}</span>
       </button>
-      {message && <div id="payment-message">{message}</div>}
+
+      {message && (
+        <MessageBox
+          variants={message.includes("succeeded") ? "success" : "danger"}
+        >
+          {message}
+        </MessageBox>
+      )}
     </form>
   );
 }

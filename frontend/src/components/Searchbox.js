@@ -35,15 +35,13 @@ export default function Searchbox(props) {
       {mobile ? (
         <Container fluid className="d-block d-md-none mt-2 mb-2">
           <Form
-            id="search-form"
-            className="d-flex flex-fill"
+            className="search-form d-flex flex-fill"
             onSubmit={searchSubmitHandler}
           >
             <Form.Control
-              id="search-input"
               type="search"
               placeholder="Search"
-              className="me-2"
+              className="search-input me-2"
               aria-label="Search"
               onChange={(e) => setKeyword(e.target.value)}
             />
@@ -54,8 +52,7 @@ export default function Searchbox(props) {
         </Container>
       ) : (
         <Form
-          id="search-form"
-          className="nav-center d-flex flex-fill d-none d-md-flex "
+          className="search-form nav-center d-flex flex-fill d-none d-md-flex "
           onSubmit={searchSubmitHandler}
         >
           <Form.Select
@@ -96,10 +93,9 @@ export default function Searchbox(props) {
             <option value="fashion-womens">Women's Fashion</option>
           </Form.Select>
           <Form.Control
-            id="search-input"
             type="search"
             placeholder="Search"
-            className="me-2"
+            className="search-input me-2"
             aria-label="Search"
             onChange={(e) => setKeyword(e.target.value)}
           />

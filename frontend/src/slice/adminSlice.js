@@ -4,6 +4,10 @@ import Axios from "axios";
 
 const initialState = {
   dashboard: null,
+  order: null,
+  user: null,
+  review: null,
+  product: null,
   loading: false,
   error: null,
 };
@@ -32,6 +36,54 @@ export const getDashboardOverview = createAsyncThunk(
   }
 );
 
+export const getAdminOrderOverView = createAsyncThunk(
+  "admin/getAdminOrderOverView",
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      userAuth: { userInfo },
+    } = getState();
+    try {
+      const res = await Axios({
+        method: "post",
+        url: "/api/admin/order",
+        data: { user: userInfo },
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
+export const getAdminUserOverView = createAsyncThunk(
+  "admin/getAdminUserOverView",
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      userAuth: { userInfo },
+    } = getState();
+    try {
+      const res = await Axios({
+        method: "post",
+        url: "/api/admin/user",
+        data: { user: userInfo },
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -46,6 +98,30 @@ const adminSlice = createSlice({
       state.dashboard = action.payload;
     });
     builder.addCase(getDashboardOverview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getAdminOrderOverView.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getAdminOrderOverView.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.order = action.payload;
+    });
+    builder.addCase(getAdminOrderOverView.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getAdminUserOverView.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getAdminUserOverView.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.user = action.payload;
+    });
+    builder.addCase(getAdminUserOverView.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

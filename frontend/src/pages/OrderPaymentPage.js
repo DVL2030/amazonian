@@ -8,6 +8,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../components/CheckoutForm";
 import axios from "axios";
+import { createIntent, getStripeKey } from "../slice/stripeSlice";
 
 export default function OrderPaymentPage(props) {
   const dispatch = useDispatch();
@@ -17,32 +18,27 @@ export default function OrderPaymentPage(props) {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
-  const cartState = useSelector((state) => state.cart);
-  const { orderInfo } = cartState;
-
   const orderState = useSelector((state) => state.order);
   const { createOrder, loading, error } = orderState;
 
-  useEffect(() => {
-    axios.get("/api/config/key").then(async (r) => {
-      const { publicKey } = r.data;
-      setStripePromise(loadStripe(publicKey));
-    });
-  }, []);
+  const stripeState = useSelector((state) => state.stripe);
+  const { key, secret, loading: stripeLoading } = stripeState;
 
   useEffect(() => {
-    if (orderInfo)
-      axios
-        .post("/api/config/create-payment-intent", {
-          amount: parseInt(orderInfo.final),
-        })
-        .then(async (r) => {
-          const { clientSecret } = r.data;
-          setClientSecret(clientSecret);
-        });
-
     if (createOrder) navigate(`/ordersummary/${createOrder._id}`);
-  }, [orderInfo, createOrder]);
+  }, [createOrder]);
+
+  useEffect(() => {
+    if (!key) dispatch(getStripeKey());
+    else if (key) setStripePromise(loadStripe(key.publicKey));
+    if (!secret && !stripeLoading) {
+      const final = parseInt(
+        JSON.parse(localStorage.getItem("orderInfo")).final
+      );
+      dispatch(createIntent({ amount: final }));
+    } else if (secret) setClientSecret(secret.clientSecret);
+  }, [key, secret]);
+
   return (
     <div className="payment-main-container">
       <ProgressBar p1 p2 p3 p4="active"></ProgressBar>

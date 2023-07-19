@@ -6,10 +6,10 @@ export default function ReadMore(props) {
 
   const handleText = (e) => {
     e.preventDefault();
-    const div = e.currentTarget.parentNode.children;
-    let dots = div[1];
-    let moreText = div[2];
-    let handler = div[3];
+    const target = e.currentTarget.parentNode.children;
+    let dots = target[1];
+    let moreText = target[2];
+    let handler = target[3];
 
     if (dots.style.display === "none") {
       dots.style.display = "inline";
@@ -22,7 +22,7 @@ export default function ReadMore(props) {
     }
   };
   return (
-    <div>
+    <>
       {text.length < hideLen + 20 ? (
         <span>{text}</span>
       ) : (
@@ -30,14 +30,15 @@ export default function ReadMore(props) {
           <span>{text.substring(0, hideLen)}</span>
           <span className="dots">...</span>
           <span className="more">{text}</span>
-          <div
+          <br></br>
+          <span
             className="read-more-less text-primary mt-2 "
             onClick={(e) => handleText(e)}
           >
             Read more
-          </div>
+          </span>
         </>
       )}
-    </div>
+    </>
   );
 }

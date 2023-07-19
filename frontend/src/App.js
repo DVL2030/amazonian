@@ -49,6 +49,8 @@ function App() {
     navigate("/");
   };
 
+  useEffect(() => {}, [cartItems]);
+
   return (
     <div className="App">
       <header>
@@ -238,11 +240,11 @@ function App() {
             </Nav>
             <Nav>
               <Nav.Link
-                href="/signin"
+                href={userInfo ? "/user/home" : "/signin"}
                 className="nav-right-item d-flex d-md-none gap-1"
               >
                 <span className="nav-line-1 d-none d-sm-block">
-                  <small>Sign in </small>
+                  <small>{userInfo ? userInfo.name : "Sign in"} </small>
                 </span>
                 <span className="d-none d-sm-block">
                   <i className="fa-solid fa-arrow-right fa-2xs text-white"></i>

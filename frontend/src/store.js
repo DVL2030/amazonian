@@ -7,6 +7,8 @@ import historySlice from "./slice/historySlice";
 import userSlice from "./slice/userSlice";
 import orderSlice from "./slice/orderSlice";
 import favouriteSlice from "./slice/favouriteSlice";
+import stripeSlice from "./slice/stripeSlice";
+import adminSlice from "./slice/adminSlice";
 
 const initialState = {
   userAuth: {
@@ -41,6 +43,8 @@ export const store = configureStore({
     cart: cartSlice,
     order: orderSlice,
     favourite: favouriteSlice,
+    stripe: stripeSlice,
+    admin: adminSlice,
   },
   preloadedState: initialState,
 });
