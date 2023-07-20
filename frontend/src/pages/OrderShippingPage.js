@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ProgressBar from "../components/ProgressBar";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import { getAddress } from "../slice/userSlice";
 import { saveShippingAddress } from "../slice/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -67,37 +67,51 @@ export default function OrderShippingPage() {
         <Row className="p-0">
           {address && (
             <Col xs={12}>
-              <div>
+              <div className="my-4">
                 <h3>Your addresses</h3>
               </div>
               <Container>
                 <Row>
-                  <Col xs={4}>
+                  <Col xs={6} sm={4} lg={3}>
                     <Link
-                      className="box shipping add-new"
+                      // className="box shipping add-new"
                       to="/user/address/add?redirect=/shipping"
                     >
-                      <i className="fa-solid fa-plus text-secondary fa-2xl"></i>
-                      <h2 className="text-secondary">Add Address</h2>
+                      <Card className="box shipping add-new text-center">
+                        <Card.Body className="d-flex justify-content-center flex-column">
+                          <i className="fa-solid fa-plus text-secondary fa-2xl"></i>
+                          <Card.Title className="my-2 text-muted">
+                            Add Address
+                          </Card.Title>
+                        </Card.Body>
+                      </Card>
                     </Link>
                   </Col>
                   {address.length !== 0 &&
                     address.map((a, idx) => (
-                      <Col md={12} lg={4} key={idx} className="">
-                        <div
+                      <Col xs={6} sm={4} lg={3} key={idx} className="">
+                        <Card
                           data-index={idx}
                           className="box shipping use-old"
                           onClick={() => changeAddress(idx)}
                         >
-                          <h5>{a.fullName}</h5>
-                          <span>{a.address1} </span> <span>{a.address2}</span>
-                          <br></br>
-                          <span>{a.city}, </span>
-                          <span>{a.province}, </span>
-                          <span>{a.postalCode},</span>
-                          <br></br>
-                          <span>{a.country}</span>
-                        </div>
+                          <Card.Body>
+                            <Card.Title>{a.fullName}</Card.Title>
+                            <Card.Subtitle className="mb-2 text-muted">
+                              Amazon Default
+                            </Card.Subtitle>
+                            <Card.Text>
+                              <span>{a.address1} </span>{" "}
+                              <span>{a.address2}</span>
+                              <br></br>
+                              <span>{a.city}, </span>
+                              <span>{a.province}, </span>
+                              <span>{a.postalCode},</span>
+                              <br></br>
+                              <span>{a.country}</span>
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
                       </Col>
                     ))}
                 </Row>

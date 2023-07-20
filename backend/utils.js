@@ -35,7 +35,7 @@ export const isAuth = (req, res, next) => {
       }
     );
   } else {
-    return res.status(401).send({ message: "No Token." });
+    return res.status(401).send({ message: "Not logged in." });
   }
 };
 

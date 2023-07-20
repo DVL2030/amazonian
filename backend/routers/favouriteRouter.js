@@ -125,9 +125,9 @@ favRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-    const id = new mongoose.Types.ObjectId(userId);
 
     try {
+      const id = new mongoose.Types.ObjectId(userId);
       const products = await Favourite.aggregate([
         { $match: { userId: id } },
         {
@@ -165,9 +165,9 @@ favRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-    const id = new mongoose.Types.ObjectId(userId);
 
     try {
+      const id = new mongoose.Types.ObjectId(userId);
       const reviews = await Favourite.aggregate([
         { $match: { userId: id } },
         {
@@ -195,9 +195,9 @@ favRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-    const id = new mongoose.Types.ObjectId(userId);
 
     try {
+      const id = new mongoose.Types.ObjectId(userId);
       const reviews = await Favourite.aggregate([
         { $match: { userId: id } },
         {

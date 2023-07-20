@@ -21,6 +21,7 @@ export default function ProductDetailsPage() {
     product,
     loading: productLoading,
     error: productError,
+    success,
   } = productState;
 
   const amazonState = useSelector((state) => state.amazon);
@@ -28,12 +29,12 @@ export default function ProductDetailsPage() {
 
   useEffect(() => {
     if (!asin) navigate("/");
-    if (!product) {
+    if (!product && !productLoading) {
       dispatch(getAsinFromDB(asin));
-      if (!data && productError) {
+      if (!data && productError && !loading) {
         dispatch(getProductAsin(asin));
       }
-      if (data) {
+      if (data && !success) {
         const save = { asin: asin, ...data };
         dispatch(saveProduct(save));
       }
