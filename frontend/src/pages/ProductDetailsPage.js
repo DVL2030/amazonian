@@ -7,7 +7,6 @@ import MessageBox from "../components/MessageBox";
 import LoadingBox from "../components/LoadingBox";
 import SorryBox from "../components/SorryBox";
 import ProductDetails from "../components/ProductDetails";
-import { getFavouriteAsins } from "../slice/favouriteSlice";
 import { getAsinFromDB, saveProduct } from "../slice/productSlice";
 
 export default function ProductDetailsPage() {
@@ -27,12 +26,8 @@ export default function ProductDetailsPage() {
   const amazonState = useSelector((state) => state.amazon);
   const { amazonProductAsin: data, loading, error } = amazonState;
 
-  const favState = useSelector((state) => state.favourite);
-  const { favAsins } = favState;
-
   useEffect(() => {
     if (!asin) navigate("/");
-    dispatch(getFavouriteAsins());
     if (!product) {
       dispatch(getAsinFromDB(asin));
       if (!data && productError) {
@@ -52,12 +47,8 @@ export default function ProductDetailsPage() {
   ) : (
     <div>
       {error && <MessageBox variants="danger">{error}</MessageBox>}
-      {(data || product) && favAsins && (
-        <ProductDetails
-          data={product || data}
-          asin={asin}
-          fav={favAsins.filter((f) => f.asin === asin)}
-        ></ProductDetails>
+      {(data || product) && (
+        <ProductDetails data={product || data} asin={asin}></ProductDetails>
       )}
     </div>
   );

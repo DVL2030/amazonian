@@ -13,7 +13,8 @@ export default function Searchbox(props) {
   const adjustWidth = () => {
     let select = document.getElementById("search-select");
     let selectedOption = select[select.selectedIndex];
-    select.style.width = Number(selectedOption.text.length + 6) + "ch";
+    let calcWidth = Number(selectedOption.text.length) + 7;
+    select.style.width = calcWidth + "ch";
   };
 
   const selectChange = (value) => {

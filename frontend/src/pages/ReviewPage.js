@@ -209,24 +209,6 @@ export default function ReviewPage() {
               <hr></hr>
             </Col>
           </Row>
-          <Row className="py-3">
-            <Col className="d-flex justify-content-center d-sm-none">
-              <Paginate
-                path={`product-reviews/${asin}`}
-                label={false}
-                page={Number(page)}
-                totalPage={data.totalPage}
-              ></Paginate>
-            </Col>
-            <Col className="d-none d-sm-flex justify-content-center">
-              <Paginate
-                path={`product-reviews/${asin}`}
-                label={true}
-                page={Number(page)}
-                totalPage={data.totalPage}
-              ></Paginate>
-            </Col>
-          </Row>
         </Container>
       ) : (
         <></>

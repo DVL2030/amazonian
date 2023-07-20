@@ -11,6 +11,7 @@ const favRouter = express.Router();
 
 favRouter.post(
   "/add",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId, item, type } = req.body;
 
@@ -57,7 +58,7 @@ favRouter.post(
       }
 
       return res.status(200).send({
-        status: true,
+        message: `Successfully add ${type} to your favourite!`,
       });
     } catch (error) {
       return res.status(401).send({
@@ -72,7 +73,7 @@ favRouter.post(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { userId, id, type } = req.body;
-
+    console.log(id);
     try {
       const removeFromFav = await Favourite.updateOne(
         { userId: userId },
@@ -207,9 +208,20 @@ favRouter.post(
             as: "reviews",
           },
         },
+        {
+          $project: {
+            _id: "$reviews._id",
+            id: "$reviews.id",
+          },
+        },
       ]);
+      const favReviews = [];
+      for (let i = 0; i < reviews[0]._id.length; i++) {
+        let json = { _id: reviews[0]._id[i], id: reviews[0].id[i] };
+        favReviews.push(json);
+      }
 
-      return res.status(200).send(reviews[0].reviews);
+      return res.status(200).send(favReviews);
     } catch (error) {
       return res.status(401).send({
         message: error.message,

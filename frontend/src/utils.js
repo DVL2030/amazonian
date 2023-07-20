@@ -103,7 +103,7 @@ export const filterProductSearch = (data, filter) => {
   return { totalPage: data.totalPage, items: temp };
 };
 
-// Constants
+// CONSTANTS
 export const baseRate = 11.99;
 export const options = [
   { price: baseRate, date: addDays(2), label: "Standard Shipping" },

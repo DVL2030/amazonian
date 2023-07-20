@@ -3,65 +3,51 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 
 const initialState = {
-  success: false,
-  favProducts: [],
-  favProduct: null,
-  favAsins: [],
-  favReviews: [],
-  favReview: null,
+  favProducts: null,
+  favAsins: null,
+  favReviews: null,
+  favReviewIds: null,
   loading: false,
   error: null,
 };
 
-export const addItemToFavourite = createAsyncThunk(
-  "favourite/addItemToFavourite",
-  async (param, { getState, rejectWithValue }) => {
-    const {
-      userAuth: { userInfo },
-    } = getState();
-    try {
-      const { item, type } = param;
-      const res = await Axios({
-        method: "post",
-        url: "/api/favourite/add",
-        data: { userId: userInfo._id, item: item, type: type },
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      );
-    }
-  }
-);
+export const addItemToFavourite = async (userInfo, item, type) => {
+  try {
+    const res = await Axios({
+      method: "post",
+      url: "/api/favourite/add",
+      data: { userId: userInfo._id, item: item, type: type },
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    return res.data;
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
 
-export const removeItemFromFavourite = createAsyncThunk(
-  "favourite/removeItemFromFavourite",
-  async (param, { getState, rejectWithValue }) => {
-    const {
-      userAuth: { userInfo },
-    } = getState();
-    try {
-      const { id, type } = param;
-      const res = await Axios({
-        method: "post",
-        url: "/api/favourite/remove",
-        data: { userId: userInfo._id, id: id, type: type },
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      );
-    }
+    throw new Error(message);
   }
-);
+};
+
+export const removeItemFromFavourite = async (userInfo, id, type) => {
+  try {
+    const res = await Axios({
+      method: "post",
+      url: "/api/favourite/remove",
+      data: { userId: userInfo._id, id: id, type: type },
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    return res.data;
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    throw new Error(message);
+  }
+};
 
 export const getFavouriteProductList = createAsyncThunk(
   "favourite/getFavouriteProducts",
@@ -86,29 +72,7 @@ export const getFavouriteProductList = createAsyncThunk(
     }
   }
 );
-export const getFavouriteProduct = createAsyncThunk(
-  "favourite/getFavouriteProduct",
-  async (id, { getState, rejectWithValue }) => {
-    const {
-      userAuth: { userInfo },
-    } = getState();
-    try {
-      const res = await Axios({
-        method: "post",
-        url: "/api/favourite/getProduct",
-        data: { userId: userInfo._id, productId: id },
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      });
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      );
-    }
-  }
-);
+
 export const getFavouriteAsins = createAsyncThunk(
   "favourite/getFavouriteAsins",
   async (_, { getState, rejectWithValue }) => {
@@ -157,9 +121,8 @@ export const getFavouriteReviewList = createAsyncThunk(
     }
   }
 );
-
-export const getFavouriteReview = createAsyncThunk(
-  "favourite/getFavouriteReview",
+export const getFavouriteReviewIds = createAsyncThunk(
+  "favourite/getFavouriteReviewIds",
   async (_, { getState, rejectWithValue }) => {
     const {
       userAuth: { userInfo },
@@ -168,7 +131,7 @@ export const getFavouriteReview = createAsyncThunk(
     try {
       const res = await Axios({
         method: "post",
-        url: "/api/favourite/getReviews",
+        url: "/api/favourite/getReviewIds",
         data: body,
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
@@ -182,38 +145,11 @@ export const getFavouriteReview = createAsyncThunk(
     }
   }
 );
-
 const favouriteSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(addItemToFavourite.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(addItemToFavourite.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.success = action.payload.status;
-    });
-    builder.addCase(addItemToFavourite.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-      state.success = false;
-    });
-    builder.addCase(removeItemFromFavourite.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(removeItemFromFavourite.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.success = action.payload.status;
-    });
-    builder.addCase(removeItemFromFavourite.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-      state.success = false;
-    });
     builder.addCase(getFavouriteProductList.pending, (state) => {
       state.loading = true;
     });
@@ -226,18 +162,7 @@ const favouriteSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
-    builder.addCase(getFavouriteProduct.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getFavouriteProduct.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.favProduct = action.payload;
-    });
-    builder.addCase(getFavouriteProduct.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
+
     builder.addCase(getFavouriteAsins.pending, (state) => {
       state.loading = true;
     });
@@ -262,15 +187,15 @@ const favouriteSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
-    builder.addCase(getFavouriteReview.pending, (state) => {
+    builder.addCase(getFavouriteReviewIds.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getFavouriteReview.fulfilled, (state, action) => {
+    builder.addCase(getFavouriteReviewIds.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
-      state.favReview = action.payload;
+      state.favReviewIds = action.payload;
     });
-    builder.addCase(getFavouriteReview.rejected, (state, action) => {
+    builder.addCase(getFavouriteReviewIds.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

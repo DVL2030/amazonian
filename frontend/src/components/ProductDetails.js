@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Carousel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Rating from "../components/Rating";
 import RatingHistogram from "../components/RatingHistogram";
@@ -9,6 +9,8 @@ import Review from "../components/Review";
 import { addItemToCart } from "../slice/cartSlice";
 import {
   addItemToFavourite,
+  getFavouriteAsins,
+  getFavouriteReviewIds,
   removeItemFromFavourite,
 } from "../slice/favouriteSlice";
 
@@ -21,15 +23,16 @@ export default function ProductDetails(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data, asin, fav } = props;
-
-  const [qty, setQty] = useState(1);
+  const { data, asin } = props;
 
   const userAuthState = useSelector((state) => state.userAuth);
   const { userInfo } = userAuthState;
 
   const favState = useSelector((state) => state.favourite);
-  const { success, loading, error } = favState;
+  const { favAsins, favReviewIds } = favState;
+
+  const [qty, setQty] = useState(1);
+  const [fav, setFav] = useState(null);
 
   const changeMainImage = (idx) => {
     const listEl = document.getElementsByClassName("main-image-item");
@@ -51,72 +54,58 @@ export default function ProductDetails(props) {
     navigate("/cart");
   };
 
-  const addToFavourite = (e) => {
+  const favButtonHandler = (e) => {
     e.preventDefault();
     if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
-    if (!loading) {
-      if (data) {
-        dispatch(
-          addItemToFavourite({
-            item: { asin: asin, ...data },
-            type: "products",
-          })
-        );
-        const id = toast.loading("Please wait...");
-        setTimeout(() => {
-          if (success) {
-            toast.update(id, {
-              render: "Added!",
-              type: "success",
-              isLoading: false,
-              autoClose: 1000,
-            });
-          } else if (error) {
-            toast.update(id, {
-              render: "There was an error... Please try again",
-              type: "error",
-              autoClose: 1000,
-              isLoading: false,
-            });
-          } else {
-            toast.dismiss();
-          }
-        }, 2000);
+    if (data)
+      if (e.target.value === "save")
+        toast.promise(addItemToFavourite(userInfo, data, "products"), {
+          pending: {
+            render() {
+              return "Please wait..";
+            },
+            icon: false,
+          },
+          success: {
+            render() {
+              return `Added Fav Product!`;
+            },
+          },
+          error: {
+            render({ data }) {
+              return `${data}`;
+            },
+          },
+        });
+      else if (e.target.value === "remove") {
+        toast.promise(removeItemFromFavourite(userInfo, fav.id, "reviews"), {
+          pending: {
+            render() {
+              return "Please wait..";
+            },
+            icon: false,
+          },
+          success: {
+            render() {
+              return `Removed Fav Product!`;
+            },
+          },
+          error: {
+            render({ data }) {
+              return `${data}`;
+            },
+          },
+        });
       }
-    }
   };
 
-  const removeFromFav = (e) => {
-    e.preventDefault();
-    if (!loading) {
-      dispatch(
-        removeItemFromFavourite({
-          id: fav[0].id,
-          type: "products",
-        })
-      );
-      const id = toast.loading("Please wait...");
-      setTimeout(() => {
-        if (success) {
-          toast.update(id, {
-            render: "Removed!",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000,
-          });
-        } else if (error) {
-          toast.update(id, {
-            render: "There was an error... Please try again",
-            type: "error",
-            autoClose: 1000,
-            isLoading: false,
-          });
-        } else {
-          toast.dismiss();
-        }
-      }, 1500);
-    }
-  };
+  useEffect(() => {
+    if (!asin) navigate("/");
+    if (!favAsins) dispatch(getFavouriteAsins());
+    else setFav(favAsins.find((f) => f.asin === asin));
+
+    if (!favReviewIds) dispatch(getFavouriteReviewIds());
+  }, [favAsins, favReviewIds]);
 
   return (
     <>
@@ -259,17 +248,19 @@ export default function ProductDetails(props) {
                     </div>
                   )}
                   <div className="buy-box-button">
-                    {fav && fav.length > 0 ? (
+                    {fav ? (
                       <button
                         className="rect orange"
-                        onClick={(e) => removeFromFav(e)}
+                        value={"remove"}
+                        onClick={(e) => favButtonHandler(e)}
                       >
                         Remove from Fav
                       </button>
                     ) : (
                       <button
                         className="rect orange"
-                        onClick={(e) => addToFavourite(e)}
+                        value={"save"}
+                        onClick={(e) => favButtonHandler(e)}
                       >
                         Save this for later
                       </button>
@@ -398,12 +389,20 @@ export default function ProductDetails(props) {
                 </>
               )}
               <div className="buy-box-button">
-                {fav && fav.length > 0 ? (
-                  <button className="rect orange" onClick={removeFromFav}>
+                {fav ? (
+                  <button
+                    className="rect orange"
+                    value={"remove"}
+                    onClick={(e) => favButtonHandler(e)}
+                  >
                     Remove from Fav
                   </button>
                 ) : (
-                  <button className="rect orange" onClick={addToFavourite}>
+                  <button
+                    className="rect orange"
+                    value={"save"}
+                    onClick={(e) => favButtonHandler(e)}
+                  >
                     Save this for later
                   </button>
                 )}
@@ -474,9 +473,15 @@ export default function ProductDetails(props) {
               data.reviewData.reviewListLocal.length !== 0 ? (
                 <div className="reviews-local ">
                   <h4>Top reviews from the United States</h4>
-                  {data.reviewData.reviewListLocal.map((review, idx) => (
-                    <Review review={review} key={idx}></Review>
-                  ))}
+                  {favReviewIds &&
+                    data.reviewData.reviewListLocal.map((review, idx) => (
+                      <Review
+                        review={review}
+                        key={idx}
+                        asin={asin}
+                        fav={favReviewIds.find((f) => review.id === f.id)}
+                      ></Review>
+                    ))}
                   <hr></hr>
                 </div>
               ) : (
@@ -489,12 +494,17 @@ export default function ProductDetails(props) {
               )}
 
               {data.reviewData.reviewListGlobal &&
-                data.reviewData.reviewListGlobal.length !== 0 && (
+                data.reviewData.reviewListGlobal.length !== 0 &&
+                favReviewIds && (
                   <div className="reviews-local ">
                     <h4>Top reviews from other countries</h4>
 
                     {data.reviewData.reviewListGlobal.map((review, idx) => (
-                      <Review review={review} key={idx}></Review>
+                      <Review
+                        review={review}
+                        key={idx}
+                        fav={favReviewIds.find((f) => review.id === f.id)}
+                      ></Review>
                     ))}
                     <hr></hr>
                   </div>

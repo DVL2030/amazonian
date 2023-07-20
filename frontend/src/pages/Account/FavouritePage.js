@@ -188,7 +188,7 @@ export default function FavouritePage() {
                                           )
                                         }
                                       >
-                                        Remove
+                                        Remove  
                                       </button>
                                     </div>
                                   </li>

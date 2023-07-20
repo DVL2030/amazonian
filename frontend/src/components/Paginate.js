@@ -8,6 +8,7 @@ export default function Paginate(props) {
   const navigate = useNavigate();
   const handlePageChange = (event) => {
     const target = Number(event.target.innerText);
+
     if (target) navigate(`/${path}/page/${target}`);
   };
 

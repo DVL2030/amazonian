@@ -32,7 +32,6 @@ const startScraper = async ({
   reviewId,
 }) => {
   let apiEndpoint, resBody, result;
-  console.log(reviewFilter);
   switch (type) {
     case "home":
       resBody = await buildHttpRequest(CONST.host);

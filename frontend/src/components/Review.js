@@ -1,42 +1,66 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Rating from "./Rating";
-import { addItemToFavourite } from "../slice/favouriteSlice";
+import {
+  addItemToFavourite,
+  removeItemFromFavourite,
+} from "../slice/favouriteSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import ReadMore from "./ReadMore";
 
 export default function Review(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { review } = props;
+  const { review, fav, asin } = props;
 
-  const favState = useSelector((state) => state.favourite);
-  const { success, loading, error } = favState;
+  const userAuthState = useSelector((state) => state.userAuth);
+  const { userInfo } = userAuthState;
 
-  const saveHandler = (e) => {
+  const favButtonHandler = (e) => {
     e.preventDefault();
-    dispatch(addItemToFavourite({ item: review, type: "reviews" }));
-    const id = toast.loading("Please wait...");
-    setTimeout(() => {
-      if (success) {
-        toast.update(id, {
-          render: "Added!",
-          type: "success",
-          isLoading: false,
-          autoClose: 1000,
+    if (!userInfo) navigate(`/signin?redirect=/product/${asin}`);
+    if (review)
+      if (e.target.value === "save")
+        toast.promise(addItemToFavourite(userInfo, review, "reviews"), {
+          pending: {
+            render() {
+              return "Please wait..";
+            },
+            icon: false,
+          },
+          success: {
+            render() {
+              return `Added Fav Review!`;
+            },
+          },
+          error: {
+            render({ data }) {
+              return `${data}`;
+            },
+          },
         });
-      } else if (error) {
-        toast.update(id, {
-          render: "There was an error... Please try again",
-          type: "error",
-          autoClose: 1000,
-          isLoading: false,
+      else if (e.target.value === "remove") {
+        toast.promise(removeItemFromFavourite(userInfo, fav._id, "reviews"), {
+          pending: {
+            render() {
+              return "Please wait..";
+            },
+            icon: false,
+          },
+          success: {
+            render() {
+              return `Removed Fav Review!`;
+            },
+          },
+          error: {
+            render({ data }) {
+              return `${data}`;
+            },
+          },
         });
-      } else {
-        toast.dismiss();
       }
-    }, 1500);
   };
   return (
     <div className="mb-5" id={review.id}>
@@ -76,16 +100,32 @@ export default function Review(props) {
             <img key={idx} alt="review-img" src={image}></img>
           </div>
         ))}
+      {review.helpful > 0 && (
+        <span className="review-vote">
+          {review.helpful} {review.helpful > 1 ? "people" : "person"} found this
+          helpful
+        </span>
+      )}
 
-      <span className="review-vote">
-        {review.helpful} {review.helpful > 1 ? "people" : "person"} found this
-        helpful
-      </span>
       <div>
         <button className="review helpful">Helpful</button>
-        <button className="review helpful" onClick={(e) => saveHandler(e)}>
-          Save
-        </button>
+        {fav ? (
+          <button
+            className="review helpful"
+            value={"remove"}
+            onClick={(e) => favButtonHandler(e)}
+          >
+            Remove
+          </button>
+        ) : (
+          <button
+            className="review helpful"
+            value={"save"}
+            onClick={(e) => favButtonHandler(e)}
+          >
+            Save
+          </button>
+        )}
       </div>
     </div>
   );

@@ -29,7 +29,6 @@ export const getAsinFromDB = createAsyncThunk(
 export const saveProduct = createAsyncThunk(
   "product/saveProduct",
   async (product, { rejectWithValue }) => {
-    console.log(product);
     try {
       const res = await Axios.post("/api/product/save", { product: product });
       return res.data;
