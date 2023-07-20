@@ -45,9 +45,9 @@ export const createOrder = createAsyncThunk(
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       if (res) {
-        localStorage.removeItem("cartItems");
-        localStorage.removeItem("shippingAddress");
-        localStorage.removeItem("orderInfo");
+        sessionStorage.removeItem("cartItems");
+        sessionStorage.removeItem("shippingAddress");
+        sessionStorage.removeItem("orderInfo");
       }
       return res.data;
     } catch (error) {

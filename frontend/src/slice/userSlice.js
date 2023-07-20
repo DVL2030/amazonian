@@ -75,9 +75,9 @@ export const updateUserSecurity = createAsyncThunk(
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       const { field, value } = param;
-      const current = JSON.parse(localStorage.getItem("userInfo"));
+      const current = JSON.parse(sessionStorage.getItem("userInfo"));
       if (param.field !== "password") {
-        localStorage.setItem(
+        sessionStorage.setItem(
           "userInfo",
           JSON.stringify({ ...current, [field]: value })
         );

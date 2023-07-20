@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const cartItems = localStorage.getItem("cartItems")
-  ? JSON.parse(localStorage.getItem("cartItems"))
+const cartItems = sessionStorage.getItem("cartItems")
+  ? JSON.parse(sessionStorage.getItem("cartItems"))
   : [];
 
-const shippingAddress = localStorage.getItem("shippingAddress")
-  ? JSON.parse(localStorage.getItem("shippingAddress"))
+const shippingAddress = sessionStorage.getItem("shippingAddress")
+  ? JSON.parse(sessionStorage.getItem("shippingAddress"))
   : null;
 
-const orderInfo = localStorage.getItem("orderInfo")
-  ? JSON.parse(localStorage.getItem("orderInfo"))
+const orderInfo = sessionStorage.getItem("orderInfo")
+  ? JSON.parse(sessionStorage.getItem("orderInfo"))
   : null;
 
 const initialState = {
@@ -40,7 +40,7 @@ const cartSlice = createSlice({
         } else {
           newCart = [...cartItems, action.payload];
         }
-        localStorage.setItem("cartItems", JSON.stringify(newCart));
+        sessionStorage.setItem("cartItems", JSON.stringify(newCart));
         state.cartItems = newCart;
       } catch (error) {
         state.error = error.message;
@@ -49,7 +49,7 @@ const cartSlice = createSlice({
     removeItemFromCart(state, action) {
       try {
         const newCart = cartItems.filter((x) => x.asin !== action.payload.asin);
-        localStorage.setItem("cartItems", JSON.stringify(newCart));
+        sessionStorage.setItem("cartItems", JSON.stringify(newCart));
         state.cartItems = newCart;
       } catch (error) {
         state.error = error.message;
@@ -67,16 +67,18 @@ const cartSlice = createSlice({
         });
 
         state.cartItems = newCart;
-        localStorage.setItem("cartItems", JSON.stringify(newCart));
+        sessionStorage.setItem("cartItems", JSON.stringify(newCart));
       } catch (error) {
         state.error = error.message;
       }
     },
     saveShippingAddress(state, action) {
-      localStorage.setItem("shippingAddress", JSON.stringify(action.payload));
+      sessionStorage.setItem("shippingAddress", JSON.stringify(action.payload));
+      state.shippingAddress = action.payload;
     },
     saveOrderInfo(state, action) {
-      localStorage.setItem("orderInfo", JSON.stringify(action.payload));
+      sessionStorage.setItem("orderInfo", JSON.stringify(action.payload));
+      state.orderInfo = action.payload;
     },
   },
 });

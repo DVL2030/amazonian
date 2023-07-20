@@ -3,7 +3,6 @@ import userAuthSlice from "./slice/userAuthSlice";
 import userRegisterSlice from "./slice/userRegisterSlice";
 import amazonSlice from "./slice/amazonSlice";
 import cartSlice from "./slice/cartSlice";
-import historySlice from "./slice/historySlice";
 import userSlice from "./slice/userSlice";
 import orderSlice from "./slice/orderSlice";
 import favouriteSlice from "./slice/favouriteSlice";
@@ -13,24 +12,24 @@ import productSlice from "./slice/productSlice";
 
 const initialState = {
   userAuth: {
-    userInfo: localStorage.getItem("userInfo")
-      ? JSON.parse(localStorage.getItem("userInfo"))
+    userInfo: sessionStorage.getItem("userInfo")
+      ? JSON.parse(sessionStorage.getItem("userInfo"))
       : null,
   },
   amazon: {
-    amazonHome: localStorage.getItem("amazonHome")
-      ? JSON.parse(localStorage.getItem("amazonHome"))
+    amazonHome: sessionStorage.getItem("amazonHome")
+      ? JSON.parse(sessionStorage.getItem("amazonHome"))
       : null,
   },
   cart: {
-    cartItems: localStorage.getItem("cartItems")
-      ? JSON.parse(localStorage.getItem("cartItems"))
+    cartItems: sessionStorage.getItem("cartItems")
+      ? JSON.parse(sessionStorage.getItem("cartItems"))
       : [],
-    shippingAddress: localStorage.getItem("shippingAddress")
-      ? JSON.parse(localStorage.getItem("shippingAddress"))
+    shippingAddress: sessionStorage.getItem("shippingAddress")
+      ? JSON.parse(sessionStorage.getItem("shippingAddress"))
       : null,
-    orderInfo: localStorage.getItem("orderInfo")
-      ? JSON.parse(localStorage.getItem("orderInfo"))
+    orderInfo: sessionStorage.getItem("orderInfo")
+      ? JSON.parse(sessionStorage.getItem("orderInfo"))
       : null,
   },
 };

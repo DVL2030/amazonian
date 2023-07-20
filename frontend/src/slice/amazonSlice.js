@@ -13,7 +13,7 @@ export const getHomePage = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await Axios.get("/api/amazon/home");
-      localStorage.setItem("amazonHome", JSON.stringify(res.data));
+      sessionStorage.setItem("amazonHome", JSON.stringify(res.data));
       return res.data;
     } catch (error) {
       return rejectWithValue(

@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import Axios from "axios";
 
-const userInfo = localStorage.getItem("userInfo")
-  ? localStorage.getItem("userInfo")
+const userInfo = sessionStorage.getItem("userInfo")
+  ? sessionStorage.getItem("userInfo")
   : null;
 
 const initialState = {
@@ -19,7 +19,7 @@ export const signin = createAsyncThunk(
   async (authParams, { rejectWithValue }) => {
     try {
       const res = await Axios.post("/api/users/signin", authParams);
-      localStorage.setItem("userInfo", JSON.stringify(res.data));
+      sessionStorage.setItem("userInfo", JSON.stringify(res.data));
       return res.data;
     } catch (error) {
       return rejectWithValue(
@@ -38,9 +38,9 @@ export const signout = createAsyncThunk(
       const wait = (delay) =>
         new Promise((resolve, reject) => setTimeout(resolve, delay));
       await wait(1000);
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("cartItems");
-      localStorage.removeItem("shippingAddress");
+      sessionStorage.removeItem("userInfo");
+      sessionStorage.removeItem("cartItems");
+      sessionStorage.removeItem("shippingAddress");
       return null;
     } catch (error) {
       return rejectWithValue(
@@ -54,14 +54,7 @@ export const signout = createAsyncThunk(
 const userAuthSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    // signout(state) {
-    //   state.userInfo = null;
-    //   localStorage.removeItem("userInfo");
-    //   localStorage.removeItem("cartItems");
-    //   localStorage.removeItem("shippingAddress");
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signin.pending, (state) => {
       state.loading = true;
