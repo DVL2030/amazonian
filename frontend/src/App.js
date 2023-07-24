@@ -330,15 +330,7 @@ function App() {
           <Route path="/cart" exact element={<CartPage />} />
           <Route path="/shipping" exact element={<OrderShippingPage />} />
           <Route path="/placeorder" exact element={<OrderPlacePage />} />
-          <Route
-            path="/payment"
-            exact
-            element={
-              <PrivateRoute>
-                <OrderPaymentPage />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/payment" exact element={<OrderPaymentPage />} />
           <Route
             path="/ordersummary/:id"
             exact

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 export default function PrivateRoute(props) {
-  const userState = useSelector((state) => state.user);
+  const userState = useSelector((state) => state.userAuth);
   const { userInfo } = userState;
 
   if (userInfo) return props.children;

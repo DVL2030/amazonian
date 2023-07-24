@@ -20,7 +20,7 @@ export default function OrderPaymentPage(props) {
   const { createOrder } = orderState;
 
   const cartState = useSelector((state) => state.cart);
-  const { orderInfo } = cartState;
+  const { orderInfo, cartItems, shippingAddress } = cartState;
 
   const stripeState = useSelector((state) => state.stripe);
   const { key, secret, loading: stripeLoading } = stripeState;
@@ -30,6 +30,7 @@ export default function OrderPaymentPage(props) {
   }, [createOrder]);
 
   useEffect(() => {
+    if (!cartItems || !orderInfo || !shippingAddress) navigate("/cart");
     if (!key) dispatch(getStripeKey());
     else if (key) setStripePromise(loadStripe(key.publicKey));
     if (!secret && !stripeLoading) {
