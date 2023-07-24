@@ -32,18 +32,6 @@ export default function HomePage() {
         <LoadingBox />
       ) : (
         <div id="home">
-          {/* <Container>
-            <Row className="py-3">
-              <Col className="d-flex justify-content-center">
-                <Paginate
-                  path="home"
-                  label={true}
-                  page={Number(page)}
-                  totalPage={20}
-                ></Paginate>
-              </Col>
-            </Row>
-          </Container> */}
           <Carousel
             fade
             slide

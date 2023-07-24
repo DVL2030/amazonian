@@ -1,7 +1,7 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { createOrder } from "../slice/orderSlice";
 import MessageBox from "./MessageBox";
@@ -53,6 +53,7 @@ export default function CheckoutForm(props) {
           price: item.currentPrice,
         };
       });
+
       const newOrder = {
         userId: userInfo._id,
         orderedItems: items,

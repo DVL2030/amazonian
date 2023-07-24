@@ -7,19 +7,20 @@ import { Container, Row, Col } from "react-bootstrap";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../components/CheckoutForm";
-import axios from "axios";
 import { createIntent, getStripeKey } from "../slice/stripeSlice";
 
 export default function OrderPaymentPage(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
   const orderState = useSelector((state) => state.order);
-  const { createOrder, loading, error } = orderState;
+  const { createOrder } = orderState;
+
+  const cartState = useSelector((state) => state.cart);
+  const { orderInfo } = cartState;
 
   const stripeState = useSelector((state) => state.stripe);
   const { key, secret, loading: stripeLoading } = stripeState;
@@ -32,9 +33,7 @@ export default function OrderPaymentPage(props) {
     if (!key) dispatch(getStripeKey());
     else if (key) setStripePromise(loadStripe(key.publicKey));
     if (!secret && !stripeLoading) {
-      const final = parseInt(
-        JSON.parse(localStorage.getItem("orderInfo")).final
-      );
+      const final = parseInt(orderInfo.final);
       dispatch(createIntent({ amount: final }));
     } else if (secret) setClientSecret(secret.clientSecret);
   }, [key, secret]);

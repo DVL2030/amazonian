@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Card, Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getFavouriteProductList,
   getFavouriteReviewList,
@@ -188,7 +188,7 @@ export default function FavouritePage() {
                                           )
                                         }
                                       >
-                                        Remove  
+                                        Remove
                                       </button>
                                     </div>
                                   </li>

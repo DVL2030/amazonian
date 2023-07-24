@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import http from "http";
+import path from "path";
+
 import userRouter from "./routers/userRouter.js";
 import amazonRouter from "./routers/amazonRouter.js";
 
@@ -16,6 +19,7 @@ dotenv.config();
 const port = process.env.port || 5000;
 
 const app = express();
+const __dirname = path.resolve();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,25 +29,6 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 app.get("/", (req, res) => {});
 
-// app.get("/api/config/key", (req, res) => {
-//   res.send({ publicKey: process.env.STRIPE_USER_API });
-// });
-
-// app.post("/api/config/create-payment-intent", async (req, res) => {
-//   try {
-//     const paymentIntent = await stripe.paymentIntents.create({
-//       currency: "USD",
-//       amount: req.body.amount,
-//       automatic_payment_methods: { enabled: true },
-//     });
-//     res.send({ clientSecret: paymentIntent.client_secret });
-//   } catch (error) {
-//     return res.status(400).send({
-//       message: error.message,
-//     });
-//   }
-// });
-
 app.use("/api/users", userRouter);
 app.use("/api/stripe", stripeRouter);
 app.use("/api/amazon", amazonRouter);
@@ -52,10 +37,21 @@ app.use("/api/order", orderRouter);
 app.use("/api/favourite", favRouter);
 app.use("/api/admin", adminRouter);
 
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+);
+
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-app.listen(port, () => {
-  console.log(`serve at http://127.0.0.1:${port}`);
+const httpServer = http.Server(app);
+
+httpServer.listen(port, () => {
+  console.log(`Serve at http://localhost:${port}`);
 });
+
+// app.listen(port, () => {
+//   console.log(`serve at http://127.0.0.1:${port}`);
+// });

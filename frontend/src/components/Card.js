@@ -1,12 +1,10 @@
 import React from "react";
 import Rating from "./Rating";
 import { Link } from "react-router-dom";
-import MultiCarousel from "./MultiCarousel";
 import { Carousel } from "react-bootstrap";
 
 export default function Card(props) {
   const cardFooters = ["See more, See all deals, Shop now"];
-  const randFooter = cardFooters[Math.floor(Math.random() * 2)];
 
   const { header, items, price, rating, footer, footerLink, carousel } = props;
 

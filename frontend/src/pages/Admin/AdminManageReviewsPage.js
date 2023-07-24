@@ -28,24 +28,6 @@ export default function AdminManageReviewsPage() {
 
         {review && (
           <>
-            {/* <Row>
-              <Col xs={12} sm={6}>
-                <StatBox
-                  icon="fa-solid fa-star"
-                  number={user.total_reviews}
-                  percentage={32}
-                  label="Total Reviews"
-                ></StatBox>
-              </Col>
-              <Col xs={12} sm={6}>
-                <StatBox
-                  icon=""
-                  number={}
-                  percentage={}
-                  label=""
-                ></StatBox>
-              </Col>
-            </Row> */}
             <Row className="my-3 p-5">
               <h3 className="mb-3" style={{ color: "#154c79" }}>
                 Most Popular Reviews
