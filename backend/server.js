@@ -27,8 +27,6 @@ mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
 });
 
-app.get("/", (req, res) => {});
-
 app.use("/api/users", userRouter);
 app.use("/api/stripe", stripeRouter);
 app.use("/api/amazon", amazonRouter);
@@ -37,21 +35,24 @@ app.use("/api/order", orderRouter);
 app.use("/api/favourite", favRouter);
 app.use("/api/admin", adminRouter);
 
-app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.use(express.static(path.join(__dirname, "frontend/build")));
+// app.get("/", function (req, res) {
+//   res.sendFile(path.join(__dirname, "frontend/build/index.html"));
+// });
 app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+  res.sendFile(path.join(__dirname, "frontend/build/index.html"))
 );
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-const httpServer = http.Server(app);
+// const httpServer = http.Server(app);
 
-httpServer.listen(port, () => {
-  console.log(`Serve at http://localhost:${port}`);
-});
-
-// app.listen(port, () => {
-//   console.log(`serve at http://127.0.0.1:${port}`);
+// httpServer.listen(port, () => {
+//   console.log(`Serve at http://localhost:${port}`);
 // });
+
+app.listen(port, () => {
+  console.log(`serve at http://localhost:${port}`);
+});

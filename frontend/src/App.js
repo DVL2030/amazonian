@@ -292,7 +292,7 @@ function App() {
       >
         <Routes>
           <Route path="/" exact element={<HomePage />} />
-          <Route path="/home" exact element={<HomePage />} />
+          {/* <Route path="/home" exact element={<HomePage />} /> */}
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
