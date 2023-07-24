@@ -23,8 +23,17 @@ const __dirname = path.resolve();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.MONGODB_URL, {
-  useNewUrlParser: true,
+mongoose.connect(
+  "mongodb+srv://dlee2307:Bb3Kyrjuh47zYBhW@amazonian.yg8r19r.mongodb.net/?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+  }
+);
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
+  console.log("Mongo DB connected successfully");
 });
 
 app.use("/api/users", userRouter);

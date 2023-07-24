@@ -33,6 +33,7 @@ import AdminManageProductsPage from "./pages/Admin/AdminManageProductsPage";
 import AdminManageUsersPage from "./pages/Admin/AdminManageUsersPage";
 import AdminManageReviewsPage from "./pages/Admin/AdminManageReviewsPage";
 import AdminRoute from "./components/AdminRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -329,25 +330,65 @@ function App() {
           <Route path="/cart" exact element={<CartPage />} />
           <Route path="/shipping" exact element={<OrderShippingPage />} />
           <Route path="/placeorder" exact element={<OrderPlacePage />} />
-          <Route path="/payment" exact element={<OrderPaymentPage />} />
+          <Route
+            path="/payment"
+            exact
+            element={
+              <PrivateRoute>
+                <OrderPaymentPage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/ordersummary/:id"
             exact
             element={<OrderSummaryPage />}
           />
-          <Route path="/user/home" exact element={<UserHomePage />} />
-          <Route path="/user/security" exact element={<UserSecurityPage />} />
+          <Route
+            path="/user/home"
+            exact
+            element={
+              <PrivateRoute>
+                <UserHomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/user/security"
+            exact
+            element={
+              <PrivateRoute>
+                <UserSecurityPage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/user/security/update"
             exact
-            element={<UserUpdateSecurityPage />}
+            element={
+              <PrivateRoute>
+                <UserUpdateSecurityPage />
+              </PrivateRoute>
+            }
           />
-          <Route path="/user/favourite" exact element={<FavouritePage />} />
+          <Route
+            path="/user/favourite"
+            exact
+            element={
+              <PrivateRoute>
+                <FavouritePage />
+              </PrivateRoute>
+            }
+          />
           <Route path="/user/address/add" exact element={<AddressAddPage />} />
           <Route
             path="/user/order/history"
             exact
-            element={<OrderHistoryPage />}
+            element={
+              <PrivateRoute>
+                <OrderHistoryPage />
+              </PrivateRoute>
+            }
           />
 
           {/* Admin Routes */}

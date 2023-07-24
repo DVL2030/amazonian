@@ -140,7 +140,7 @@ const getUserAgent = () => {
 };
 
 const getHttpHeader = () => {
-  let headers = new Headers({
+  let headers = {
     Accept:
       "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate",
@@ -151,7 +151,7 @@ const getHttpHeader = () => {
     "device-memory": `${Math.floor(Math.random() * 16) + 8}`,
     Referer: `${CONST.host}?ref=nav_logo_${Math.floor(Math.random() * 100000)}`,
     "User-Agent": getUserAgent(),
-  });
+  };
 
   return headers;
 };
