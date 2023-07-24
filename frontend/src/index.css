@@ -64,7 +64,7 @@ button.search {
   cursor: pointer;
 }
 
-.search-input {
+#search-input {
   border-radius: 0;
 }
 

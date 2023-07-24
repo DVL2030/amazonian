@@ -40,9 +40,10 @@ export default function Searchbox(props) {
             onSubmit={searchSubmitHandler}
           >
             <Form.Control
+              id="search-input"
               type="search"
               placeholder="Search"
-              className="search-input me-2"
+              className="me-2"
               aria-label="Search"
               onChange={(e) => setKeyword(e.target.value)}
             />
@@ -94,9 +95,10 @@ export default function Searchbox(props) {
             <option value="fashion-womens">Women's Fashion</option>
           </Form.Select>
           <Form.Control
+            id="search-input"
             type="search"
             placeholder="Search"
-            className="search-input me-2"
+            className="me-2"
             aria-label="Search"
             onChange={(e) => setKeyword(e.target.value)}
           />
